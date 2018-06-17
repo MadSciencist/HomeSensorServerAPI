@@ -77,6 +77,32 @@ namespace HomeSensorServerAPI.Controllers
                 return BadRequest();
             }
 
+            IPAddress sensorIP = null, sensorGatewayIP = null;
+            //validate IPs only for actuators - we do not carry about sensor IP, cause they might have non-static IP and thats fine
+            if (node.Type == "nodeActuator")
+            {
+                try
+                {
+                    sensorIP = IPAddress.Parse(node.IpAddress);
+                    sensorGatewayIP = IPAddress.Parse(node.GatewayAddress);
+
+                    //actuator IP must be unique
+                    if (_context.Nodes.Where(n => n.IpAddress != "-").Any(n => IPAddress.Parse(n.IpAddress).Equals(sensorIP)))
+                    {
+                        return BadRequest("Podany adres IP urządzenia już jest na liście. Adres powinien być unikalny.");
+                    }
+                }
+                catch (FormatException)
+                {
+                    return BadRequest("Podany adres IP nie jest prawidłowy");
+                }
+            }
+            else if(node.Type == "nodeSensor")
+            {
+                node.IpAddress = "-";
+                node.GatewayAddress = "-";
+            }
+
             _context.Entry(node).State = EntityState.Modified;
 
             try
@@ -95,7 +121,7 @@ namespace HomeSensorServerAPI.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok();
         }
 
         // POST: api/Nodes

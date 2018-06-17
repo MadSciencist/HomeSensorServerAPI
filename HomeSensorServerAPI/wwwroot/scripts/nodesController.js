@@ -47,36 +47,58 @@
         }
     };
 
-    $scope.editNode = function (nodeId) {
-        let selectedNode = ($scope.nodes.filter(n => n.id === nodeId))[0];
-        console.log(selectedNode);
-        $("#addEditNodeModalLabel").text('Edytujesz urządzenie: '.concat(selectedNode.name));
+    let nodeEditRequest = {
+        requestActive: false,
+        nodeId: null
+    };
 
-        $("#nodeName").val(selectedNode.name);
-        $("#nodeIdentifier").val(selectedNode.identifier);
-        $("#nodeType").val(selectedNode.type);
-        $("#nodeLogin").val(selectedNode.loginName);
-        $("#nodePassword").val(selectedNode.loginPassword);
-
-        if (selectedNode.type === 'nodeSensor') {
-            $("#selectActuatorType").css('display', 'none');
-            $("#selectSensorType").css('display', 'block');
-            $("#sensorType").val(selectedNode.exactType);
-        } else if (selectedNode.type === 'nodeActuator') {
-            $("#selectActuatorType").css('display', 'block');
-            $("#actuatorType").val(selectedNode.exactType);
-            $("#nodeIP").val(selectedNode.ipAddress);
-            $("#nodeGatewayIP").val(selectedNode.gatewayAddress);
+    $scope.processAddEditNodeButton = function () {
+        if (nodeEditRequest.requestActive === true) {
+            let originalNode = ($scope.nodes.filter(n => n.id === nodeEditRequest.nodeId))[0];
+            putNode(originalNode);
+        } else {
+            postNode();
+            clearForm();
         }
-        
+        nodeEditRequest.requestActive = false;
+    };
 
+    let putNode = function (originalNode) {
+        let editedNode = originalNode; //copy ID
+        editedNode.name = $("#nodeName").val();
+        editedNode.identifier = $("#nodeIdentifier").val();
+        editedNode.type = $scope.nodeType;
+        editedNode.exactType = nodeEactTypeVar;
+        editedNode.loginName = $("#nodeLogin").val();
+        editedNode.loginPassword = $("#nodePassword").val();
+
+        if (editedNode.type === 'nodeActuator') {
+            editedNode.ipAddress = $("#nodeIP").val();
+            editedNode.gatewayAddress = $("#nodeGatewayIP").val();
+        } else if (editedNode.node === 'nodeSensor') {
+            editedNode.ipAddress = '';
+            editedNode.gatewayAddress = '';
+        }
+
+        $http.put('/api/nodes/'.concat(nodeEditRequest.nodeId), JSON.stringify(editedNode), {
+            headers: {
+                'Content-Type': 'application/json; charset=UTF-8'
+            },
+            'Accept': 'application/json'
+        }).then(function onSuccess(data) {
+            $('#nodes-info-error').hide();
+            $scope.getNodes(); //refresh area
+        }, function onError(error) {
+            $('#nodes-info-error-text').text(error.data);
+            $('#nodes-info-error').show();
+        });
     };
 
     $scope.test = [{ id: 1, name: 'jeden' }, { id: 2, name: 'dwa' }];
 
     //ok
-    $scope.addNode = function () {
-        let obj = {
+    let postNode = function () {
+        const obj = {
             name: $("#nodeName").val(),
             identifier: $("#nodeIdentifier").val(),
             type: $scope.nodeType,
@@ -99,6 +121,41 @@
             $('#nodes-info-error-text').text(error.data);
             $('#nodes-info-error').show();
         });
+    };
+
+    $scope.editNodePrefillForm = function (nodeId) {
+        let selectedNode = ($scope.nodes.filter(n => n.id === nodeId))[0];
+        nodeEditRequest.requestActive = true;
+        nodeEditRequest.nodeId = nodeId;
+
+        $("#addEditNodeModalLabel").text('Edytujesz urządzenie: '.concat(selectedNode.name));
+
+        $("#nodeName").val(selectedNode.name);
+        $("#nodeIdentifier").val(selectedNode.identifier);
+        $("#nodeType").val(selectedNode.type);
+        $("#nodeLogin").val(selectedNode.loginName);
+        $("#nodePassword").val(selectedNode.loginPassword);
+
+        if (selectedNode.type === 'nodeSensor') {
+            $("#selectActuatorType").css('display', 'none');
+            $("#selectSensorType").css('display', 'block');
+            $("#sensorType").val(selectedNode.exactType);
+        } else if (selectedNode.type === 'nodeActuator') {
+            $("#selectSensorType").css('display', 'none')
+            $("#selectActuatorType").css('display', 'block');
+            $("#actuatorType").val(selectedNode.exactType);
+            $("#nodeIP").val(selectedNode.ipAddress);
+            $("#nodeGatewayIP").val(selectedNode.gatewayAddress);
+        }
+    };
+
+    let clearForm = function () {
+        $("#nodeName").val('');
+        $("#nodeIdentifier").val('');
+        $("#nodeLogin").val('');
+        $("#nodePassword").val('');
+        $("#nodeIP").val('');
+        $("#nodeGatewayIP").val('');
     };
 
     //ok
@@ -144,7 +201,7 @@
             $scope.nodes = response.data;
         }, function errorCallback(response) {
             console.log(response);
-            });
+        });
     };
 
     //ok

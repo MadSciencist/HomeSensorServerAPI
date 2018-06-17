@@ -115,18 +115,11 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Anuluj</button>
-                    <button type="button" class="btn btn-primary" ng-click="addNode();" data-dismiss="modal">Dodaj</button>
+                    <button type="button" class="btn btn-primary" ng-click="processAddEditNodeButton();" data-dismiss="modal">Wyślij</button>
                 </div>
             </div>
         </div>
     </div>
-
-
-    <select id="testtest" name="testtest" class="select form-control">
-        <option ng-repeat="t in test" value="{{t.id}}">{{t.name}}</option>
-    </select>
-
-
     <table class="table table-hover">
         <tr>
             <th>Nazwa</th>
@@ -145,7 +138,7 @@
             <td>{{ node.ipAddress }}</td>
             <td>{{ node.gatewayAddress }}</td>
             <td>
-                <button type="submit" class="btn btn-sm btn-primary" ng-click="editNode(node.id)" data-toggle="modal" data-target="#newNodeModal">Edytuj</button>
+                <button type="submit" class="btn btn-sm btn-primary" ng-click="editNodePrefillForm(node.id)" data-toggle="modal" data-target="#newNodeModal">Edytuj</button>
                 <button type="submit" class="btn btn-sm btn-danger" ng-click="deleteNode(node.id)">Usuń</button>
             </td>
         </tr>
