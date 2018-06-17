@@ -3,6 +3,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Net;
 
 namespace HomeSensorServerAPI
 {
@@ -33,21 +34,7 @@ namespace HomeSensorServerAPI
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>(); 
-               // .UseKestrel(options => options.ListenAnyIP(80));
+                .UseStartup<Startup>()
+               .UseKestrel(options => options.Listen(IPAddress.Any, 80));
     }
 }
-
-
-/*
- *         public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseApplicationInsights()
-                .UseStartup<Startup>()
-                .UseKestrel(options =>
-                {
-                    options.Listen(IPAddress.Any, 80);
-                })
-                .Build();
-    }
-    */
