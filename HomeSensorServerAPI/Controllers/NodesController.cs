@@ -121,36 +121,32 @@ namespace HomeSensorServerAPI.Controllers
                 {
                     sensorIP = IPAddress.Parse(node.IpAddress);
                     sensorGatewayIP = IPAddress.Parse(node.GatewayAddress);
+
+                    //actuator IP must be unique
+                    if (_context.Nodes.Where(n => n.IpAddress != "-").Any(n => IPAddress.Parse(n.IpAddress).Equals(sensorIP)))
+                    {
+                        return BadRequest("Podany adres IP urządzenia już jest na liście. Adres powinien być unikalny.");
+                    }
                 }
                 catch (FormatException)
                 {
                     return BadRequest("Podany adres IP nie jest prawidłowy");
                 }
-
-                //actuator IP must be unique
-                var IPs = _context.Nodes.Where(n => n.IpAddress != "-").Select(n => n.IpAddress);
-
-                foreach (var IP in IPs)
-                {
-                    var tempIP = IPAddress.Parse(IP);
-                    if (tempIP.Equals(sensorIP))
-                    {
-                        return BadRequest("Podany adres IP urządzenia już jest na liście. Adres powinien być unikalny.");
-                    }
-                }
             }
 
-            var candidate = new Node()
+            var verifiedNode = new Node()
             {
                 Name = node.Name,
                 Identifier = node.Identifier,
                 Type = node.Type,
                 ExactType = node.ExactType,
                 IpAddress = sensorIP == null ? "-" : sensorIP.ToString(),
-                GatewayAddress = sensorGatewayIP == null ? "-" : sensorGatewayIP.ToString()
+                GatewayAddress = sensorGatewayIP == null ? "-" : sensorGatewayIP.ToString(),
+                LoginName = node.LoginName,
+                LoginPassword = node.LoginPassword
             };
 
-            _context.Nodes.Add(candidate);
+            _context.Nodes.Add(verifiedNode);
 
             await _context.SaveChangesAsync();
 

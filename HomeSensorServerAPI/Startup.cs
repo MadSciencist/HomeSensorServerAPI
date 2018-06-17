@@ -30,9 +30,9 @@ namespace HomeSensorServerAPI
             });
 
             services.AddDbContextPool<AppDbContext>(o =>
-    o.UseMySql(Configuration["ConnectionStrings:MySqlConnection"],
-    mysqlOptions => mysqlOptions.ServerVersion(new Version(10, 1, 29), ServerType.MariaDb)
-));
+                o.UseMySql(Configuration["ConnectionStrings:MySqlConnection"],
+                mysqlOptions => mysqlOptions.ServerVersion(new Version(10, 1, 29), ServerType.MariaDb)
+            ));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -45,12 +45,12 @@ namespace HomeSensorServerAPI
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
             app.UseStatusCodePages();
             app.UseAuthentication();
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
             app.UseCookiePolicy();
-
             app.UseMvc();
         }
     }
