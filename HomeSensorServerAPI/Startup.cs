@@ -48,22 +48,14 @@ namespace HomeSensorServerAPI
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                //app.UseExceptionHandler("/Home/Error"); //this is done in front end
-                app.UseHsts();
-            }
 
+            app.UseStatusCodePages();
+            //app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            app.UseMvc();
         }
     }
 }
