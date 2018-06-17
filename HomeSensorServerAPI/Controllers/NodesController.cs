@@ -78,6 +78,7 @@ namespace HomeSensorServerAPI.Controllers
             }
 
             IPAddress sensorIP = null, sensorGatewayIP = null;
+            
             //validate IPs only for actuators - we do not carry about sensor IP, cause they might have non-static IP and thats fine
             if (node.Type == "nodeActuator")
             {
@@ -87,7 +88,7 @@ namespace HomeSensorServerAPI.Controllers
                     sensorGatewayIP = IPAddress.Parse(node.GatewayAddress);
 
                     //actuator IP must be unique
-                    if (_context.Nodes.Where(n => n.IpAddress != "-").Any(n => IPAddress.Parse(n.IpAddress).Equals(sensorIP)))
+                    if(!IsIPAddressUnique(sensorIP))
                     {
                         return BadRequest("Podany adres IP urządzenia już jest na liście. Adres powinien być unikalny.");
                     }
@@ -117,8 +118,11 @@ namespace HomeSensorServerAPI.Controllers
                 }
                 else
                 {
-                    throw;
+                    return BadRequest();
                 }
+            }catch (DbUpdateException)
+            {
+                return BadRequest();
             }
 
             return Ok();
@@ -149,7 +153,7 @@ namespace HomeSensorServerAPI.Controllers
                     sensorGatewayIP = IPAddress.Parse(node.GatewayAddress);
 
                     //actuator IP must be unique
-                    if (_context.Nodes.Where(n => n.IpAddress != "-").Any(n => IPAddress.Parse(n.IpAddress).Equals(sensorIP)))
+                    if (!IsIPAddressUnique(sensorIP))
                     {
                         return BadRequest("Podany adres IP urządzenia już jest na liście. Adres powinien być unikalny.");
                     }
@@ -198,6 +202,10 @@ namespace HomeSensorServerAPI.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(node);
+        }
+        private bool IsIPAddressUnique(IPAddress IPToCompare)
+        {
+            return _context.Nodes.Where(n => n.IpAddress != "-").Any(n => IPAddress.Parse(n.IpAddress).Equals(IPToCompare));
         }
 
         private bool NodeExists(int id)
