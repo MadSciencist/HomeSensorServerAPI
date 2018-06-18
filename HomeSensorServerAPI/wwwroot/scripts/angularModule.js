@@ -1,4 +1,4 @@
-﻿var app = angular.module("smartHomeApp", ["ngRoute"]);
+﻿var app = angular.module("smartHomeApp", ["ngRoute", "html5.sortable"]);
 
 
 app.config(function ($routeProvider) {

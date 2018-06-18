@@ -13,7 +13,7 @@
             }
         }).then(function successCallback(response) {
             for (let i = 0; i < response.data.length; i++) {
-                $scope.sensorsIdentifiers.push(response.data[i].identifier);
+                $scope.sensorsIdentifiers.push({ identifier: response.data[i].identifier, name: response.data[i].name });
             }
         }, function errorCallback(response) {
             console.log(response);
@@ -21,6 +21,7 @@
     };
 
     $scope.getSpecifiedSesorData = function (identifier) {
+        console.log('getting data of...: '.concat(identifier));
         const token = sessionStorage.getItem('token');
         $http({
             method: 'GET',
@@ -38,7 +39,7 @@
     };
 
     $scope.createChart = function (container, dataArray) {
-
+        let currentSensor = ($scope.sensorsIdentifiers.filter(s => s.identifier === dataArray[0].identifier))[0];
         const processedStamps = processTimestamps(dataArray);
         const sensorValues_Y = getValuesArray(dataArray);
 
@@ -58,8 +59,7 @@
                 },
                 title: {
                     display: true,
-                    text: 'Wykres temperatury z czujnika '.concat(dataArray[0].identifier)
-                    //text: 'Wykres temperatury z czujnika '
+                    text: 'Wykres temperatury z czujnika '.concat(currentSensor.name)
                 },
                 scales: {
                     yAxes: [{
