@@ -1,134 +1,60 @@
-﻿app.controller("chartsController", function ($scope, $http, $window) {
+﻿app.controller("chartsController", function ($scope, $http, $window, $document) {
 
-    $scope.sensorNames = [];
-    const colsPerRow = 2;
-    let rowsCount = 0, colsCount = 0;
+    $scope.sensorsIdentifiers = [];
 
-    $scope.getCharts = function () {
+    $scope.getIdentifiers = function () {
         const token = sessionStorage.getItem('token');
-        $.ajax({
-            type: 'GET',
+        $http({
+            method: 'GET',
             url: '/api/nodes/type/nodesensor',
             headers: {
                 'Content-Type': 'application-json; charset=UTF-8',
                 'Authorization': 'Bearer '.concat(token)
-            },
-            success: function (response) {
-                for (var i = 0; i < response.length; i++) {
-                    $scope.sensorNames.push(response[i].identifier);
-                    getSpecifiedSesor(response[i].identifier);
-
-                }
-                createRows($scope.sensorNames.length, $scope.sensorNames);
-            },
-            error: function (err) {
-                checkIfNotAuthorized(err);
             }
+        }).then(function successCallback(response) {
+            for (let i = 0; i < response.data.length; i++) {
+                $scope.sensorsIdentifiers.push(response.data[i].identifier);
+            }
+        }, function errorCallback(response) {
+            console.log(response);
         });
     };
 
-
-    let getSpecifiedSesor = function (identifier) {
+    $scope.getSpecifiedSesorData = function (identifier) {
         const token = sessionStorage.getItem('token');
-        $.ajax({
-            type: 'GET',
+        $http({
+            method: 'GET',
             url: '/api/sensors/'.concat(identifier),
             headers: {
                 'Content-Type': 'application-json; charset=UTF-8',
                 'Authorization': 'Bearer '.concat(token)
-            },
-            success: function (response) {
-                createChart(identifier, response);
-            },
-            error: function (err) {
-                console.log(error);
-                checkIfNotAuthorized(err);
             }
+        }).then(function successCallback(response) {
+            let name = 'canvas-chart-'.concat(identifier);
+            $scope.createChart(name, response.data);
+        }, function errorCallback(response) {
+            console.log(response);
         });
     };
 
+    $scope.createChart = function (container, dataArray) {
 
-    let createRows = function (elementsToFit, sensorNames) {
-        let neededRows = Math.ceil(elementsToFit / 2);
-        let sensorNamesForThisRow = [];
-
-        let j = 0;
-        for (let i = 1; i <= neededRows; i++){
-            if (i % colsPerRow === 0) {
-                j = rowsCount * colsPerRow;
-                sensorNamesForThisRow = [];
-            }
-
-            sensorNamesForThisRow.push(sensorNames[j]);
-            sensorNamesForThisRow.push(sensorNames[j+1]);
-
-            createRow(i, sensorNamesForThisRow);
-        }
-    };
-
-    let createRow = function (rowNum, sensorNamesForThisRow) {
-        let row = document.createElement("div");
-        row.className = "row";
-        row.id = "row".concat("_").concat(rowNum);
-
-        row.appendChild(createSpacerColumn());
-
-        let colLeft = createColumn(row.id, 'left', sensorNamesForThisRow[0]);
-        row.appendChild(colLeft);
-
-        let colRight = createColumn(row.id, 'right', sensorNamesForThisRow[1]);
-        row.appendChild(colRight);
-
-        row.appendChild(createSpacerColumn());
-
-        document.getElementById("chart-parent-container").appendChild(row);
-        rowsCount++;
-    };
-
-    let createColumn = function (rowId, columnName, sensorName) {
-
-        let col = document.createElement("div");
-        col.className = "col-md-5";
-        col.id = rowId.concat("_col_").concat(columnName);
-
-        let canvas = createCanvas(sensorName);
-        col.appendChild(canvas);
-
-        colsCount++;
-        return col;
-    };
-
-    let createSpacerColumn = function () {
-        let spacerCol = document.createElement("div");
-        spacerCol.className = "col-md-1";
-        return spacerCol;
-    };
-
-    let createCanvas = function (sensorName) {
-        let canvas = document.createElement("canvas");
-        canvas.id = "canvas_".concat(sensorName);
-        return canvas;
-    };
-
-
-    function createChart(container, dataArray) {
-        let _container = "canvas_".concat(container);
         const processedStamps = processTimestamps(dataArray);
         const sensorValues_Y = getValuesArray(dataArray);
 
-        var ctx = document.getElementById(_container).getContext('2d');
+        var ctx = document.getElementById(container).getContext('2d');
         var stackedLine = new Chart(ctx, {
             type: 'line',
             data: {
                 datasets: [{
                     data: sensorValues_Y
                 }],
-                labels: processedStamps,
+                labels: processedStamps
             },
             options: {
                 responsive: true,
                 legend: {
-                    display: false,
+                    display: false
                 },
                 title: {
                     display: true,
@@ -142,9 +68,9 @@
                 }
             }
         });
-    }
+    };
 
-    getValuesArray = function (sensorAllDataArray) {
+    let getValuesArray = function (sensorAllDataArray) {
         let valuesArray = [];
         for (let i = 0; i < sensorAllDataArray.length; i++) {
             let indexOfStartValue = sensorAllDataArray[i].data.indexOf(':');
@@ -156,7 +82,7 @@
         return valuesArray;
     };
 
-    processTimestamps = function (d) {
+    let processTimestamps = function (d) {
         const days = ['Nd', 'Pon', 'Wt', 'Sr', 'Czw', 'Pt', 'Sob'];
         let stampsArray = [];
         for (i = 0; i < d.length; i++) {
@@ -166,6 +92,4 @@
         }
         return stampsArray;
     };
-
-
 });

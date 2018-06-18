@@ -14,6 +14,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\scripts\NewFolder\**" />
+    <Content Remove="wwwroot\scripts\NewFolder\**" />
+    <EmbeddedResource Remove="wwwroot\scripts\NewFolder\**" />
+    <None Remove="wwwroot\scripts\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />

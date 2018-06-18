@@ -1,9 +1,10 @@
 ﻿app.controller("nodesController", function ($scope, $http, $window, $document) {
+    $scope.nodes = [];
 
     $scope.onToggle = function (nodeId) {
         let state;
 
-        const node = $scope.nodes.filter(node => node.id == nodeId);
+        const node = $scope.nodes.filter(node => node.id === nodeId);
 
         if (node[0].isOn === true)
             state = 'on';
@@ -28,7 +29,7 @@
     };
 
     function formatChangedDeviceName(isSuccess, nodeId, state) {
-        const node = $scope.nodes.filter(node => node.id == nodeId);
+        const node = $scope.nodes.filter(node => node.id === nodeId);
         const name = node[0].name;
         if (isSuccess === true)
             return ' '.concat('Ustawiono stan urządzenia: ').concat(name).concat(' na stan: ').concat(state);
@@ -87,7 +88,10 @@
             'Accept': 'application/json'
         }).then(function onSuccess(data) {
             $('#nodes-info-error').hide();
-            $scope.getNodes(); //refresh area
+            setTimeout(function () {
+                $scope.getNodes(); //refresh area
+            }, 250);
+            
         }, function onError(error) {
             $('#nodes-info-error-text').text(error.data);
             $('#nodes-info-error').show();
@@ -141,7 +145,7 @@
             $("#selectSensorType").css('display', 'block');
             $("#sensorType").val(selectedNode.exactType);
         } else if (selectedNode.type === 'nodeActuator') {
-            $("#selectSensorType").css('display', 'none')
+            $("#selectSensorType").css('display', 'none');
             $("#selectActuatorType").css('display', 'block');
             $("#actuatorType").val(selectedNode.exactType);
             $("#nodeIP").val(selectedNode.ipAddress);
@@ -149,7 +153,7 @@
         }
     };
 
-    let clearForm = function () {
+    $scope.clearNodeForm = function () {
         $("#nodeName").val('');
         $("#nodeIdentifier").val('');
         $("#nodeLogin").val('');
@@ -178,7 +182,7 @@
             headers: {
                 'Content-Type': 'application-json; charset=UTF-8',
                 'Authorization': 'Bearer '.concat(token)
-            },
+            }
         }).then(function successCallback(response) {
             $scope.nodes = response.data;
         }, function errorCallback(response) {
@@ -196,7 +200,7 @@
             headers: {
                 'Content-Type': 'application-json; charset=UTF-8',
                 'Authorization': 'Bearer '.concat(token)
-            },
+            }
         }).then(function successCallback(response) {
             $scope.nodes = response.data;
         }, function errorCallback(response) {
