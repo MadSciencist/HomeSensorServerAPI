@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Smart home controller</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="style/chartStyle.css">
     <link rel="stylesheet" type="text/css" href="style/mainStyle.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" crossorigin="anonymous"></script>
     <script src="node_modules/chart.js/dist/Chart.js"></script>
     <script src="scripts/Vendors/html5-sortable.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
@@ -20,6 +20,8 @@
     <script src="scripts/nodesController.js"></script>
 </head>
 <body ng-controller="homeController">
+
+    <!--
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -65,8 +67,60 @@
             </div>
         </div>
     </nav>
-    <main>
-        <div ng-view></div>
-    </main>
+        -->
+    <div class="nav-side-menu">
+        <div class="brand">Smart Home</div>
+        <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i>
+
+        <div class="menu-list">
+            <ul id="menu-content" class="menu-content collapse out">
+                <li>
+                    <a href="#!charts"><i class="fa fa-chart-bar fa-lg"></i> Dane z czujników</a>
+                </li>
+                <li data-toggle="collapse" data-target="#products" class="collapsed active">
+                    <a href="javascript:void(0)"><i class="fa fa-globe fa-lg"></i>Zarządzaj<i class="fa fa-sort-down fa-lg" style="float: right;"></i></a>
+                </li>
+                <ul class="sub-menu collapse" id="products">
+                    <li><a href="#!control">Urządzenia</a></li>
+                </ul>
+
+                <li data-toggle="collapse" data-target="#service" class="collapsed">
+                    <a href="javascript:void(0)"><i class="fa fa-globe fa-lg"></i>Panel sterowania<i class="fa fa-sort-down fa-lg" style="float: right;"></i></a>
+                </li>
+                <ul class="sub-menu collapse" id="service">
+                    <li><a href="#!nodes">Dodaj urządzenie</a></li>
+                    <li>Dodaj nowy typ</li>
+                </ul>
+                <li>
+                    <a href="#"><i class="fa fa-user fa-lg"></i> Mój profil</a>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-users fa-lg"></i> Użytkownicy</a>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-sign-out-alt fa-lg"></i> Wyloguj</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <main>
+            <div ng-view></div>
+        </main>
+    </div>
+
+    <footer>
+        <div class="footer-wrapper">
+            <div class="footer-upper row" style="background-color: #3c3d41;">
+                <div class="col-md-4">1111111</div>
+                <div class="col-md-4">222222222</div>
+                <div class="col-md-4">333333333</div>
+            </div>
+            <div class="footer-lower">
+                <p>2018 - Mateusz Kryszczak</p>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

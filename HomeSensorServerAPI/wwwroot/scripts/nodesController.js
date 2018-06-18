@@ -98,8 +98,6 @@
         });
     };
 
-    $scope.test = [{ id: 1, name: 'jeden' }, { id: 2, name: 'dwa' }];
-
     //ok
     let postNode = function () {
         const obj = {
