@@ -161,22 +161,3 @@ body {
         display: block;
     }
 }
-
-
-.footer-wrapper {
-    padding-left: 205px;
-    min-height: 50px;
-    background-color: #2e353d;
-    text-decoration: none;
-    color: white;
-}
-
-.footer-upper .div {
-    text-align: center;
-}
-
-.footer-lower {
-    text-align: center;
-    padding-top: 3px;
-    padding-bottom: 3px;
-}

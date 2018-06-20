@@ -24,7 +24,7 @@ app.config(function ($routeProvider) {
             controller: "homeController"
         })
         .otherwise({
-            templateUrl: "pages/error-404.html"
+            templateUrl: "pages/not-found.html"
         });
 });
 
