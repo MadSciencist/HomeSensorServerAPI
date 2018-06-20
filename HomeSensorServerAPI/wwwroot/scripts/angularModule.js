@@ -1,27 +1,64 @@
-﻿var app = angular.module("smartHomeApp", ["ngRoute", "html5.sortable"]);
+﻿let ChangeMainPanelName = function (name) {
+    const names = [
+        {
+            id: 'charts',
+            fullName: 'Wykresy z danych wszystkich czujników'
+        },
+        {
+            id: 'control',
+            fullName: 'Steruj swoimi urządzeniami'
+        },
+
+        {
+            id: 'nodes',
+            fullName: 'Zarządzaj swoimi urządzeniami'
+        },
+        {
+            id: 'new-device-type',
+            fullName: 'Zdefiniuj nowe urządzenie'
+        },
+        {
+            id: 'users',
+            fullName: 'Zarządzaj użytkownikami systemu'
+        },
+        {
+            id: 'my-profile',
+            fullName: 'Twoje dane'
+        }];
+
+    let fullName = names.filter(n => n.id === name)[0].fullName;
+
+    $('#view-title').text(fullName);
+};
+
+var app = angular.module("smartHomeApp", ["ngRoute", "html5.sortable"]);
 
 
 app.config(function ($routeProvider) {
     $routeProvider
         .when("/", {
             templateUrl: "pages/charts.html",
-            controller: "chartsController"
+            controller: "HomeController"
         })
         .when("/charts", {
             templateUrl: "pages/charts.html",
-            controller: "chartsController"
+            controller: "ChartsController"
         })
         .when("/control", {
             templateUrl: "pages/control.html",
-            controller: "nodesController"
+            controller: "NodesController"
         })
         .when("/nodes", {
             templateUrl: "pages/nodes.html",
-            controller: "nodesController"
+            controller: "NodesController"
         })
         .when("/users", {
             templateUrl: "pages/users.html",
-            controller: "homeController"
+            controller: "UsersController"
+        })
+        .when("/my-profile", {
+            templateUrl: "pages/user.html",
+            controller: "UserController"
         })
         .otherwise({
             templateUrl: "pages/not-found.html"
@@ -29,33 +66,11 @@ app.config(function ($routeProvider) {
 });
 
 
-app.directive('ipaddress', function () {
-    return {
-        require: 'ngModel',
-        link: function (scope, elem, attrs, ctrl) {
-            ctrl.$validators.ipaddress = function (modelValue, viewValue) {
-                if (ctrl.$isEmpty(modelValue)) {
-                    return false;
-                }
-                var matcher;
-                if ((matcher = viewValue.match(/^([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})$/)) !== null) {
-                    var i;
-                    var previous = "255";
-                    for (i = 1; i < 5; i++) {
-                        var octet = parseInt(matcher[i]);
-                        if (octet > 255) return false;
-                    }
-                    return true;
-                }
-                else {
-                    return false;
-                }
-            };
-        }
-    };
-});
 
-app.controller("homeController", function ($scope, $http, $window, $route) {
+
+
+
+app.controller("HomeController", function ($scope, $http, $window, $route) {
 
 
     $scope.login = function () {

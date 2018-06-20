@@ -2,7 +2,7 @@
 <html ng-app="smartHomeApp" lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Smart home controller</title>
+    <title>Smart home controller - beta 1.00 development</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -15,11 +15,14 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.10/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.10/angular-route.js"></script>
 
-    <script src="scripts/angularModule.js"></script>
-    <script src="scripts/chartsController.js"></script>
-    <script src="scripts/nodesController.js"></script>
+    <script src="scripts/AngularModule.js"></script>
+    <script src="scripts/AngularDirectives.js"></script>
+    <script src="scripts//UserController.js"></script>
+    <script src="scripts/ChartsController.js"></script>
+    <script src="scripts/NodesController.js"></script>
+
 </head>
-<body ng-controller="homeController">
+<body ng-controller="HomeController">
 
     <!--
     <nav class="navbar navbar-default">
@@ -75,27 +78,23 @@
         <div class="menu-list">
             <ul id="menu-content" class="menu-content collapse out">
                 <li>
-                    <a href="#!charts"><i class="fa fa-chart-bar fa-lg"></i> Dane z czujników</a>
+                    <a href="#!charts" onclick="ChangeMainPanelName('charts')"><i class="fa fa-chart-bar fa-lg"></i> Dane z czujników</a>
                 </li>
-                <li data-toggle="collapse" data-target="#products" class="collapsed active">
-                    <a href="javascript:void(0)"><i class="fa fa-globe fa-lg"></i>Zarządzaj<i class="fa fa-sort-down fa-lg" style="float: right;"></i></a>
-                </li>
-                <ul class="sub-menu collapse" id="products">
-                    <li><a href="#!control">Urządzenia</a></li>
-                </ul>
 
-                <li data-toggle="collapse" data-target="#service" class="collapsed">
+                <li>
+                    <a href="#!control" onclick="ChangeMainPanelName('control')"><i class="fa fa-sitemap fa-lg"></i> Sterowanie</a>
+                </li>
+
+                <li data-toggle="collapse" data-target="#admin-panel" class="collapsed">
                     <a href="javascript:void(0)"><i class="fa fa-globe fa-lg"></i>Panel sterowania<i class="fa fa-sort-down fa-lg" style="float: right;"></i></a>
                 </li>
-                <ul class="sub-menu collapse" id="service">
-                    <li><a href="#!nodes">Dodaj urządzenie</a></li>
-                    <li>Dodaj nowy typ</li>
+                <ul class="sub-menu collapse" id="admin-panel">
+                    <li><a href="#!nodes"  onclick="ChangeMainPanelName('nodes')"><i class="fas fa-caret-right"></i> Dodaj urządzenie</a></li>
+                    <li><a href="#!new-device-type"  onclick="ChangeMainPanelName('new-device-type')"><i class="fas fa-caret-right"></i> Dodaj nowy typ</a></li>
+                    <li><a href="#!users" onclick="ChangeMainPanelName('users')"><i class="fas fa-caret-right"></i> Użytkownicy systemu</a></li>
                 </ul>
                 <li>
-                    <a href="#!my-profile"><i class="fa fa-user fa-lg"></i> Mój profil</a>
-                </li>
-                <li>
-                    <a href="#!users"><i class="fa fa-users fa-lg"></i> Użytkownicy</a>
+                    <a href="#!my-profile" onclick="ChangeMainPanelName('my-profile')"><i class="fa fa-user fa-lg"></i> Mój profil</a>
                 </li>
                 <li>
                     <a href="#"><i class="fa fa-sign-out-alt fa-lg"></i> Wyloguj</a>
@@ -105,9 +104,14 @@
     </div>
 
     <div class="main-content">
-        <main>
-            <div ng-view></div>
-        </main>
+        <div class="panel panel-default">
+            <div class="panel-heading" id="view-title">Strona główna</div>
+            <div class="panel-body">
+                <main>
+                    <div ng-view></div>
+                </main>
+            </div>
+        </div>
     </div>
 
 </body>

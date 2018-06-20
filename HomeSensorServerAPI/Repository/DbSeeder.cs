@@ -19,7 +19,7 @@ namespace HomeSensorServerAPI.Repository
                     Lastname = "Kryszczak",
                     Email = "mkrysz1337@gmail.com",
                     Password = "admin",
-                    Role = UserRole.Admin,
+                    Role = EUserRole.Admin,
                     Birthdate = new DateTime(1994, 6, 20)
                 });
 
@@ -30,7 +30,7 @@ namespace HomeSensorServerAPI.Repository
                     Lastname = "Kryszczak",
                     Email = "mkrysz1337@gmail.com",
                     Password = "admin",
-                    Role = UserRole.Manager,
+                    Role = EUserRole.Manager,
                     Birthdate = new DateTime(1994, 6, 20)
                 });
 
@@ -41,7 +41,7 @@ namespace HomeSensorServerAPI.Repository
                     Lastname = "Kryszczak",
                     Email = "mkrysz1337@gmail.com",
                     Password = "admin",
-                    Role = UserRole.Viewer,
+                    Role = EUserRole.Viewer,
                     Birthdate = new DateTime(1994, 6, 20)
                 });
 
@@ -52,7 +52,7 @@ namespace HomeSensorServerAPI.Repository
                     Lastname = "Kryszczak",
                     Email = "mkrysz1337@gmail.com",
                     Password = "homeAutomationSensorPassword",
-                    Role = UserRole.Sensor,
+                    Role = EUserRole.Sensor,
                     Birthdate = new DateTime(1994, 6, 20)
                 });
 

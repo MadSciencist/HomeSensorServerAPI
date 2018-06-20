@@ -1,4 +1,4 @@
-﻿app.controller("chartsController", function ($scope, $http, $window, $document) {
+﻿app.controller("ChartsController", function ($scope, $http, $window, $document) {
 
     $scope.sensorsIdentifiers = [];
 

@@ -1,4 +1,4 @@
-﻿app.controller("nodesController", function ($scope, $http, $window, $document) {
+﻿app.controller("NodesController", function ($scope, $http, $window, $document) {
     $scope.nodes = [];
 
     $scope.onToggle = function (nodeId) {
