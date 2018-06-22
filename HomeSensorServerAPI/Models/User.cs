@@ -4,9 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace HomeSensorServerAPI.Models
 {
     [Table("users")]
-    public class User
+    public class User : Entity
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public string Lastname { get; set; }
         public string Email { get; set; }

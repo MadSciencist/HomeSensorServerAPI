@@ -1,7 +1,7 @@
 ﻿namespace HomeSensorServerAPI.Models
 {
-    public abstract class Entity
+    public class Entity
     {
-        public abstract long Id { get; set; }
+        public long Id { get; set; }
     }
 }

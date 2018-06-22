@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using HomeSensorServerAPI.Logger;
 
 namespace LocalSensorServer.Controllers
 {
@@ -30,6 +31,8 @@ namespace LocalSensorServer.Controllers
         public async Task<PublicUser> GetUserInfo(int id)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+
+            new LogService().LogToDatabase(_context, ELogLevel.WARNING, user.Lastname);
 
             return new UserPublicDataProvider().ConvertFullUserDataToPublicData(user);
         }

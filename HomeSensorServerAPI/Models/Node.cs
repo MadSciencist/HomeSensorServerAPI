@@ -6,7 +6,6 @@ namespace HomeSensorServerAPI.Models
     [Table("nodes")]
     public class Node : Entity
     {
-        public override long Id { get; set; }
         [DisplayName("Nazwa")]
         public string Name { get; set; }
         [DisplayName("Identyfikator")]
