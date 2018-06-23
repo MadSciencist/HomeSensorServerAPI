@@ -1,5 +1,4 @@
-﻿using HomeSensorServerAPI.Logger;
-using HomeSensorServerAPI.Repository;
+﻿using HomeSensorServerAPI.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;

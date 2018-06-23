@@ -1,22 +1,16 @@
 ﻿using HomeSensorServerAPI.Models;
-using HomeSensorServerAPI.Repository;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace HomeSensorServerAPI.BusinessLogic
 {
     public class UserAuthenticator
     {
-        AppDbContext _context;
-        public UserAuthenticator(AppDbContext context)
-        {
-            _context = context;
-        }
-
-        public User Authenticate(LoginCredentials login)
+        public User Authenticate(IEnumerable<User> users, LoginCredentials login)
         {
             User user = null;
 
-            var requestant = _context.Users.FirstOrDefault(u => u.Login == login.Username);
+            var requestant = users.FirstOrDefault(u => u.Login == login.Username);
 
             if (requestant == null)
                 return null;

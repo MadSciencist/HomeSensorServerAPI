@@ -17,14 +17,14 @@
     
     <script src="scripts/main.js"></script>
     <script src="scripts/AngularModule.js"></script>
-    <script src="scripts/HomeController.js"></script>
+    <script src="scripts/LoginController.js"></script>
     <script src="scripts/AngularDirectives.js"></script>
     <script src="scripts//UserController.js"></script>
     <script src="scripts/ChartsController.js"></script>
     <script src="scripts/NodesController.js"></script>
 
 </head>
-<body ng-controller="HomeController">
+<body>
     <div class="nav-side-menu">
         <div class="brand">Smart Home</div>
         <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i>
@@ -43,12 +43,15 @@
                     <a href="javascript:void(0)"><i class="fa fa-globe fa-lg"></i>Panel sterowania<i class="fa fa-sort-down fa-lg" style="float: right;"></i></a>
                 </li>
                 <ul class="sub-menu collapse" id="admin-panel">
-                    <li><a href="#!nodes"  onclick="ChangeMainPanelName('nodes')"><i class="fas fa-caret-right"></i> Dodaj urządzenie</a></li>
-                    <li><a href="#!new-device-type"  onclick="ChangeMainPanelName('new-device-type')"><i class="fas fa-caret-right"></i> Dodaj nowy typ</a></li>
+                    <li><a href="#!nodes" onclick="ChangeMainPanelName('nodes')"><i class="fas fa-caret-right"></i> Dodaj urządzenie</a></li>
+                    <li><a href="#!new-device-type" onclick="ChangeMainPanelName('new-device-type')"><i class="fas fa-caret-right"></i> Dodaj nowy typ</a></li>
                     <li><a href="#!users" onclick="ChangeMainPanelName('users')"><i class="fas fa-caret-right"></i> Użytkownicy systemu</a></li>
                 </ul>
                 <li>
                     <a href="#!my-profile" onclick="ChangeMainPanelName('my-profile')"><i class="fa fa-user fa-lg"></i> Mój profil</a>
+                </li>
+                <li>
+                    <a href="#!login"><i class="fa fa-sign-out-alt fa-lg"></i> Zaloguj</a>
                 </li>
                 <li>
                     <a href="#"><i class="fa fa-sign-out-alt fa-lg"></i> Wyloguj</a>

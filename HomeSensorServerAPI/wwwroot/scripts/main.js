@@ -24,6 +24,10 @@
         {
             id: 'my-profile',
             fullName: 'Twoje dane'
+        },
+        {
+            id: 'login',
+            fullName: 'Zaloguj się'
         }];
 
     let fullName = names.filter(n => n.id === name)[0].fullName;

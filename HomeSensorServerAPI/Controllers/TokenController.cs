@@ -4,6 +4,8 @@ using Microsoft.Extensions.Configuration;
 using HomeSensorServerAPI.Repository;
 using HomeSensorServerAPI.Models;
 using HomeSensorServerAPI.BusinessLogic;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace HomeSensorServerAPI.Controllers
 {
@@ -22,22 +24,26 @@ namespace HomeSensorServerAPI.Controllers
         [HttpPost]
         public IActionResult CreateToken([FromBody]LoginCredentials requestant)
         {
-            var a = Request;
-
             IActionResult response = BadRequest();
 
             if (ModelState.IsValid)
             {
                 response = Unauthorized();
 
-                var authenticator = new UserAuthenticator(_context);
-                var user = authenticator.Authenticate(requestant);
+                IEnumerable<User> users = _context.Users.ToList();
+      
+                var authenticator = new UserAuthenticator();
+                var user = authenticator.Authenticate(users, requestant);
 
-                if (user != null)
+                if (user != null) //user found
                 {
                     var builder = new AuthenticationTokenBuilder(_config);
                     var tokenString = builder.BuildToken(user);
                     response = Json(new { token = tokenString, userId = user.Id });
+                }
+                else //no matching user
+                {
+                    response = NotFound("No matching user");
                 }
             }
             return response;

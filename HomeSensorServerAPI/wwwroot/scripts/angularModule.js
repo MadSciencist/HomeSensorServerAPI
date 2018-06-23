@@ -20,11 +20,15 @@ app.config(function ($routeProvider) {
         })
         .when("/users", {
             templateUrl: "pages/users.html",
-            controller: "UsersController"
+            controller: "UserController"
         })
         .when("/my-profile", {
             templateUrl: "pages/user.html",
             controller: "UserController"
+        })
+        .when("/login", {
+            templateUrl: "pages/login.html",
+            controller: "LoginController"
         })
         .otherwise({
             templateUrl: "pages/not-found.html"
