@@ -11,11 +11,11 @@ namespace ServerMvc.Models
 {
     [Route("api/[controller]")]
     [Produces("application/json")]
-    public class SensorsApiController : ControllerBase
+    public class SensorsController : ControllerBase
     {
         private readonly AppDbContext _context;
 
-        public SensorsApiController(AppDbContext context)
+        public SensorsController(AppDbContext context)
         {
             _context = context;
         }

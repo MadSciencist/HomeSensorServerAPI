@@ -7,6 +7,7 @@ using HomeSensorServerAPI.BusinessLogic;
 using System.Linq;
 using System.Collections.Generic;
 using System;
+using Newtonsoft.Json;
 
 namespace HomeSensorServerAPI.Controllers
 {
@@ -38,13 +39,14 @@ namespace HomeSensorServerAPI.Controllers
                 {
                     var builder = new AuthenticationTokenBuilder(_config);
                     var tokenString = builder.BuildToken(user);
-                    response = Json(new
+
+                    response = Ok(JsonConvert.SerializeObject(new
                     {
                         token = tokenString,
                         userId = user.Id,
                         tokenIssueTime = DateTime.UtcNow.ToString(),
                         tokenValidTo = DateTime.UtcNow.AddMinutes(double.Parse(_config["AuthenticationJwt:ValidTime"])).ToString(),
-                    });
+                    }));
                 }
                 else //no matching user
                 {
