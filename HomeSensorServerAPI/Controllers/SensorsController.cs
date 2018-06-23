@@ -9,6 +9,7 @@ using System.Linq;
 
 namespace ServerMvc.Models
 {
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [Produces("application/json")]
     public class SensorsController : ControllerBase
@@ -22,7 +23,7 @@ namespace ServerMvc.Models
 
         //TODO validate search result, authorize
         //api/sensors/kitchen
-        [HttpGet("{identifier}"), AllowAnonymous]
+        [HttpGet("{identifier}")]
         public IEnumerable<Sensor> Get(string identifier)
         {
             var sensors = _context.Sensors.Where(s => s.Identifier == identifier);

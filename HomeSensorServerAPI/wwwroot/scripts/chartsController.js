@@ -3,7 +3,7 @@
     $scope.sensorsIdentifiers = [];
 
     $scope.getIdentifiers = function () {
-        const token = sessionStorage.getItem('token');
+        const token = localStorage.getItem('token');
         $http({
             method: 'GET',
             url: '/api/nodes/type/nodesensor',
@@ -16,13 +16,13 @@
                 $scope.sensorsIdentifiers.push({ identifier: response.data[i].identifier, name: response.data[i].name });
             }
         }, function errorCallback(response) {
-            console.log(response);
+            console.error(response);
         });
     };
 
     $scope.getSpecifiedSesorData = function (identifier) {
         console.log('getting data of...: '.concat(identifier));
-        const token = sessionStorage.getItem('token');
+        const token = localStorage.getItem('token');
         $http({
             method: 'GET',
             url: '/api/sensors/'.concat(identifier),

@@ -173,7 +173,7 @@
 
     //ok
     $scope.getActuators = function () {
-        const token = sessionStorage.getItem('token');
+        const token = localStorage.getItem('token');
         $http({
             method: 'GET',
             url: '/api/nodes/type/nodeactuator',
@@ -191,7 +191,7 @@
 
     //ok
     $scope.getNodes = function () {
-        const token = sessionStorage.getItem('token');
+        const token = localStorage.getItem('token');
         $http({
             method: 'GET',
             url: '/api/nodes',

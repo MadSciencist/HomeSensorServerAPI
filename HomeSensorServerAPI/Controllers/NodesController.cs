@@ -11,6 +11,7 @@ using HomeSensorServerAPI.Models;
 
 namespace HomeSensorServerAPI.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Produces("application/json")]
     [Route("api/[controller]")]
     public class NodesController : ControllerBase

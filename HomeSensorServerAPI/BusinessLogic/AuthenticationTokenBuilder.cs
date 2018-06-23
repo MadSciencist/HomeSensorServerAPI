@@ -22,10 +22,9 @@ namespace HomeSensorServerAPI.BusinessLogic
             {
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Sub, user.Name),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email)
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim(ClaimTypes.Role, user.Role.ToString())
             };
-
-            claims.Add(new Claim(ClaimTypes.Role, user.Role.ToString()));
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["AuthenticationJwt:Key"]));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -34,7 +33,7 @@ namespace HomeSensorServerAPI.BusinessLogic
               _config["AuthenticationJwt:Issuer"],
               _config["AuthenticationJwt:Issuer"], //this is actually audience
               claims: claims,
-              expires: DateTime.Now.AddMinutes(double.Parse(_config["AuthenticationJwt:ValidTime"])),
+              expires: DateTime.UtcNow.AddMinutes(double.Parse(_config["AuthenticationJwt:ValidTime"])),
               signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
