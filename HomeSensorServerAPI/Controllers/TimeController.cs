@@ -5,6 +5,7 @@ using System;
 namespace HomeSensorServerAPI.Controllers
 {
     [Route("api/[controller]")]
+    [Produces("application/json")]
     [ApiController]
     public class TimeController : ControllerBase
     {

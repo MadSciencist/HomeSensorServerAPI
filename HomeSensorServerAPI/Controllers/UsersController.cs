@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace LocalSensorServer.Controllers
 {
     [Route("api/[controller]")]
-    public class UsersController : Controller
+    public class UsersController : ControllerBase
     {
         private readonly AppDbContext _context;
 

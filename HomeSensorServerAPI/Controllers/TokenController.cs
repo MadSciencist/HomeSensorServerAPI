@@ -11,7 +11,7 @@ using System;
 namespace HomeSensorServerAPI.Controllers
 {
     [Route("api/[controller]")]
-    public class TokenController : Controller
+    public class TokenController : ControllerBase
     {
         readonly IConfiguration _config;
         private readonly AppDbContext _context;

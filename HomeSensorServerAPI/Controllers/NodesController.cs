@@ -12,8 +12,8 @@ using HomeSensorServerAPI.Models;
 namespace HomeSensorServerAPI.Controllers
 {
     [Produces("application/json")]
-    [Route("api/Nodes")]
-    public class NodesController : Controller
+    [Route("api/[controller]")]
+    public class NodesController : ControllerBase
     {
         private readonly AppDbContext _context;
 

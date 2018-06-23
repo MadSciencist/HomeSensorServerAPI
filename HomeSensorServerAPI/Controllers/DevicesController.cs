@@ -12,7 +12,8 @@ namespace HomeSensorServerAPI.Controllers
 {
     [Authorize(Roles = "Admin, Manager")]
     [Route("api/[controller]")]
-    public class DevicesController : Controller
+    [Produces("application/json")]
+    public class DevicesController : ControllerBase
     {
         private readonly AppDbContext _context;
 

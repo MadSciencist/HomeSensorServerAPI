@@ -9,8 +9,9 @@ using System.Linq;
 
 namespace ServerMvc.Models
 {
-    [Route("api/sensors")]
-    public class SensorsApiController : Controller
+    [Route("api/[controller]")]
+    [Produces("application/json")]
+    public class SensorsApiController : ControllerBase
     {
         private readonly AppDbContext _context;
 
