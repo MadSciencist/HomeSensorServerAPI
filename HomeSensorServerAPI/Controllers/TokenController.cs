@@ -44,8 +44,8 @@ namespace HomeSensorServerAPI.Controllers
                     {
                         token = tokenString,
                         userId = user.Id,
-                        tokenIssueTime = DateTime.UtcNow.ToString(),
-                        tokenValidTo = DateTime.UtcNow.AddMinutes(double.Parse(_config["AuthenticationJwt:ValidTime"])).ToString(),
+                        tokenIssueTime = DateTime.Now.ToString(),
+                        tokenValidTo = DateTime.Now.AddMinutes(double.Parse(_config["AuthenticationJwt:ValidTime"])).ToString(),
                     }));
                 }
                 else //no matching user

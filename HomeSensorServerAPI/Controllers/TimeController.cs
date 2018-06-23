@@ -14,6 +14,14 @@ namespace HomeSensorServerAPI.Controllers
         [AllowAnonymous]
         public IActionResult GetTime()
         {
+            return Ok(DateTime.Now.ToString());
+        }
+
+        [Route("utcnow")]
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult GetUtcTime()
+        {
             return Ok(DateTime.UtcNow.ToString());
         }
     }

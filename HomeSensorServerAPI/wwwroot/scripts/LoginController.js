@@ -18,14 +18,13 @@
             $scope.password = '';
             $window.localStorage.setItem('token', response.data.token);
             $window.localStorage.setItem('userId', response.data.userId);
-            $window.localStorage.setItem('tokenIssueTime', response.data.tokenIssueTime);
             $window.localStorage.setItem('validTo', response.data.tokenValidTo);
             getUserData();
         }, function onError(error) {
             $scope.username = '';
             $scope.password = '';
-            $scope.badAuthentication = true;
-            $scope.badAuthenticationMessage = error.data;
+            $rootScope.badAuthentication = true;
+            $rootScope.badAuthenticationMessage = error.data;
         });
     };
 

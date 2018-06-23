@@ -10,7 +10,7 @@ namespace HomeSensorServerAPI.Logger
             string message = "Stack: " + e.StackTrace.ToString() + ", Message: " + e.Message.ToString();
             LogEvent logEvent = new LogEvent
             {
-                DateOccured = DateTime.UtcNow,
+                DateOccured = DateTime.Now,
                 LogLevel = ELogLevel.EXCEPTION,
                 LogMessage = message
             };
@@ -22,7 +22,7 @@ namespace HomeSensorServerAPI.Logger
         {
             LogEvent logEvent = new LogEvent
             {
-                DateOccured = DateTime.UtcNow,
+                DateOccured = DateTime.Now,
                 LogLevel = logLevel,
                 LogMessage = message
             };
@@ -35,7 +35,7 @@ namespace HomeSensorServerAPI.Logger
             string message = "Stack: " + e.StackTrace.ToString() + ", Message: " + e.Message.ToString();
             LogEvent logEvent = new LogEvent
             {
-                DateOccured = DateTime.UtcNow,
+                DateOccured = DateTime.Now,
                 LogLevel = ELogLevel.EXCEPTION,
                 LogMessage = message
             };
@@ -47,7 +47,7 @@ namespace HomeSensorServerAPI.Logger
         {
             LogEvent logEvent = new LogEvent
             {
-                DateOccured = DateTime.UtcNow,
+                DateOccured = DateTime.Now,
                 LogLevel = logLevel,
                 LogMessage = message
             };

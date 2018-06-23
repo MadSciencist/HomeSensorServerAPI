@@ -33,7 +33,7 @@ namespace HomeSensorServerAPI.BusinessLogic
               _config["AuthenticationJwt:Issuer"],
               _config["AuthenticationJwt:Issuer"], //this is actually audience
               claims: claims,
-              expires: DateTime.UtcNow.AddMinutes(double.Parse(_config["AuthenticationJwt:ValidTime"])),
+              expires: DateTime.Now.AddMinutes(double.Parse(_config["AuthenticationJwt:ValidTime"])),
               signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);

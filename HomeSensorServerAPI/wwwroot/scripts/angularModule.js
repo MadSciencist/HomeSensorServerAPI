@@ -43,13 +43,17 @@ app.config(function ($routeProvider) {
 
 app.run(["$rootScope", "$location", "$window", function ($rootScope, $location, $window) {
     $rootScope.$on('$routeChangeStart', function (event, next, current) {
-
-        const token = $window.localStorage.getItem('token');
-        const userId = $window.localStorage.getItem('userId');
-
         if (next.$$route.auth) {
-            if (userId === null) {
-                console.log('NULL USER ID');
+            const tokenValidTo = $window.localStorage.getItem('validTo');
+
+            const tokenValidToObject = new Date(tokenValidTo);
+            let currentTime = new Date();
+            if (currentTime.getTime() > tokenValidToObject.getTime()) { //token is no longer valid
+                
+                if (tokenValidTo != null) {
+                    $rootScope.badAuthentication = true;
+                    $rootScope.badAuthenticationMessage = 'Twoja sesja wygasła. Zaloguj się ponownie.';
+                }
                 $location.path('/login');
             }
         }

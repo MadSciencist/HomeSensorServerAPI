@@ -39,29 +39,8 @@ namespace HomeSensorServerAPI
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = Configuration["AuthenticationJwt:Issuer"],
-                    ValidAudience = Configuration["AuthenticationJwt:Issuer"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["AuthenticationJwt:Key"])),
-                    ClockSkew = TimeSpan.FromMinutes(0)
-                };
-            });
-
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
-                options.AddPolicy("Manager", policy => policy.RequireRole("Manager"));
-                options.AddPolicy("Viewer", policy => policy.RequireRole("Viewer"));
-                options.AddPolicy("Sensor", policy => policy.RequireRole("Sensor"));
-            });
+            AddJwtAuthentication(services);
+            AddAuthorizationPolicies(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -79,6 +58,36 @@ namespace HomeSensorServerAPI
             app.UseHttpsRedirection();
             app.UseCookiePolicy();
             app.UseMvc();
+        }
+
+        private void AddJwtAuthentication(IServiceCollection services)
+        {
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = Configuration["AuthenticationJwt:Issuer"],
+                    ValidAudience = Configuration["AuthenticationJwt:Issuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["AuthenticationJwt:Key"])),
+                    ClockSkew = TimeSpan.FromMinutes(0)
+                };
+            });
+        }
+
+        private void AddAuthorizationPolicies(IServiceCollection services)
+        {
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
+                options.AddPolicy("Manager", policy => policy.RequireRole("Manager"));
+                options.AddPolicy("Viewer", policy => policy.RequireRole("Viewer"));
+                options.AddPolicy("Sensor", policy => policy.RequireRole("Sensor"));
+            });
         }
     }
 }
