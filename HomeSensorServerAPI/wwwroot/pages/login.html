@@ -3,6 +3,12 @@
 </head>
 
 <div class="container-fluid" ng-controller="LoginController">
+    <div class="col-md-6 col-md-offset-3" ng-show="badAuthentication">
+        <div class="panel panel-danger">
+            <div class="panel-heading">Wystąpił błąd</div>
+            <div class="panel-body" ng-bind="badAuthenticationMessage"></div>
+        </div>
+    </div>
     <div class="col-md-6 col-md-offset-3">
         <h2>Login</h2>
         <form name="form" ng-submit="login()" role="form">

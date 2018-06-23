@@ -6,6 +6,7 @@ using HomeSensorServerAPI.Models;
 using HomeSensorServerAPI.BusinessLogic;
 using System.Linq;
 using System.Collections.Generic;
+using System;
 
 namespace HomeSensorServerAPI.Controllers
 {
@@ -28,10 +29,8 @@ namespace HomeSensorServerAPI.Controllers
 
             if (ModelState.IsValid)
             {
-                response = Unauthorized();
-
                 IEnumerable<User> users = _context.Users.ToList();
-      
+
                 var authenticator = new UserAuthenticator();
                 var user = authenticator.Authenticate(users, requestant);
 
@@ -39,11 +38,17 @@ namespace HomeSensorServerAPI.Controllers
                 {
                     var builder = new AuthenticationTokenBuilder(_config);
                     var tokenString = builder.BuildToken(user);
-                    response = Json(new { token = tokenString, userId = user.Id });
+                    response = Json(new
+                    {
+                        token = tokenString,
+                        userId = user.Id,
+                        tokenIssueTime = DateTime.UtcNow.ToString(),
+                        tokenValidTo = DateTime.UtcNow.AddMinutes(double.Parse(_config["AuthenticationJwt:ValidTime"])).ToString(),
+                    });
                 }
                 else //no matching user
                 {
-                    response = NotFound("No matching user");
+                    response = NotFound("Podany użytkownik nie istnieje");
                 }
             }
             return response;

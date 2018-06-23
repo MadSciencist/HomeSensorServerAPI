@@ -28,14 +28,14 @@ namespace HomeSensorServerAPI.BusinessLogic
             claims.Add(new Claim(ClaimTypes.Role, user.Role.ToString()));
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["AuthenticationJwt:Key"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
               _config["AuthenticationJwt:Issuer"],
               _config["AuthenticationJwt:Issuer"], //this is actually audience
               claims: claims,
-              expires: DateTime.Now.AddMinutes(30),
-              signingCredentials: creds);
+              expires: DateTime.Now.AddMinutes(double.Parse(_config["AuthenticationJwt:ValidTime"])),
+              signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
