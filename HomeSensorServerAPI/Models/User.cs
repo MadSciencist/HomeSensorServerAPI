@@ -23,7 +23,7 @@ namespace HomeSensorServerAPI.Models
 
     public enum EUserRole : int
     {
-        Admin,
+        Admin = 0,
         Manager,
         Viewer,
         Sensor
@@ -31,7 +31,7 @@ namespace HomeSensorServerAPI.Models
 
     public enum EUserGender : int
     {
-        Male,
+        Male = 0,
         Female
     }
 }
