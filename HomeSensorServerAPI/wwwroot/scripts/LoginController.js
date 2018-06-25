@@ -32,7 +32,7 @@
         const token = sessionStorage.getItem('token');
         $http({
             method: 'GET',
-            url: '/api/users/'.concat(1),
+            url: '/api/users/'.concat(9),
             headers: {
                 'Content-Type': 'application-json; charset=UTF-8',
                 'Authorization': 'Bearer '.concat(token)

@@ -8,6 +8,8 @@ using System.Linq;
 using System.Collections.Generic;
 using System;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
+using HomeSensorServerAPI.Logger;
 
 namespace HomeSensorServerAPI.Controllers
 {
@@ -24,7 +26,7 @@ namespace HomeSensorServerAPI.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult CreateToken([FromBody]LoginCredentials requestant)
+        public async Task<IActionResult> CreateToken([FromBody]LoginCredentials requestant)
         {
             IActionResult response = BadRequest();
 
@@ -35,18 +37,14 @@ namespace HomeSensorServerAPI.Controllers
                 var authenticator = new UserAuthenticator();
                 var user = authenticator.Authenticate(users, requestant);
 
-                if (user != null) //user found
+                await UpdateLastLoginInfo(user);
+
+                if (user != null && user.IsSuccessfullyAuthenticated) //user found
                 {
                     var builder = new AuthenticationTokenBuilder(_config);
                     var tokenString = builder.BuildToken(user);
 
-                    response = Ok(JsonConvert.SerializeObject(new
-                    {
-                        token = tokenString,
-                        userId = user.Id,
-                        tokenIssueTime = DateTime.Now.ToString(),
-                        tokenValidTo = DateTime.Now.AddMinutes(double.Parse(_config["AuthenticationJwt:ValidTime"])).ToString(),
-                    }));
+                    response = CreateResponseToken(user, tokenString);
                 }
                 else //no matching user
                 {
@@ -54,6 +52,39 @@ namespace HomeSensorServerAPI.Controllers
                 }
             }
             return response;
+        }
+
+        private IActionResult CreateResponseToken(User user, string tokenString)
+        {
+            return Ok(JsonConvert.SerializeObject(new
+            {
+                token = tokenString,
+                userId = user.Id,
+                tokenIssueTime = DateTime.Now.ToString(),
+                tokenValidTo = DateTime.Now.AddMinutes(double.Parse(_config["AuthenticationJwt:ValidTime"])).ToString(),
+            }));
+        }
+
+        private async Task UpdateLastLoginInfo(User user)
+        {
+            if (user != null)
+            {
+                try
+                {
+                    _context.Update(user);
+                    await _context.SaveChangesAsync();
+                }
+                catch(Exception e)
+                {
+                    LogException(e);
+                }
+            }
+        }
+
+        private void LogException(Exception e)
+        {
+            var logger = new LogService();
+            logger.LogToDatabase(_context, e);
         }
     }
 }

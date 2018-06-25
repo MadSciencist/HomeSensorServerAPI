@@ -26,7 +26,8 @@ namespace HomeSensorServerAPI.BusinessLogic
         }
 
         public PublicUser ConvertFullUserDataToPublicData(User user)
-            => new PublicUser()
+        {
+            PublicUser publicUser = new PublicUser()
             {
                 Name = user.Name,
                 Lastname = user.Lastname,
@@ -36,7 +37,9 @@ namespace HomeSensorServerAPI.BusinessLogic
                 Role = user.Role,
                 Email = user.Email,
                 LastInvalidLogin = user.LastInvalidLogin,
-                LastValidLogin = user.LastValidLogin                
+                LastValidLogin = user.LastValidLogin
             };
+            return publicUser;
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using HomeSensorServerAPI.Models;
 using System;
 using System.Linq;
+using HomeSensorServerAPI.BusinessLogic;
 
 namespace HomeSensorServerAPI.Repository
 {
@@ -18,8 +19,12 @@ namespace HomeSensorServerAPI.Repository
                     Name = "Mateusz",
                     Lastname = "Kryszczak",
                     Email = "mkrysz1337@gmail.com",
-                    Password = "admin",
+                    Password = new PasswordCryptoSerivce().CreateHashString("admin"),
                     Role = EUserRole.Admin,
+                    Gender = EUserGender.Male,
+                    PhotoUrl = "url",
+                    LastInvalidLogin = DateTime.Now,
+                    LastValidLogin = DateTime.Now,
                     Birthdate = new DateTime(1994, 6, 20)
                 });
 
@@ -29,8 +34,12 @@ namespace HomeSensorServerAPI.Repository
                     Name = "Mateusz",
                     Lastname = "Kryszczak",
                     Email = "mkrysz1337@gmail.com",
-                    Password = "admin",
+                    Password = new PasswordCryptoSerivce().CreateHashString("admin"),
                     Role = EUserRole.Manager,
+                    Gender = EUserGender.Male,
+                    PhotoUrl = "url",
+                    LastInvalidLogin = DateTime.Now,
+                    LastValidLogin = DateTime.Now,
                     Birthdate = new DateTime(1994, 6, 20)
                 });
 
@@ -40,8 +49,12 @@ namespace HomeSensorServerAPI.Repository
                     Name = "Mateusz",
                     Lastname = "Kryszczak",
                     Email = "mkrysz1337@gmail.com",
-                    Password = "admin",
+                    Password = new PasswordCryptoSerivce().CreateHashString("admin"),
                     Role = EUserRole.Viewer,
+                    Gender = EUserGender.Male,
+                    PhotoUrl = "url",
+                    LastInvalidLogin = DateTime.Now,
+                    LastValidLogin = DateTime.Now,
                     Birthdate = new DateTime(1994, 6, 20)
                 });
 
@@ -51,8 +64,12 @@ namespace HomeSensorServerAPI.Repository
                     Name = "Mateusz",
                     Lastname = "Kryszczak",
                     Email = "mkrysz1337@gmail.com",
-                    Password = "homeAutomationSensorPassword",
+                    Password = new PasswordCryptoSerivce().CreateHashString("homeAutomationSensorPassword"),
                     Role = EUserRole.Sensor,
+                    Gender = EUserGender.Male,
+                    PhotoUrl = "url",
+                    LastInvalidLogin = DateTime.Now,
+                    LastValidLogin = DateTime.Now,
                     Birthdate = new DateTime(1994, 6, 20)
                 });
 

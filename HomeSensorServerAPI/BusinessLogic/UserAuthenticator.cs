@@ -1,4 +1,5 @@
 ﻿using HomeSensorServerAPI.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -12,11 +13,25 @@ namespace HomeSensorServerAPI.BusinessLogic
 
             var requestant = users.FirstOrDefault(u => u.Login == login.Username);
 
+            //no matching user, return 
             if (requestant == null)
                 return null;
 
-            if (requestant.Password == login.Password)
-                user = requestant;
+            user = requestant;
+
+            var cryptoService = new PasswordCryptoSerivce();
+
+            //we found matching login, check password
+            if (cryptoService.IsPasswordMatching(requestant.Password, login.Password))
+            {
+                user.IsSuccessfullyAuthenticated = true;
+                user.LastValidLogin = DateTime.Now;
+            }
+            else
+            {
+                user.IsSuccessfullyAuthenticated = false;
+                user.LastInvalidLogin = DateTime.Now;
+            }
 
             return user;
         }

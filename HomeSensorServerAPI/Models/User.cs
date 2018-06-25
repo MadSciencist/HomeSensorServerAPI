@@ -17,9 +17,11 @@ namespace HomeSensorServerAPI.Models
         public string PhotoUrl { get; set; }
         public DateTime LastValidLogin { get; set; }
         public DateTime LastInvalidLogin { get; set; }
+        [NotMapped]
+        public bool IsSuccessfullyAuthenticated { get; set; }
     }
 
-    public enum EUserRole
+    public enum EUserRole : int
     {
         Admin,
         Manager,
@@ -27,7 +29,7 @@ namespace HomeSensorServerAPI.Models
         Sensor
     }
 
-    public enum EUserGender
+    public enum EUserGender : int
     {
         Male,
         Female

@@ -29,9 +29,16 @@ namespace LocalSensorServer.Controllers
         [HttpGet("{id}")]
         public async Task<PublicUser> GetUserInfo(int id)
         {
+            PublicUser publicUser = null;
+
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
 
-            return new UserPublicDataProvider().ConvertFullUserDataToPublicData(user);
+            if (user != null)
+                publicUser = new UserPublicDataProvider().ConvertFullUserDataToPublicData(user);
+            else
+                publicUser = new PublicUser();
+
+            return publicUser;
         }
     }
 }
