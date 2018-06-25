@@ -1,4 +1,4 @@
-﻿app.controller("RootController", function ($rootScope, $scope, $window, $route) {
+﻿app.controller("RootController", function ($rootScope, $http, $scope, $window, $route, $location) {
 
     $scope.logout = function () {
         console.log('Log out');
@@ -9,4 +9,6 @@
 
         $route.reload();
     };
+
+
 });
