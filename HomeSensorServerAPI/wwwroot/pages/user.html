@@ -101,6 +101,9 @@
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#exampleModal">Edytuj swoje dane</button>
 
+
+
+
         <!-- Modal -->
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -138,8 +141,6 @@
                                 </div>
                             </div>
 
-
-
                             <div class="row form-group">
                                 <label for="userEmail" class="control-label col-xs-3">Adres e-mail</label>
                                 <div class="col-xs-9">
@@ -147,7 +148,20 @@
                                 </div>
                             </div>
 
+                            <!--TODO te dwa nizej-->
+                            <div class="row form-group">
+                                <label for="userBirthdate" class="control-label col-xs-3">Data urodzenia</label>
+                                <div class="col-xs-9">
+                                    <input name="userBirthdate" value="{{userData.birthdate}}" type="text" class="form-control">
+                                </div>
+                            </div>
 
+                            <div class="row form-group">
+                                <label for="userPhotoUrl" class="control-label col-xs-3">Zdjęcie profilowe</label>
+                                <div class="col-xs-9">
+                                    <input name="userPhotoUrl" value="{{userData.photoUrl}}" type="text" class="form-control">
+                                </div>
+                            </div>
 
 
 
