@@ -1,4 +1,4 @@
-﻿app.controller("LoginController", function ($rootScope, $scope, $http, $window, $route, $location, userService) {
+﻿app.controller("LoginController", function ($rootScope, $scope, $http, $window, $route, $location) {
 
     $scope.login = function () {
 
@@ -20,7 +20,6 @@
             $window.localStorage.setItem('userId', response.data.userId);
             $window.localStorage.setItem('validTo', response.data.tokenValidTo);
 
-            userService.getUserData();
             $location.path('/');
 
         }, function onError(error) {

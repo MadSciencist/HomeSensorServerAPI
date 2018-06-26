@@ -27,4 +27,8 @@
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.1.0-*" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\img\uploads\" />
+  </ItemGroup>
+
 </Project>

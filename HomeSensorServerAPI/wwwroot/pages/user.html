@@ -3,7 +3,7 @@
     <title></title>
 </head>
 
-<div class="container bootstrap snippet" ng-controller="UserController">
+<div class="container bootstrap snippet" ng-controller="UserController" data-ng-init="get()">
     <div class="panel-body inf-content">
         <div class="row">
             <div class="col-md-4" style="text-align: center;">
@@ -37,7 +37,7 @@
                                         <span class="glyphicon glyphicon-cloud text-primary"></span> Płeć
                                     </strong>
                                 </td>
-                                <td class="text-primary" ng-bind="userData.gender"></td>
+                                <td class="text-primary" ng-bind="userData.genderLut"></td>
                             </tr>
 
                             <tr>
@@ -55,7 +55,7 @@
                                         <span class="glyphicon glyphicon-eye-open text-primary"></span> Rola w systemie
                                     </strong>
                                 </td>
-                                <td class="text-primary" ng-bind="userData.role"></td>
+                                <td class="text-primary" ng-bind="userData.roleLut"></td>
                             </tr>
 
                             <tr>
@@ -81,13 +81,84 @@
                                 <td>
                                     <strong>
                                         <span class="glyphicon glyphicon-calendar text-primary"></span>
-                                        Data ostatniego nie udanego logowania
+                                        Data ostatniego nieudanego logowania
                                     </strong>
                                 </td>
-                                <td class="text-primary" ng-bind="userData.lastInvalidLogin"></td>
+                                <td class="text-primary">
+                                    {{ userData.lastInvalidLogin }}
+                                    <span class="glyphicon glyphicon-warning-sign text-primary"></span>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
+                </div>
+            </div>
+        </div>
+    </div><!--END OF PANEL-->
+
+
+    <div class="container-fluid" style="text-align: center;">
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#exampleModal">Edytuj swoje dane</button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Podaj nowe dane</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!--modal body begin-->
+                        <form class="form-horizontal container-fluid" name="serverForm">
+
+                            <div class="row form-group">
+                                <label for="userName" class="control-label col-xs-3">Imię</label>
+                                <div class="col-xs-9">
+                                    <input name="userName" value="{{userData.name}}" type="text" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <label for="userLastname" class="control-label col-xs-3">Nazwisko</label>
+                                <div class="col-xs-9">
+                                    <input name="userLastname" value="{{userData.lastname}}" type="text" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <label for="userGender" class="control-label col-xs-3">Płeć</label>
+                                <div class="col-xs-9">
+                                    <select name="userGender" class="form-control"
+                                            ng-model="userGender"
+                                            ng-options="option.id as option.name for option in availableGender"></select>
+                                </div>
+                            </div>
+
+
+
+                            <div class="row form-group">
+                                <label for="userEmail" class="control-label col-xs-3">Adres e-mail</label>
+                                <div class="col-xs-9">
+                                    <input name="userEmail" value="{{userData.email}}" type="text" class="form-control">
+                                </div>
+                            </div>
+
+
+
+
+
+
+                        </form>
+                        <!--modal body end-->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+                        <button type="button" class="btn btn-primary">Zapisz zmiany</button>
+                    </div>
                 </div>
             </div>
         </div>
