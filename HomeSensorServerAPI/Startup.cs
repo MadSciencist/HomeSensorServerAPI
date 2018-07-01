@@ -87,6 +87,7 @@ namespace HomeSensorServerAPI
                 options.AddPolicy("Manager", policy => policy.RequireRole("Manager"));
                 options.AddPolicy("Viewer", policy => policy.RequireRole("Viewer"));
                 options.AddPolicy("Sensor", policy => policy.RequireRole("Sensor"));
+                //options.AddPolicy("OnlyCurrentUser", policy => policy.RequireClaim()
             });
         }
     }
