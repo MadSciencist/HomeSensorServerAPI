@@ -65,7 +65,7 @@
                                         Data urodzenia
                                     </strong>
                                 </td>
-                                <td class="text-primary" ng-bind="userData.birthdate"></td>
+                                <td class="text-primary" ng-bind="userData.birthdateFormated"></td>
                             </tr>
 
                             <tr>
@@ -99,17 +99,14 @@
 
     <div class="container-fluid" style="text-align: center;">
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#exampleModal">Edytuj swoje dane</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#userEditModal">Edytuj swoje dane</button>
 
-
-
-
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <!-- Modal edit user -->
+        <div class="modal fade" id="userEditModal" tabindex="-1" role="dialog" aria-labelledby="userEditModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Podaj nowe dane</h5>
+                        <h5 class="modal-title" id="userEditModalLabel">Podaj nowe dane</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -121,14 +118,14 @@
                             <div class="row form-group">
                                 <label for="userName" class="control-label col-xs-3">Imię</label>
                                 <div class="col-xs-9">
-                                    <input name="userName" value="{{userData.name}}" type="text" class="form-control">
+                                    <input name="userName" value="{{userData.name}}" ng-model="userData.name" type="text" class="form-control">
                                 </div>
                             </div>
 
                             <div class="row form-group">
                                 <label for="userLastname" class="control-label col-xs-3">Nazwisko</label>
                                 <div class="col-xs-9">
-                                    <input name="userLastname" value="{{userData.lastname}}" type="text" class="form-control">
+                                    <input name="userLastname" value="{{userData.lastname}}" ng-model="userData.lastname" type="text" class="form-control">
                                 </div>
                             </div>
 
@@ -144,34 +141,55 @@
                             <div class="row form-group">
                                 <label for="userEmail" class="control-label col-xs-3">Adres e-mail</label>
                                 <div class="col-xs-9">
-                                    <input name="userEmail" value="{{userData.email}}" type="text" class="form-control">
+                                    <input name="userEmail" value="{{userData.email}}" ng-model="userData.email" type="text" class="form-control">
                                 </div>
                             </div>
 
-                            <!--TODO te dwa nizej-->
+                            <!--TODO validate password-->
+                            <div class="row form-group">
+                                <label for="userPassword" class="control-label col-xs-3">Hasło</label>
+                                <div class="col-xs-9">
+                                    <input name="userPassword" value="{{userData.password}}" ng-model="userData.password" type="password" class="form-control">
+                                </div>
+                            </div>
+
+                            <!--TODO add calendar-->
                             <div class="row form-group">
                                 <label for="userBirthdate" class="control-label col-xs-3">Data urodzenia</label>
                                 <div class="col-xs-9">
-                                    <input name="userBirthdate" value="{{userData.birthdate}}" type="text" class="form-control">
+                                    <input name="userBirthdate" value="{{userData.birthdateFormated}}" ng-model="userData.birthdateFormated" type="text" class="form-control">
                                 </div>
                             </div>
-
-                            <div class="row form-group">
-                                <label for="userPhotoUrl" class="control-label col-xs-3">Zdjęcie profilowe</label>
-                                <div class="col-xs-9">
-                                    <input name="userPhotoUrl" value="{{userData.photoUrl}}" type="text" class="form-control">
-                                </div>
-                            </div>
-
-
-
-
                         </form>
+
+                        <!--photo uploader form-->
+                        <div class="row form-group">
+                            <label for="userPhotoUrl" class="control-label col-xs-3">Zdjęcie profilowe</label>
+                            <div class="col-xs-7">
+                                <form id="avatarUploadForm" enctype="multipart/form-data">
+                                    <div style="text-align: center;">
+                                        <input name="file" type="file" accept=".jpg, .jpeg, .png" />
+                                        <div ng-show="isAvatarUploaded">
+                                            <img alt="User picture" style="width:260px;" title=""
+                                                 class="avatar-edit-thumbnail" ng-src="{{ uploadedAvatarUrl }}" />
+                                            <button type="button" class="close" style="margin-top: 20px;" aria-label="Close" ng-click="isAvatarUploaded = false">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-xs-2">
+                                <input type="button" class="btn btn-primary btn-sm" ng-click="uploadFile()" value="Upload" />
+                            </div>
+                        </div>
+
+
                         <!--modal body end-->
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
-                        <button type="button" class="btn btn-primary">Zapisz zmiany</button>
+                        <button type="button" class="btn btn-primary" ng-click="editUser();" data-dismiss="modal">Zapisz zmiany</button>
                     </div>
                 </div>
             </div>

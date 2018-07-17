@@ -1,20 +1,80 @@
-﻿app.controller("UserController", function ($scope, $http, $route, httpService) {
+﻿app.controller("UserController", function ($scope, $http, $location, $route, httpService) {
+
+    $scope.editUser = function () {
+        const token = localStorage.getItem('token');
+        const userId = localStorage.getItem('userId');
+
+        let editedUser = JSON.stringify({
+            Login: $scope.userData.login,
+            Name: $scope.userData.name,
+            Lastname: $scope.userData.lastname,
+            Password: $scope.userData.password,
+            Email: $scope.userData.email,
+            Gender: $scope.userGender,
+            Birthdate: $scope.userData.birthdate,
+            PhotoUrl: $scope.uploadedAvatarUrl
+        });
+
+        console.log(editedUser);
+
+        $http.put('/api/users/'.concat(userId), editedUser, {
+            headers: {
+                'Content-Type': 'application/json; charset=UTF-8',
+                'Authorization': 'Bearer '.concat(token)
+            },
+            'Accept': 'application/json'
+        }).then(function onSuccess(response) {
+            $location.path('/my-profile');
+            $scope.get();
+
+        }, function onError(error) {
+            console.log(error);
+        });
+    };
+
+    $scope.isAvatarUploaded = false;
+    $scope.uploadedAvatarUrl = null;
+
+    $scope.uploadFile = function () {
+        $.ajax({
+            url: 'api/photoupload/upload',
+            type: 'POST',
+
+            data: new FormData($('#avatarUploadForm')[0]),
+            cache: false,
+            contentType: false,
+            processData: false,
+
+        }).then(function (response) {
+            const splitedUrl = response.url.split("\\")[8];
+            const avatarFullUrl = getAvatarFullUrl(splitedUrl);
+
+            $scope.uploadedAvatarUrl = avatarFullUrl;
+            $scope.isAvatarUploaded = true;
+            $scope.$apply();
+        }).catch(function (error) {
+            console.log(error);
+        });
+    };
+
+    let getAvatarFullUrl = function (name) {
+        return '/img/uploads/avatars/' + name;
+    };
 
     $scope.get = function () {
         httpService.userGet()
             .then(function (response) {
                 $scope.userData = getFullNamesOfUserAttributes(response.data);
                 $scope.userGender = $scope.userData.gender;
-            })
+                console.log(response.data);
+            });
     };
     
-
-
     let getFullNamesOfUserAttributes = function (user) {
         let expandedUser = user;
         expandedUser.genderLut = genderLookUpTable(user.gender);
         expandedUser.roleLut = roleLookUpTable(user.role);
-        expandedUser.birthdate = formatDate(user.birthdate, false);
+        expandedUser.birthdateFormated = formatDate(user.birthdate, false);
         expandedUser.lastValidLogin = formatDate(user.lastValidLogin, true);
         expandedUser.lastInvalidLogin = formatDate(user.lastInvalidLogin, true);
         return expandedUser;
@@ -30,11 +90,11 @@
             "Listopad", "Grudzień"
         ];
 
-        let day = date.getDate();
-        let monthIndex = date.getMonth();
-        let year = date.getFullYear();
-        let hour = date.getHours();
-        let minute = date.getMinutes();
+        const day = date.getDate();
+        const monthIndex = date.getMonth();
+        const year = date.getFullYear();
+        const hour = date.getHours();
+        const minute = date.getMinutes();
 
         let dateString = day + ' ' + monthNames[monthIndex] + ' ' + year;
 

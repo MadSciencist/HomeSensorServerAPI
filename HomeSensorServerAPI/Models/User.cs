@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HomeSensorServerAPI.Models
 {
+    //TODO: more validation
     [Table("users")]
     public class User : Entity
     {

@@ -31,6 +31,7 @@ namespace HomeSensorServerAPI.BusinessLogic
             {
                 Name = user.Name,
                 Lastname = user.Lastname,
+                Login = user.Login,
                 Birthdate = user.Birthdate,
                 Gender = user.Gender,
                 PhotoUrl = user.PhotoUrl,

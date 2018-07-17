@@ -47,43 +47,46 @@ namespace LocalSensorServer.Controllers
 
             return publicUser;
         }
+
         [HttpPut("{id}")]
-        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateUser(int id, [FromBody]User candidate)
-        { 
+        {
+            //TODO update more variables than this
             if (ModelState.IsValid)
             {
-                int loggedOnUserId = int.Parse(this.User.FindFirstValue(ClaimTypes.NameIdentifier));
-
-                if (loggedOnUserId == id)
+                string claimedUserIdentifier = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (Int32.TryParse(claimedUserIdentifier, out int claimedUserId))
                 {
-                    User user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
-                    user.Password = new PasswordCryptoSerivce().CreateHashString(candidate.Password);
-                    user.Login = candidate.Login;
-                    user.Name = candidate.Name;
-                    user.Lastname = candidate.Lastname;
-
-                    try
+                    if (claimedUserId == id)
                     {
-                        _context.Update(user);
-                        await _context.SaveChangesAsync();
-                    }
-                    catch(Exception e)
-                    {
-                        new LogService().LogToDatabase(_context, e);
-                    }
+                        User user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+                        user.Password = new PasswordCryptoSerivce().CreateHashString(candidate.Password);
+                        user.Login = candidate.Login;
+                        user.Name = candidate.Name;
+                        user.Gender = candidate.Gender; //validate this
+                        user.Lastname = candidate.Lastname;
+                        user.PhotoUrl = candidate.PhotoUrl;
+                        user.Birthdate = candidate.Birthdate;
 
-                    return Ok();
-                }
-                else
-                {
-                    return Unauthorized();
+                        try
+                        {
+                            _context.Update(user);
+                            await _context.SaveChangesAsync();
+                        }
+                        catch (Exception e)
+                        {
+                            new LogService().LogToDatabase(_context, e);
+                        }
+
+                        return Ok();
+                    }
+                    else
+                    {
+                        return Unauthorized();
+                    }
                 }
             }
-            else
-            {
-                return BadRequest();
-            }
+            return BadRequest();
         }
     }
 }
