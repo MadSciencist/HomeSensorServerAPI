@@ -35,8 +35,14 @@ namespace HomeSensorServerAPI.Controllers
         [Route("Upload")]
         public async Task<IActionResult> Post(IFormFile file)
         {
+            if(file == null)
+            {
+                return BadRequest();
+            }
+
             var uploads = Path.Combine(_environment.WebRootPath, "img", "uploads", "avatars");
             var fullPath = Path.Combine(uploads, GetUniqueFileName(file.FileName));
+
             EnsureFolderCreation(uploads);
 
             if (file.Length > 0)

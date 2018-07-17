@@ -168,3 +168,13 @@ body {
     border-radius: 8px;
     transition: all .5s cubic-bezier(0.6 0.04 0.6 1);
 }
+
+.edit-user-form-validation-message {
+    display: block;
+    margin-left: 10px;
+    text-align: left;
+}
+
+.red {
+    color: red;
+}
