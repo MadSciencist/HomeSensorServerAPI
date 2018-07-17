@@ -115,7 +115,7 @@
                         <!--modal body begin-->
                         <form class="form-horizontal container-fluid" name="editUserForm" novalidate> <!--novalidate prevents HTML5 validation-->
 
-                            <div class="row form-group">
+                            <div class="row form-group" ng-class="{ 'has-error' : editUserForm.userName.$invalid && !editUserForm.userName.$pristine }">
                                 <label for="userName" class="control-label col-xs-3">Imię</label>
                                 <div class="col-xs-9">
                                     <input name="userName" value="{{userData.name}}" ng-model="userData.name" type="text" class="form-control" required>
@@ -124,7 +124,7 @@
                                 </div>
                             </div>
 
-                            <div class="row form-group">
+                            <div class="row form-group" ng-class="{ 'has-error' : editUserForm.userName.$invalid && !editUserForm.userName.$pristine }">
                                 <label for="userLastname" class="control-label col-xs-3">Nazwisko</label>
                                 <div class="col-xs-9">
                                     <input name="userLastname" value="{{userData.lastname}}" ng-model="userData.lastname" type="text" class="form-control" required>
@@ -142,7 +142,7 @@
                                 </div>
                             </div>
 
-                            <div class="row form-group">
+                            <div class="row form-group" ng-class="{ 'has-error' : editUserForm.userName.$invalid && !editUserForm.userName.$pristine }">
                                 <label for="userEmail" class="control-label col-xs-3">Adres e-mail</label>
                                 <div class="col-xs-9">
                                     <input name="userEmail" value="{{userData.email}}" ng-model="userData.email" type="email" class="form-control" required>
@@ -152,7 +152,7 @@
                             </div>
 
                             <!--TODO validate password-->
-                            <div class="row form-group">
+                            <div class="row form-group" ng-class="{ 'has-error' : editUserForm.userName.$invalid && !editUserForm.userName.$pristine }">
                                 <label for="userPassword" class="control-label col-xs-3">Hasło</label>
                                 <div class="col-xs-9">
                                     <input name="userPassword" value="{{userData.password}}" ng-model="userData.password" type="password" class="form-control" required ng-minlength="5" ng-maxlength="20">
@@ -178,7 +178,7 @@
                                     <div style="text-align: center;">
 
                                         <label class="btn btn-default btn-file">Wybierz plik
-                                            <input name="file" type="file" accept=".jpg, .jpeg, .png" style="display: none;" required />
+                                            <input name="file" type="file" accept=".jpg, .jpeg, .png .gif" style="display: none;" required />
                                         </label>
 
                                         <div ng-show="isAvatarUploaded">
@@ -192,8 +192,7 @@
                                 </form>
                             </div>
                             <div class="col-xs-2">
-                                <input type="button" class="btn btn-primary btn-sm" ng-disabled="avatarUploadForm.file.$invalid"
-                                       ng-click="uploadFile()" value="Upload" />
+                                <input type="button" class="btn btn-primary btn-sm" ng-click="uploadFile()" value="Upload" />
                             </div>
                         </div>
 
