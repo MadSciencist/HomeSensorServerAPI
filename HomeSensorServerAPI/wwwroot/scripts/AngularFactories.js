@@ -1,11 +1,13 @@
 ﻿app.service('httpService', function ($http) {
-    this.userGet = function () {
-        return $http.get('/api/users/'.concat(localStorage.getItem('userId')),
+ 
+    this.getData = function (url) {
+        console.log('Retrieving data from: ' + url);
+        return $http.get(url,
             {
                 headers: {
                     'Authorization': 'Bearer '.concat(localStorage.getItem('token')),
                     'Content-Type': 'application-json; charset=UTF-8'
                 }
             });
-    }
+    };
 });

@@ -14,6 +14,7 @@ namespace HomeSensorServerAPI.Models
         public EUserRole Role { get; set; }
         public EUserGender Gender { get; set; }
         public string PhotoUrl { get; set; }
+        public DateTime JoinDate { get; set; }
         public DateTime LastValidLogin { get; set; }
         public DateTime LastInvalidLogin { get; set; }
     }

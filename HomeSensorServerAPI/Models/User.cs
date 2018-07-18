@@ -35,6 +35,7 @@ namespace HomeSensorServerAPI.Models
         public DateTime LastValidLogin { get; set; }
 
         public DateTime LastInvalidLogin { get; set; }
+        public DateTime JoinDate { get; set; }
 
         [NotMapped]
         public bool IsSuccessfullyAuthenticated { get; set; }

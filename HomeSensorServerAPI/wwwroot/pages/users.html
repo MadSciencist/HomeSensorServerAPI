@@ -1,4 +1,35 @@
 ﻿<head>
     <meta charset="UTF-8">
 </head>
-<h1>Users</h1>
+<div class="container-fluid" ng-controller="UsersController" data-ng-init="getUsers()">
+
+    <div id="users-info-sucessfully-deleted" class="alert alert-success alert-dismissible fade in" style="display: none">
+        <a class="close" onclick="$('#users-info-sucessfully-deleted').hide()">×</a>
+        <strong>Sukces!</strong> Pomyślnie usunięto.
+    </div>
+
+    <div id="nusers-info-error" class="alert alert-danger alert-dismissible fade in" style="display: none">
+        <a class="close" onclick="$('#users-info-error').hide()">×</a>
+        <strong>Błąd!</strong> <span id="users-info-error-text"></span>
+    </div>
+
+
+    <div class="container-fluid">
+        <table class="table table-hover">
+            <tr>
+                <th>Imie</th>
+                <th>Nazwisko</th>
+                <th>E-Mail</th>
+                <th>Data dołączenia</th>
+                <th>Rola</th>
+            </tr>
+            <tr ng-repeat="user in users | orderBy: 'id'">
+                <td>{{ user.name }}</td>
+                <td>{{ user.lastname }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.joinDate }}</td>
+                <td>{{ user.role }}</td>
+            </tr>
+        </table>
+    </div>
+</div>

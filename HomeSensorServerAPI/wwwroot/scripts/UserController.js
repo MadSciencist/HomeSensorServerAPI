@@ -1,5 +1,9 @@
 ﻿app.controller("UserController", function ($scope, $http, $location, $route, httpService) {
 
+    const userUrl = '/api/users/'.concat(localStorage.getItem('userId'));
+    $scope.isAvatarUploaded = false;
+    $scope.uploadedAvatarUrl = null;
+
     $scope.editUser = function () {
         const token = localStorage.getItem('token');
         const userId = localStorage.getItem('userId');
@@ -15,8 +19,6 @@
             PhotoUrl: $scope.uploadedAvatarUrl
         });
 
-        console.log(editedUser);
-
         $http.put('/api/users/'.concat(userId), editedUser, {
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8',
@@ -31,9 +33,6 @@
             console.log(error);
         });
     };
-
-    $scope.isAvatarUploaded = false;
-    $scope.uploadedAvatarUrl = null;
 
     $scope.uploadFile = function () {
         $.ajax({
@@ -53,7 +52,7 @@
             $scope.isAvatarUploaded = true;
             $scope.$apply();
         }).catch(function (error) {
-            console.log(error);
+            console.log("Error while writing data: " + error);
         });
     };
 
@@ -62,12 +61,11 @@
     };
 
     $scope.get = function () {
-        httpService.userGet()
+        httpService.getData(userUrl)
             .then(function (response) {
                 $scope.userData = getFullNamesOfUserAttributes(response.data);
                 $scope.userGender = $scope.userData.gender;
-                console.log(response.data);
-            });
+            }).catch(error => console.log("Error while retrieving data: " + error.data));
     };
     
     let getFullNamesOfUserAttributes = function (user) {
@@ -78,35 +76,6 @@
         expandedUser.lastValidLogin = formatDate(user.lastValidLogin, true);
         expandedUser.lastInvalidLogin = formatDate(user.lastInvalidLogin, true);
         return expandedUser;
-    };
-
-    let formatDate = function (rawDate, addTime) {
-        let date = new Date(rawDate);
-
-        const monthNames = [
-            "Styczeń", "Luty", "Marzec",
-            "Kwiecień", "Maj", "Czerwiec", "Lipiec",
-            "Sierpień", "Wrzesień", "Październik",
-            "Listopad", "Grudzień"
-        ];
-
-        const day = date.getDate();
-        const monthIndex = date.getMonth();
-        const year = date.getFullYear();
-        const hour = date.getHours();
-        const minute = date.getMinutes();
-
-        let dateString = day + ' ' + monthNames[monthIndex] + ' ' + year;
-
-        if (addTime)
-            dateString = dateString.concat(' ').concat(hour).concat(':').concat(minute);
-
-        return dateString;
-    };
-
-    let roleLookUpTable = function (roleId) {
-        const roles = ['Admin', 'Manager', 'Viewer', 'Sensor'];
-        return roles[roleId];
     };
 
     $scope.availableGender = [{ id: 0, name: 'Mężczyzna' }, { id: 1, name: 'Kobieta' }];

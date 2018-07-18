@@ -24,7 +24,7 @@ app.config(function ($routeProvider) {
         })
         .when("/users", {
             templateUrl: "pages/users.html",
-            controller: "UserController",
+            controller: "UsersController",
             auth: true
         })
         .when("/my-profile", {

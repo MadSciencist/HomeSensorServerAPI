@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HomeSensorServerAPI.Logger;
+using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -33,11 +34,11 @@ namespace HomeSensorServerAPI.BusinessLogic
             }
             catch (HttpRequestException e)
             {
-                Console.WriteLine(e.Message + " " + e.StackTrace.ToString());
+                new LogService().LogToConsole(e);
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message + " " + e.StackTrace.ToString());
+                new LogService().LogToConsole(e);
                 //TODO add exception handling (timeout)
             }
 

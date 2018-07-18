@@ -19,7 +19,8 @@ namespace HomeSensorServerAPI.BusinessLogic
                              PhotoUrl = u.PhotoUrl,
                              Gender = u.Gender,
                              LastInvalidLogin = u.LastInvalidLogin,
-                             LastValidLogin = u.LastValidLogin
+                             LastValidLogin = u.LastValidLogin,
+                             JoinDate = u.JoinDate
                          };
 
             return result;
@@ -38,7 +39,8 @@ namespace HomeSensorServerAPI.BusinessLogic
                 Role = user.Role,
                 Email = user.Email,
                 LastInvalidLogin = user.LastInvalidLogin,
-                LastValidLogin = user.LastValidLogin
+                LastValidLogin = user.LastValidLogin,
+                JoinDate = user.JoinDate
             };
             return publicUser;
         }
