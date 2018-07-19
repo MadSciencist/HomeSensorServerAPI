@@ -75,7 +75,7 @@ namespace LocalSensorServer.Controllers
                     User user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
                     user.Password = new PasswordCryptoSerivce().CreateHashString(candidate.Password);
                     user.Login = candidate.Login; //TODO if null, dont do this -> change types to nullable
-                    user.Name = candidate.Name;
+                    user.Name = candidate.Name;//TODO transfer role and gender as string!!!
                     user.Gender = candidate.Gender; //validate this
                     user.Lastname = candidate.Lastname;
                     user.PhotoUrl = candidate.PhotoUrl;

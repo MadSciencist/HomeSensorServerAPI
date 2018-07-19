@@ -1,4 +1,6 @@
-﻿using System;
+﻿using HomeSensorServerAPI.Extensions;
+using Newtonsoft.Json;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -29,7 +31,16 @@ namespace HomeSensorServerAPI.Models
         public EUserGender Gender { get; set; }
 
         [Required(ErrorMessage = "Rola jest konieczna")]
-        public EUserRole Role { get; set; }
+        public string Role
+        {
+            get { return UserRoleE.ToString(); }
+            set { UserRoleE = value.ToEnum<EUserRole>(); }
+        }
+
+        [NotMapped]
+        [JsonIgnore]
+        public EUserRole UserRoleE { get; set; }
+
 
         public string PhotoUrl { get; set; }
 

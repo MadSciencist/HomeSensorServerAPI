@@ -61,7 +61,6 @@
 
     $scope.get = function () {
         const userUrl = '/api/users/'.concat(localStorage.getItem('userId'));
-
         httpService.getData(userUrl)
             .then(function (response) {
                 $scope.userData = getFullNamesOfUserAttributes(response.data);
