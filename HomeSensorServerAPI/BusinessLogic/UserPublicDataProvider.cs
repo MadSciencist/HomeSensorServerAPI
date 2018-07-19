@@ -6,9 +6,10 @@ namespace HomeSensorServerAPI.BusinessLogic
 {
     public class UserPublicDataProvider
     {
-        public IEnumerable<PublicUser> ConvertFullUsersDataToPublicData(IEnumerable<User> users)
+        public IEnumerable<PublicUser> ConvertFullUsersDataToPublicData(IEnumerable<User> users, EUserRole claimedRole)
         {
             var result = from u in users
+                         where (int)u.Role <= (int)claimedRole
                          select new PublicUser()
                          {
                              Name = u.Name,

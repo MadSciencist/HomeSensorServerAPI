@@ -12,6 +12,7 @@ using HomeSensorServerAPI.Extensions;
 using System.Security.Claims;
 using System;
 using HomeSensorServerAPI.Logger;
+using System.Linq;
 
 namespace LocalSensorServer.Controllers
 {
@@ -28,9 +29,12 @@ namespace LocalSensorServer.Controllers
         [HttpGet]
         public async Task<IEnumerable<PublicUser>> GetAllUsersPublicData()
         {
+            var claimedRole = GetClaimedUserRole(this.User);
             var users = await _context.Users.ToListAsync();
+            var publicDataProvider = new UserPublicDataProvider();
+            var publicData = publicDataProvider.ConvertFullUsersDataToPublicData(users, claimedRole);
 
-            return new UserPublicDataProvider().ConvertFullUsersDataToPublicData(users);
+            return publicData;
         }
 
         [HttpGet("{id}")]
@@ -38,12 +42,15 @@ namespace LocalSensorServer.Controllers
         {
             PublicUser publicUser = null;
 
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            if (IsUserIdentifierAsClaimed(id))
+            {
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
 
-            if (user != null)
-                publicUser = new UserPublicDataProvider().ConvertFullUserDataToPublicData(user);
-            else
-                publicUser = new PublicUser();
+                if (user != null)
+                    publicUser = new UserPublicDataProvider().ConvertFullUserDataToPublicData(user);
+                else
+                    publicUser = new PublicUser();
+            }
 
             return publicUser;
         }
@@ -54,39 +61,57 @@ namespace LocalSensorServer.Controllers
             //TODO update more variables than this
             if (ModelState.IsValid)
             {
-                string claimedUserIdentifier = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                if (Int32.TryParse(claimedUserIdentifier, out int claimedUserId))
+                if (IsUserIdentifierAsClaimed(id))
                 {
-                    if (claimedUserId == id)
-                    {
-                        User user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
-                        user.Password = new PasswordCryptoSerivce().CreateHashString(candidate.Password);
-                        user.Login = candidate.Login;
-                        user.Name = candidate.Name;
-                        user.Gender = candidate.Gender; //validate this
-                        user.Lastname = candidate.Lastname;
-                        user.PhotoUrl = candidate.PhotoUrl;
-                        user.Birthdate = candidate.Birthdate;
+                    User user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+                    user.Password = new PasswordCryptoSerivce().CreateHashString(candidate.Password);
+                    user.Login = candidate.Login;
+                    user.Name = candidate.Name;
+                    user.Gender = candidate.Gender; //validate this
+                    user.Lastname = candidate.Lastname;
+                    user.PhotoUrl = candidate.PhotoUrl;
+                    user.Birthdate = candidate.Birthdate;
 
-                        try
-                        {
-                            _context.Update(user);
-                            await _context.SaveChangesAsync();
-                        }
-                        catch (Exception e)
-                        {
-                            new LogService().LogToDatabase(_context, e);
-                        }
-
-                        return Ok();
-                    }
-                    else
+                    try
                     {
-                        return Unauthorized();
+                        _context.Update(user);
+                        await _context.SaveChangesAsync();
                     }
+                    catch (Exception e)
+                    {
+                        new LogService().LogToDatabase(_context, e);
+                    }
+
+                    return Ok();
+                }
+                else
+                {
+                    return Unauthorized();
                 }
             }
             return BadRequest();
+        }
+
+        private bool IsUserIdentifierAsClaimed(int requestedId)
+        {
+            var claimedUserIdentifier = GetClaimedUserIdentifier(this.User);
+
+            if (Int32.TryParse(claimedUserIdentifier, out int claimedUserId))
+            {
+                return claimedUserId == requestedId;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private string GetClaimedUserIdentifier(ClaimsPrincipal claimsPrincipal) => claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        private EUserRole GetClaimedUserRole(ClaimsPrincipal claimsPrincipal)
+        {
+            var claimedRoleString = claimsPrincipal.FindFirstValue(ClaimTypes.Role);
+            return Enum.GetValues(typeof(EUserRole)).Cast<EUserRole>().FirstOrDefault(ur => ur.ToString() == claimedRoleString);
         }
     }
 }

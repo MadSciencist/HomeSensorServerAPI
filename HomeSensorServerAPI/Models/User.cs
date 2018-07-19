@@ -41,18 +41,4 @@ namespace HomeSensorServerAPI.Models
         [NotMapped]
         public bool IsSuccessfullyAuthenticated { get; set; }
     }
-
-    public enum EUserRole : int
-    {
-        Admin = 0,
-        Manager,
-        Viewer,
-        Sensor
-    }
-
-    public enum EUserGender : int
-    {
-        Male = 0,
-        Female
-    }
 }
