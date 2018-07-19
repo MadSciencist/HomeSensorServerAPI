@@ -23,7 +23,7 @@
 };
 
 const roleLookUpTable = function (roleId) {
-    const roles = ['Admin', 'Manager', 'Viewer', 'Sensor'];
+    const roles = ['Sensor', 'Viewer', 'Manager', 'Admin'];
     if (roleId >= 0 && roleId <= (roles.length + 1))
     return roles[roleId];
 };

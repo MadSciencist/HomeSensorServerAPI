@@ -178,3 +178,16 @@ body {
 .red {
     color: red;
 }
+
+.not-found-box {
+    padding-top: 50px;
+    padding-bottom: 50px;
+    margin: 0 auto;
+    background-color: #2e353d;
+    color: #dddddd;
+    text-align: center;
+}
+
+    .not-found-box .a {
+        text-decoration: none;
+    }

@@ -27,14 +27,23 @@ namespace LocalSensorServer.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<PublicUser>> GetAllUsersPublicData()
+        public async Task<IActionResult> GetAllUsersPublicData()
         {
-            var claimedRole = GetClaimedUserRole(this.User);
-            var users = await _context.Users.ToListAsync();
-            var publicDataProvider = new UserPublicDataProvider();
-            var publicData = publicDataProvider.ConvertFullUsersDataToPublicData(users, claimedRole);
+            IEnumerable<PublicUser> publicData = null;
 
-            return publicData;
+            var claimedRole = GetClaimedUserRole(this.User);
+            if (claimedRole == EUserRole.Admin)
+            {
+                var users = await _context.Users.ToListAsync();
+                var publicDataProvider = new UserPublicDataProvider();
+                publicData = publicDataProvider.ConvertFullUsersDataToPublicData(users);
+            }
+            else
+            {
+                return Unauthorized();
+            }
+
+            return Ok(publicData);
         }
 
         [HttpGet("{id}")]
@@ -65,7 +74,7 @@ namespace LocalSensorServer.Controllers
                 {
                     User user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
                     user.Password = new PasswordCryptoSerivce().CreateHashString(candidate.Password);
-                    user.Login = candidate.Login;
+                    user.Login = candidate.Login; //TODO if null, dont do this -> change types to nullable
                     user.Name = candidate.Name;
                     user.Gender = candidate.Gender; //validate this
                     user.Lastname = candidate.Lastname;

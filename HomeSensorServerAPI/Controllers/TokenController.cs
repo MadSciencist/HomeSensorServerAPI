@@ -60,6 +60,7 @@ namespace HomeSensorServerAPI.Controllers
             {
                 token = tokenString,
                 userId = user.Id,
+                userRole = user.Role.ToString(),
                 tokenIssueTime = DateTime.Now.ToString(),
                 tokenValidTo = DateTime.Now.AddMinutes(double.Parse(_config["AuthenticationJwt:ValidTime"])).ToString(),
             }));

@@ -19,6 +19,7 @@
             $window.localStorage.setItem('token', response.data.token);
             $window.localStorage.setItem('userId', response.data.userId);
             $window.localStorage.setItem('validTo', response.data.tokenValidTo);
+            $window.localStorage.setItem('role', response.data.userRole);
 
             $location.path('/');
 
@@ -26,7 +27,10 @@
             $scope.username = '';
             $scope.password = '';
             $rootScope.badAuthentication = true;
-            $rootScope.badAuthenticationMessage = error.data;
+            if (error.data.length < 100) {
+                $rootScope.badAuthenticationMessage = error.data;
+            } else $rootScope.badAuthenticationMessage = "Error";
+
         });
     };
 });

@@ -10,4 +10,17 @@
                 }
             });
     };
+
+    this.putData = function (url, data) {
+        console.log('Updating data to: ' + url)
+        console.log('Data:');
+        console.log(data);
+        $http.put(url, data, {
+            headers: {
+                'Authorization': 'Bearer '.concat(localStorage.getItem('token')),
+                'Accept': 'application-json'
+            },
+            'Accept': 'application/json'
+        });
+    };
 });

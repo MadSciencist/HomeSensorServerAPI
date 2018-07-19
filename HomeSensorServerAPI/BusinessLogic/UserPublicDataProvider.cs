@@ -6,10 +6,9 @@ namespace HomeSensorServerAPI.BusinessLogic
 {
     public class UserPublicDataProvider
     {
-        public IEnumerable<PublicUser> ConvertFullUsersDataToPublicData(IEnumerable<User> users, EUserRole claimedRole)
+        public IEnumerable<PublicUser> ConvertFullUsersDataToPublicData(IEnumerable<User> users)
         {
             var result = from u in users
-                         where (int)u.Role <= (int)claimedRole
                          select new PublicUser()
                          {
                              Name = u.Name,
@@ -21,7 +20,8 @@ namespace HomeSensorServerAPI.BusinessLogic
                              Gender = u.Gender,
                              LastInvalidLogin = u.LastInvalidLogin,
                              LastValidLogin = u.LastValidLogin,
-                             JoinDate = u.JoinDate
+                             JoinDate = u.JoinDate,
+                             Id = u.Id
                          };
 
             return result;
@@ -33,15 +33,16 @@ namespace HomeSensorServerAPI.BusinessLogic
             {
                 Name = user.Name,
                 Lastname = user.Lastname,
-                Login = user.Login,
                 Birthdate = user.Birthdate,
+                Login = user.Login,
                 Gender = user.Gender,
                 PhotoUrl = user.PhotoUrl,
                 Role = user.Role,
                 Email = user.Email,
                 LastInvalidLogin = user.LastInvalidLogin,
                 LastValidLogin = user.LastValidLogin,
-                JoinDate = user.JoinDate
+                JoinDate = user.JoinDate,
+                Id = user.Id
             };
             return publicUser;
         }

@@ -1,6 +1,5 @@
 ﻿app.controller("UserController", function ($scope, $http, $location, $route, httpService) {
 
-    const userUrl = '/api/users/'.concat(localStorage.getItem('userId'));
     $scope.isAvatarUploaded = false;
     $scope.uploadedAvatarUrl = null;
 
@@ -61,6 +60,8 @@
     };
 
     $scope.get = function () {
+        const userUrl = '/api/users/'.concat(localStorage.getItem('userId'));
+
         httpService.getData(userUrl)
             .then(function (response) {
                 $scope.userData = getFullNamesOfUserAttributes(response.data);

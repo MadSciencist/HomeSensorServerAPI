@@ -13,8 +13,7 @@
         <strong>Błąd!</strong> <span id="users-info-error-text"></span>
     </div>
 
-
-    <div class="container-fluid">
+    <div class="container-fluid" ng-show="isAuthorizedToViewAllUsers">
         <table class="table table-hover">
             <tr>
                 <th>Imie</th>
@@ -22,6 +21,7 @@
                 <th>E-Mail</th>
                 <th>Data dołączenia</th>
                 <th>Rola</th>
+                <th>Akcje</th>
             </tr>
             <tr ng-repeat="user in users | orderBy: 'id'">
                 <td ng-bind="user.name"></td>
@@ -29,7 +29,62 @@
                 <td ng-bind="user.email"></td>
                 <td ng-bind="user.joinDate"></td>
                 <td ng-bind="user.role"></td>
-            </tr>  
+                <td>
+                    <button type="button" class="btn btn-secondary btn-sm"
+                            data-toggle="modal" data-target="#editPrivillagedModal"
+                            ng-click="editUserRole(user.id);">
+                        Uprawnienia
+                    </button>
+                    <button type="button" class="btn btn-danger btn-sm"
+                            data-toggle="modal" data-target="#editPrivillagedModal">
+                        Usuń
+                    </button>
+                </td>
+            </tr>
         </table>
+    </div>
+
+    <div class="container-fluid" ng-hide="isAuthorizedToViewAllUsers">
+        <div class="well">
+            <div class="not-found-box">
+                <p><b style="font-weight: 700; font-size: 5em;">401</b></p>
+                <p style="font-weight: 400; font-size: 2em;">Tylko administrator może wyświetlić tę stronę :(</p>
+                <p style="font-size: 1.45em"><a href="#!">Wróć na stronę główną</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal edit user -->
+    <div class="modal fade" id="editPrivillagedModal" tabindex="-1" role="dialog" aria-labelledby="editPrivillagedModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editPrivillagedModalLabel">Edytuj uprawnienia użytkownika</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!--modal body begin-->
+                    <form class="form-horizontal container-fluid" name="editUserForm" novalidate>
+                        <!--novalidate prevents HTML5 validation-->
+
+                        <div class="row form-group" ng-class="{ 'has-error' : editUserForm.userName.$invalid && !editUserForm.userName.$pristine }">
+                            <label for="userRole" class="control-label col-xs-3">Rola: </label>
+                            <div class="col-xs-9">
+                                <select name="userRole" class="form-control"
+                                        ng-model="userToEdit.role"
+                                        ng-options="option.id as option.name for option in availableRoles"></select>
+                            </div>
+                        </div>
+                    </form>
+                    <!--modal body end-->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+                    <button type="button" class="btn btn-primary" ng-click="editUserRoleSubmit();" data-dismiss="modal">Zapisz zmiany</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
