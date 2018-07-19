@@ -25,7 +25,8 @@ namespace HomeSensorServerAPI.Repository
                     PhotoUrl = "url",
                     LastInvalidLogin = DateTime.Now,
                     LastValidLogin = DateTime.Now,
-                    Birthdate = new DateTime(1994, 6, 20)
+                    Birthdate = new DateTime(1994, 6, 20),
+                    JoinDate = DateTime.Now
                 });
 
                 context.Users.Add(new User()
@@ -40,7 +41,8 @@ namespace HomeSensorServerAPI.Repository
                     PhotoUrl = "url",
                     LastInvalidLogin = DateTime.Now,
                     LastValidLogin = DateTime.Now,
-                    Birthdate = new DateTime(1994, 6, 20)
+                    Birthdate = new DateTime(1994, 6, 20),
+                    JoinDate = DateTime.Now
                 });
 
                 context.Users.Add(new User()
@@ -55,7 +57,8 @@ namespace HomeSensorServerAPI.Repository
                     PhotoUrl = "url",
                     LastInvalidLogin = DateTime.Now,
                     LastValidLogin = DateTime.Now,
-                    Birthdate = new DateTime(1994, 6, 20)
+                    Birthdate = new DateTime(1994, 6, 20),
+                    JoinDate = DateTime.Now
                 });
 
                 context.Users.Add(new User()
@@ -70,7 +73,8 @@ namespace HomeSensorServerAPI.Repository
                     PhotoUrl = "url",
                     LastInvalidLogin = DateTime.Now,
                     LastValidLogin = DateTime.Now,
-                    Birthdate = new DateTime(1994, 6, 20)
+                    Birthdate = new DateTime(1994, 6, 20),
+                    JoinDate = DateTime.Now
                 });
 
                 context.SaveChanges();

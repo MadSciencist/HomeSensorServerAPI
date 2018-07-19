@@ -20,7 +20,8 @@ namespace HomeSensorServerAPI.Models
 
         [Required(ErrorMessage = "Hasło jest konieczne")]
         [MinLength(5, ErrorMessage = "Hasło musi miec minimum 5 znaków.")]
-        [MaxLength(30, ErrorMessage = "Hasło musi mieć maksymalnie 30 znaków")]
+        [MaxLength(100, ErrorMessage = "Hasło musi mieć maksymalnie 30 znaków")]
+        [StringLength(100)]
         public string Password { get; set; }
 
         public DateTime Birthdate { get; set; }

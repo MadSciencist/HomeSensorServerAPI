@@ -24,12 +24,12 @@
                 <th>Rola</th>
             </tr>
             <tr ng-repeat="user in users | orderBy: 'id'">
-                <td>{{ user.name }}</td>
-                <td>{{ user.lastname }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.joinDate }}</td>
-                <td>{{ user.role }}</td>
-            </tr>
+                <td ng-bind="user.name"></td>
+                <td ng-bind="user.lastname"></td>
+                <td ng-bind="user.email"></td>
+                <td ng-bind="user.joinDate"></td>
+                <td ng-bind="user.role"></td>
+            </tr>  
         </table>
     </div>
 </div>
