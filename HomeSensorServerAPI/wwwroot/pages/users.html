@@ -28,7 +28,7 @@
                 <td ng-bind="user.lastname"></td>
                 <td ng-bind="user.email"></td>
                 <td ng-bind="user.joinDate"></td>
-                <td ng-bind="user.role"></td>
+                <td ng-bind="getUserRoleFromDictionary(user.role)"></td>
                 <td>
                     <button type="button" class="btn btn-secondary btn-sm"
                             data-toggle="modal" data-target="#editPrivillagedModal"
@@ -69,12 +69,12 @@
                     <form class="form-horizontal container-fluid" name="editUserForm" novalidate>
                         <!--novalidate prevents HTML5 validation-->
 
-                        <div class="row form-group" ng-class="{ 'has-error' : editUserForm.userName.$invalid && !editUserForm.userName.$pristine }">
+                        <div class="row form-group">
                             <label for="userRole" class="control-label col-xs-3">Rola: </label>
                             <div class="col-xs-9">
                                 <select name="userRole" class="form-control"
                                         ng-model="userToEdit.role"
-                                        ng-options="option.id as option.name for option in availableRoles"></select>
+                                        ng-options="option.value as option.dictionary for option in roleDictionary"></select>
                             </div>
                         </div>
                     </form>

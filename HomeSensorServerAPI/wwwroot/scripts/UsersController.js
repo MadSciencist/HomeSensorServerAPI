@@ -1,4 +1,5 @@
-﻿app.controller("UsersController", function ($scope, httpService) {
+﻿app.controller("UsersController", function ($scope, $rootScope, httpService) {
+
     const allUsersUrl = "/api/users/";
 
     $scope.users = [];
@@ -10,12 +11,16 @@
                 .then(function (response) {
                     $scope.isAuthorizedToViewAllUsers = true;
                     $scope.users = response.data;
-                    performRoleLookUp(response.data);
                 }).catch(error => {
                     $scope.isAuthorizedToViewAllUsers = false;
                     console.log("Error while retrieving data: " + error.data)
                 });
         }
+    };
+
+
+    $scope.getUserRoleFromDictionary = function (roleId) {
+        return ($rootScope.roleDictionary.filter(r => r.value === roleId))[0].dictionary;
     };
 
     //on click privilledges, update current watched user to PUT
@@ -25,23 +30,10 @@
 
     $scope.editUserRoleSubmit = function () {
         const url = '/api/users/' + $scope.userToEdit.id;
-        let json = getUserObject();
+        let json = JSON.stringify($scope.userToEdit);
         console.log(json);
         httpService.putData(url, json);
     }
-
-    $scope.availableRoles = [
-        { id: 'Sensor', name: 'Sensor - może dodawać nowe pomiary' },
-        { id: 'Viewer', name: 'Viewer - może wyświetlać' },
-        { id: 'Manager', name: 'Manager - może edytować' },
-        { id: 'Admin', name: 'Administrator' }
-    ];
-
-    const performRoleLookUp = function (rawUsers) {
-        for (let i = 0; i < rawUsers.length; i++) {
-            $scope.users[i].role = roleLookUpTable(rawUsers[i].role);
-        }
-    };
 
     const getUserObject = function () {
         return JSON.stringify({

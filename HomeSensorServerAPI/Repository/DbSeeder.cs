@@ -81,7 +81,6 @@ namespace HomeSensorServerAPI.Repository
                 context.SaveChanges();
             }
 
-
             if (!context.UserRoles.Any())
             {
                 foreach (EUserRole role in (EUserRole[])Enum.GetValues(typeof(EUserRole)))

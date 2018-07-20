@@ -5,6 +5,8 @@ using System.Linq;
 namespace HomeSensorServerAPI.Controllers.Dictionaries
 {
     [Route("/api/dictionaries/")]
+    [Produces("application/json")]
+    [ApiController]
     public class GeneralDictionaryController : ControllerBase
     {
         private readonly AppDbContext _context;
