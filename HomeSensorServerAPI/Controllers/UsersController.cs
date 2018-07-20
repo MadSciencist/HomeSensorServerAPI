@@ -1,18 +1,14 @@
 ﻿using HomeSensorServerAPI.BusinessLogic;
+using HomeSensorServerAPI.Logger;
 using HomeSensorServerAPI.Models;
 using HomeSensorServerAPI.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using Newtonsoft.Json;
-using Microsoft.AspNetCore.Authorization;
-using HomeSensorServerAPI.Extensions;
-using System.Security.Claims;
 using System;
-using HomeSensorServerAPI.Logger;
+using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace LocalSensorServer.Controllers
 {
@@ -31,8 +27,7 @@ namespace LocalSensorServer.Controllers
         {
             IEnumerable<PublicUser> publicData = null;
 
-            var claimedRole = GetClaimedUserRole(this.User);
-            if (claimedRole == EUserRole.Admin)
+            if (GetClaimedUserRole(this.User) == EUserRole.Admin)
             {
                 var users = await _context.Users.ToListAsync();
                 var publicDataProvider = new UserPublicDataProvider();
@@ -67,7 +62,6 @@ namespace LocalSensorServer.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, [FromBody]User candidate)
         {
-            //TODO update more variables than this
             if (ModelState.IsValid)
             {
                 if (IsUserIdentifierAsClaimed(id) || IsUserAdmin())
@@ -116,7 +110,6 @@ namespace LocalSensorServer.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            //TODO update more variables than this
             if (ModelState.IsValid)
             {
                 if (IsUserIdentifierAsClaimed(id) || IsUserAdmin())
