@@ -1,7 +1,7 @@
 ﻿app.service('httpService', function ($http) {
  
     this.getData = function (url) {
-        console.log('Retrieving data from: ' + url);
+        console.log('GET data from: ' + url);
         return $http.get(url,
             {
                 headers: {
@@ -12,10 +12,20 @@
     };
 
     this.putData = function (url, data) {
-        console.log('Updating data to: ' + url)
-        console.log('Data:');
+        console.log('PUT data to: ' + url + ' using data:')
         console.log(data);
-        $http.put(url, data, {
+        return $http.put(url, data, {
+            headers: {
+                'Authorization': 'Bearer '.concat(localStorage.getItem('token')),
+                'Accept': 'application-json'
+            },
+            'Accept': 'application/json'
+        });
+    };
+
+    this.deleteData = function (url) {
+        console.log('DELETE data to: ' + url)
+        return $http.delete(url, {
             headers: {
                 'Authorization': 'Bearer '.concat(localStorage.getItem('token')),
                 'Accept': 'application-json'

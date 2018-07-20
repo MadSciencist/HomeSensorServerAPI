@@ -70,16 +70,28 @@ namespace LocalSensorServer.Controllers
             //TODO update more variables than this
             if (ModelState.IsValid)
             {
-                if (IsUserIdentifierAsClaimed(id))
+                if (IsUserIdentifierAsClaimed(id) || IsUserAdmin())
                 {
-                    User user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
-                    user.Password = new PasswordCryptoSerivce().CreateHashString(candidate.Password);
-                    user.Login = candidate.Login; //TODO if null, dont do this -> change types to nullable
-                    user.Name = candidate.Name;//TODO transfer role and gender as string!!!
-                    user.Gender = candidate.Gender; //validate this
+                    var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+
+                    user.Name = candidate.Name;
+                    user.Gender = candidate.Gender;
                     user.Lastname = candidate.Lastname;
                     user.PhotoUrl = candidate.PhotoUrl;
                     user.Birthdate = candidate.Birthdate;
+                    user.Email = candidate.Email;
+
+                    //prevent null reference exception, because we dont keep user password at front end due to security reasons
+                    if(candidate.Password != null)
+                    {
+                        user.Password = new PasswordCryptoSerivce().CreateHashString(candidate.Password);
+                    }
+
+                    //prevent non-privilladged user to change his status to admin by i.e fiddler request
+                    if (IsUserAdmin())
+                    {
+                        user.Role = candidate.Role;
+                    }
 
                     try
                     {
@@ -90,6 +102,28 @@ namespace LocalSensorServer.Controllers
                     {
                         new LogService().LogToDatabase(_context, e);
                     }
+
+                    return Ok(user);
+                }
+                else
+                {
+                    return Unauthorized();
+                }
+            }
+            return BadRequest();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            //TODO update more variables than this
+            if (ModelState.IsValid)
+            {
+                if (IsUserIdentifierAsClaimed(id) || IsUserAdmin())
+                {
+                    var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+                    _context.Users.Remove(user);
+                    await _context.SaveChangesAsync();
 
                     return Ok();
                 }
@@ -114,13 +148,17 @@ namespace LocalSensorServer.Controllers
                 return false;
             }
         }
+        private bool IsUserAdmin()
+        {
+            return GetClaimedUserRole(this.User).ToString() == EUserRole.Admin.ToString();
+        }
 
         private string GetClaimedUserIdentifier(ClaimsPrincipal claimsPrincipal) => claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
 
         private EUserRole GetClaimedUserRole(ClaimsPrincipal claimsPrincipal)
         {
-            var claimedRoleString = claimsPrincipal.FindFirstValue(ClaimTypes.Role);
-            return Enum.GetValues(typeof(EUserRole)).Cast<EUserRole>().FirstOrDefault(ur => ur.ToString() == claimedRoleString);
+            var claimedRoleString = claimsPrincipal.FindFirstValue(ClaimTypes.Role); //get role
+            return Enum.GetValues(typeof(EUserRole)).Cast<EUserRole>().FirstOrDefault(ur => ur.ToString() == claimedRoleString); //and check if it exists in enum
         }
     }
 }

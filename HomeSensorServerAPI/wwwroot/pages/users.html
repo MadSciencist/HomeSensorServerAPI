@@ -3,14 +3,14 @@
 </head>
 <div class="container-fluid" ng-controller="UsersController" data-ng-init="getUsers()">
 
-    <div id="users-info-sucessfully-deleted" class="alert alert-success alert-dismissible fade in" style="display: none">
-        <a class="close" onclick="$('#users-info-sucessfully-deleted').hide()">×</a>
-        <strong>Sukces!</strong> Pomyślnie usunięto.
+    <div id="users-info-sucessfully-deleted" ng-show="isUpdateSuccess || isDeleteSuccess" class="alert alert-success alert-dismissible fade in">
+        <a class="close" ng-click="isUpdateSuccess = false; isDeleteSuccess = false;">×</a>
+        <strong>Sukces!</strong> {{ resultMessage }}
     </div>
 
-    <div id="nusers-info-error" class="alert alert-danger alert-dismissible fade in" style="display: none">
-        <a class="close" onclick="$('#users-info-error').hide()">×</a>
-        <strong>Błąd!</strong> <span id="users-info-error-text"></span>
+    <div id="users-info-error" ng-show="isUpdateFailed || isDeleteFailed" class="alert alert-danger alert-dismissible fade in">
+        <a class="close" ng-click="isUpdateFailed = false; isDeleteFailed = false;">×</a>
+        <strong>Błąd!</strong> {{ resultMessage }}
     </div>
 
     <div class="container-fluid" ng-show="isAuthorizedToViewAllUsers">
@@ -32,11 +32,11 @@
                 <td>
                     <button type="button" class="btn btn-secondary btn-sm"
                             data-toggle="modal" data-target="#editPrivillagedModal"
-                            ng-click="editUserRole(user.id);">
+                            ng-click="editUserRole(user.id)">
                         Uprawnienia
                     </button>
                     <button type="button" class="btn btn-danger btn-sm"
-                            data-toggle="modal" data-target="#editPrivillagedModal">
+                            ng-click="deleteUser(user.id)">
                         Usuń
                     </button>
                 </td>
@@ -82,7 +82,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
-                    <button type="button" class="btn btn-primary" ng-click="editUserRoleSubmit();" data-dismiss="modal">Zapisz zmiany</button>
+                    <button type="button" class="btn btn-primary" ng-click="editUserRoleSubmit()" data-dismiss="modal">Zapisz zmiany</button>
                 </div>
             </div>
         </div>

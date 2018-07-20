@@ -21,7 +21,8 @@ namespace HomeSensorServerAPI.BusinessLogic
                              LastInvalidLogin = u.LastInvalidLogin,
                              LastValidLogin = u.LastValidLogin,
                              JoinDate = u.JoinDate,
-                             Id = u.Id
+                             Id = u.Id,
+                             Login = u.Login
                          };
 
             return result;

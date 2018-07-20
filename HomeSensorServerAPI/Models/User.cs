@@ -14,31 +14,26 @@ namespace HomeSensorServerAPI.Models
 
         public string Lastname { get; set; }
 
-        [Required(ErrorMessage ="Email jest konieczny")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Login jest konieczny")]
         public string Login { get; set; }
 
-        [Required(ErrorMessage = "Hasło jest konieczne")]
-        [MinLength(5, ErrorMessage = "Hasło musi miec minimum 5 znaków.")]
-        [MaxLength(100, ErrorMessage = "Hasło musi mieć maksymalnie 30 znaków")]
         [StringLength(100)]
         public string Password { get; set; }
 
-        public DateTime Birthdate { get; set; }
+        public DateTime? Birthdate { get; set; }
 
-        public EUserGender Gender { get; set; }
+        public EUserGender? Gender { get; set; }
 
         [Required(ErrorMessage = "Rola jest konieczna")]
-        public EUserRole Role { get; set; }
+        public EUserRole? Role { get; set; }
 
         public string PhotoUrl { get; set; }
 
-        public DateTime LastValidLogin { get; set; }
+        public DateTime? LastValidLogin { get; set; }
 
-        public DateTime LastInvalidLogin { get; set; }
-        public DateTime JoinDate { get; set; }
+        public DateTime? LastInvalidLogin { get; set; }
+        public DateTime? JoinDate { get; set; }
 
         [NotMapped]
         public bool IsSuccessfullyAuthenticated { get; set; }
