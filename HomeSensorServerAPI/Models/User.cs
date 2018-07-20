@@ -31,16 +31,7 @@ namespace HomeSensorServerAPI.Models
         public EUserGender Gender { get; set; }
 
         [Required(ErrorMessage = "Rola jest konieczna")]
-        public string Role
-        {
-            get { return UserRoleE.ToString(); }
-            set { UserRoleE = value.ToEnum<EUserRole>(); }
-        }
-
-        [NotMapped]
-        [JsonIgnore]
-        public EUserRole UserRoleE { get; set; }
-
+        public EUserRole Role { get; set; }
 
         public string PhotoUrl { get; set; }
 

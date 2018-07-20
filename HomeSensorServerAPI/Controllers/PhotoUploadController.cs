@@ -25,13 +25,6 @@ namespace HomeSensorServerAPI.Controllers
         }
 
         [HttpPost]
-        [Route("test")]
-        public IActionResult A()
-        {
-            return Ok("asd");
-        }
-
-        [HttpPost]
         [Route("Upload")]
         public async Task<IActionResult> Post(IFormFile file)
         {

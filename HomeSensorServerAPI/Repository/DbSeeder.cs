@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using HomeSensorServerAPI.BusinessLogic;
+using System.Collections.Generic;
 
 namespace HomeSensorServerAPI.Repository
 {
@@ -20,7 +21,7 @@ namespace HomeSensorServerAPI.Repository
                     Lastname = "Kryszczak",
                     Email = "mkrysz1337@gmail.com",
                     Password = new PasswordCryptoSerivce().CreateHashString("admin"),
-                    Role = EUserRole.Admin.ToString(),
+                    Role = EUserRole.Admin,
                     Gender = EUserGender.Male,
                     PhotoUrl = "url",
                     LastInvalidLogin = DateTime.Now,
@@ -36,7 +37,7 @@ namespace HomeSensorServerAPI.Repository
                     Lastname = "Kryszczak",
                     Email = "mkrysz1337@gmail.com",
                     Password = new PasswordCryptoSerivce().CreateHashString("admin"),
-                    Role = EUserRole.Manager.ToString(),
+                    Role = EUserRole.Manager,
                     Gender = EUserGender.Male,
                     PhotoUrl = "url",
                     LastInvalidLogin = DateTime.Now,
@@ -52,7 +53,7 @@ namespace HomeSensorServerAPI.Repository
                     Lastname = "Kryszczak",
                     Email = "mkrysz1337@gmail.com",
                     Password = new PasswordCryptoSerivce().CreateHashString("admin"),
-                    Role = EUserRole.Viewer.ToString(),
+                    Role = EUserRole.Viewer,
                     Gender = EUserGender.Male,
                     PhotoUrl = "url",
                     LastInvalidLogin = DateTime.Now,
@@ -68,7 +69,7 @@ namespace HomeSensorServerAPI.Repository
                     Lastname = "Kryszczak",
                     Email = "mkrysz1337@gmail.com",
                     Password = new PasswordCryptoSerivce().CreateHashString("homeAutomationSensorPassword"),
-                    Role = EUserRole.Sensor.ToString(),
+                    Role = EUserRole.Sensor,
                     Gender = EUserGender.Male,
                     PhotoUrl = "url",
                     LastInvalidLogin = DateTime.Now,
@@ -76,6 +77,35 @@ namespace HomeSensorServerAPI.Repository
                     Birthdate = new DateTime(1994, 6, 20),
                     JoinDate = DateTime.Now
                 });
+
+                context.SaveChanges();
+            }
+
+
+            if (!context.UserRoles.Any())
+            {
+                foreach (EUserRole role in (EUserRole[])Enum.GetValues(typeof(EUserRole)))
+                {
+                    context.UserRoles.Add(new UserRole
+                    {
+                        Value = (int)role,
+                        Dictionary = role.ToString()
+                    });
+                }
+
+                context.SaveChanges();
+            }
+
+            if (!context.UserGenders.Any())
+            {
+                foreach (EUserGender gender in (EUserGender[])Enum.GetValues(typeof(EUserGender)))
+                {
+                    context.UserGenders.Add(new UserGender
+                    {
+                        Value = (int)gender,
+                        Dictionary = gender.ToString()
+                    });
+                }
 
                 context.SaveChanges();
             }

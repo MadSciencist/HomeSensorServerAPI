@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HomeSensorServerAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20180718192846_addedUserJoinDate")]
-    partial class addedUserJoinDate
+    [Migration("20180720185024_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -91,6 +91,8 @@ namespace HomeSensorServerAPI.Migrations
 
                     b.Property<int>("Gender");
 
+                    b.Property<DateTime>("JoinDate");
+
                     b.Property<DateTime>("LastInvalidLogin");
 
                     b.Property<DateTime>("LastValidLogin");
@@ -104,7 +106,7 @@ namespace HomeSensorServerAPI.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasMaxLength(30);
+                        .HasMaxLength(100);
 
                     b.Property<string>("PhotoUrl");
 
@@ -113,6 +115,34 @@ namespace HomeSensorServerAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("users");
+                });
+
+            modelBuilder.Entity("HomeSensorServerAPI.Models.UserGender", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Dictionary");
+
+                    b.Property<int>("Value");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("dictionary_genders");
+                });
+
+            modelBuilder.Entity("HomeSensorServerAPI.Models.UserRole", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Dictionary");
+
+                    b.Property<int>("Value");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("dictionary_roles");
                 });
 #pragma warning restore 612, 618
         }

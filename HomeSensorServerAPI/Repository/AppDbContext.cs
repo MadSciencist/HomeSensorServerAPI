@@ -13,6 +13,8 @@ namespace HomeSensorServerAPI.Repository
         public DbSet<Sensor> Sensors { get; set; }
         public DbSet<Node> Nodes { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<UserRole> UserRoles { get; set; }
+        public DbSet<UserGender> UserGenders { get; set; }
         public DbSet<LogEvent> LogEvents { get; set; }
     }
 }

@@ -108,12 +108,39 @@ namespace HomeSensorServerAPI.Migrations
 
                     b.Property<string>("PhotoUrl");
 
-                    b.Property<string>("Role")
-                        .IsRequired();
+                    b.Property<int>("Role");
 
                     b.HasKey("Id");
 
                     b.ToTable("users");
+                });
+
+            modelBuilder.Entity("HomeSensorServerAPI.Models.UserGender", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Dictionary");
+
+                    b.Property<int>("Value");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("dictionary_genders");
+                });
+
+            modelBuilder.Entity("HomeSensorServerAPI.Models.UserRole", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Dictionary");
+
+                    b.Property<int>("Value");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("dictionary_roles");
                 });
 #pragma warning restore 612, 618
         }

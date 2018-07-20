@@ -3,6 +3,6 @@
     public enum EUserGender : int
     {
         Male = 0,
-        Female
+        Female = 1
     }
 }
