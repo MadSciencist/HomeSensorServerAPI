@@ -27,8 +27,8 @@
                 <td ng-bind="user.name"></td>
                 <td ng-bind="user.lastname"></td>
                 <td ng-bind="user.email"></td>
-                <td ng-bind="user.joinDate"></td>
-                <td ng-bind="getUserRoleFromDictionary(user.role)"></td>
+                <td ng-bind="formatDate(user.joinDate)"></td>
+                <td ng-bind="scopeGetUserRoleFromDictionary(user.role)"></td>
                 <td>
                     <button type="button" class="btn btn-secondary btn-sm"
                             data-toggle="modal" data-target="#editPrivillagedModal"

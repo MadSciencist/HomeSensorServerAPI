@@ -41,7 +41,7 @@ app.config(function ($routeProvider) {
         });
 });
 
-app.run(["$rootScope", "$location", "$window", function ($rootScope, $location, $window) {
+app.run(function ($rootScope, $location, $window) {
     $rootScope.$on('$routeChangeStart', function (event, next, current) {
         if (next.$$route.auth) {
             const tokenValidTo = $window.localStorage.getItem('validTo');
@@ -59,4 +59,4 @@ app.run(["$rootScope", "$location", "$window", function ($rootScope, $location, 
         }
         
     });
-}]);
+});

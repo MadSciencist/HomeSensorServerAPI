@@ -37,7 +37,7 @@
                                         <span class="glyphicon glyphicon-cloud text-primary"></span> Płeć
                                     </strong>
                                 </td>
-                                <td class="text-primary" ng-bind="userData.genderLut"></td>
+                                <td class="text-primary" ng-bind="userData.genderDictionary"></td>
                             </tr>
 
                             <tr>
@@ -55,7 +55,7 @@
                                         <span class="glyphicon glyphicon-eye-open text-primary"></span> Rola w systemie
                                     </strong>
                                 </td>
-                                <td class="text-primary" ng-bind="userData.roleLut"></td>
+                                <td class="text-primary" ng-bind="userData.roleDictionary"></td>
                             </tr>
 
                             <tr>
@@ -99,7 +99,8 @@
 
     <div class="container-fluid" style="text-align: center;">
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#userEditModal">Edytuj swoje dane</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
+                ng-click="createCopyOfUserToEdit()" data-target="#userEditModal">Edytuj swoje dane</button>
 
         <!-- Modal edit user -->
         <div class="modal fade" id="userEditModal" tabindex="-1" role="dialog" aria-labelledby="userEditModalLabel" aria-hidden="true">
@@ -137,8 +138,8 @@
                                 <label for="userGender" class="control-label col-xs-3">Płeć</label>
                                 <div class="col-xs-9">
                                     <select name="userGender" class="form-control"
-                                            ng-model="userGender"
-                                            ng-options="option.id as option.name for option in availableGender"></select>
+                                            ng-model="userToEdit.gender"
+                                            ng-options="option.value as option.dictionary for option in genderDictionary"></select>
                                 </div>
                             </div>
 

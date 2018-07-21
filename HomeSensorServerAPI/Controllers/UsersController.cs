@@ -81,8 +81,8 @@ namespace LocalSensorServer.Controllers
                         user.Password = new PasswordCryptoSerivce().CreateHashString(candidate.Password);
                     }
 
-                    //prevent non-privilladged user to change his status to admin by i.e fiddler request
-                    if (IsUserAdmin())
+                    //prevent non-priviledged user to change his status to admin by i.e fiddler request
+                    if (IsUserAdmin() && !IsAdminTryingToDeleteOrRemovePrivilegesItself(id))
                     {
                         user.Role = candidate.Role;
                     }
@@ -112,13 +112,21 @@ namespace LocalSensorServer.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (IsUserIdentifierAsClaimed(id) || IsUserAdmin())
+                if (IsUserIdentifierAsClaimed(id) || IsUserAdmin()) //user can delete only its account, admin can delete all accounts
                 {
-                    var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
-                    _context.Users.Remove(user);
-                    await _context.SaveChangesAsync();
+                    if (!IsAdminTryingToDeleteOrRemovePrivilegesItself(id))
+                    {
+                        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+                        _context.Users.Remove(user);
+                        await _context.SaveChangesAsync();
 
-                    return Ok();
+                        return Ok();
+                    }
+                    else
+                    {
+                        BadRequest("Admin cannot delete itself, but can be delete by other admin.");
+                    }
+
                 }
                 else
                 {
@@ -128,18 +136,27 @@ namespace LocalSensorServer.Controllers
             return BadRequest();
         }
 
+        private bool IsAdminTryingToDeleteOrRemovePrivilegesItself(int removedUserId)
+        {
+            if (IsUserAdmin())
+            {
+                string adminIdString = GetClaimedUserIdentifier(this.User);
+
+                if(Int32.TryParse(adminIdString, out int adminId))
+                    return removedUserId == adminId;
+            }
+
+            return false;
+        }
+
         private bool IsUserIdentifierAsClaimed(int requestedId)
         {
             var claimedUserIdentifier = GetClaimedUserIdentifier(this.User);
 
             if (Int32.TryParse(claimedUserIdentifier, out int claimedUserId))
-            {
                 return claimedUserId == requestedId;
-            }
             else
-            {
                 return false;
-            }
         }
         private bool IsUserAdmin()
         {

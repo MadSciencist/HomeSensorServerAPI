@@ -1,36 +1,56 @@
-﻿app.controller("UserController", function ($scope, $http, $location, $route, httpService) {
+﻿app.controller("UserController", function ($scope, $rootScope, $location, httpService) {
 
+    $scope.scopeGetUserRoleFromDictionary = $rootScope.getUserRoleFromDictionary;
+    $scope.scopeGetUserGenderFromDictionary = $rootScope.getUserGenderFromDictionary;
+    $scope.userData = {};
     $scope.isAvatarUploaded = false;
-    $scope.uploadedAvatarUrl = null;
+    $scope.uploadedAvatarUrl = "";
+    $scope.userToEdit = null;
 
     $scope.editUser = function () {
         const token = localStorage.getItem('token');
         const userId = localStorage.getItem('userId');
+        const updateUrl = '/api/users/'.concat(userId);
 
-        let editedUser = JSON.stringify({
-            Login: $scope.userData.login,
-            Name: $scope.userData.name,
-            Lastname: $scope.userData.lastname,
-            Password: $scope.userData.password,
-            Email: $scope.userData.email,
-            Gender: $scope.userGender,
-            Birthdate: $scope.userData.birthdate,
-            PhotoUrl: $scope.uploadedAvatarUrl
-        });
+        //delete unecessary properties to ensure proper api binding
+        delete $scope.userToEdit.roleDictionary;
+        delete $scope.userToEdit.genderDictionary;
+        delete $scope.userToEdit.lastInvalidLogin;
+        delete $scope.userToEdit.lastValidLogin;
 
-        $http.put('/api/users/'.concat(userId), editedUser, {
-            headers: {
-                'Content-Type': 'application/json; charset=UTF-8',
-                'Authorization': 'Bearer '.concat(token)
-            },
-            'Accept': 'application/json'
-        }).then(function onSuccess(response) {
-            $location.path('/my-profile');
-            $scope.get();
+        //update edited extra fields
+        //TODO: birthdate edit via poopup calendar
+        $scope.userToEdit.photoUrl = $scope.uploadedAvatarUrl;
 
-        }, function onError(error) {
-            console.log(error);
-        });
+        const payload = JSON.stringify($scope.userToEdit);
+
+        httpService.putData(updateUrl, payload)
+            .then(function (response) {
+                $location.path('/my-profile');
+                $scope.get();
+            }).catch(error => console.log("Error while puting data: " + error));
+    };
+
+    $scope.createCopyOfUserToEdit = function () {
+        $scope.userToEdit = $scope.userData;
+    };
+
+    $scope.get = function () {
+        const userUrl = '/api/users/'.concat(localStorage.getItem('userId'));
+        httpService.getData(userUrl)
+            .then(function (response) {
+                $scope.userData = getFullNamesOfUserAttibutes(response.data);
+                $scope.userData.roleDictionary = $scope.scopeGetUserRoleFromDictionary($scope.userData.role);
+                $scope.userData.genderDictionary = $scope.scopeGetUserGenderFromDictionary($scope.userData.gender);
+            }).catch(error => console.log("Error while retrieving data: " + error));
+    };
+ 
+    const getFullNamesOfUserAttibutes = function (user) {
+        let expandedUser = user;
+        expandedUser.birthdateFormated = formatDate(user.birthdate, false);
+        expandedUser.lastValidLogin = formatDate(user.lastValidLogin, true);
+        expandedUser.lastInvalidLogin = formatDate(user.lastInvalidLogin, true);
+        return expandedUser;
     };
 
     $scope.uploadFile = function () {
@@ -55,33 +75,8 @@
         });
     };
 
-    let getAvatarFullUrl = function (name) {
+    const getAvatarFullUrl = function (name) {
         return '/img/uploads/avatars/' + name;
-    };
-
-    $scope.get = function () {
-        const userUrl = '/api/users/'.concat(localStorage.getItem('userId'));
-        httpService.getData(userUrl)
-            .then(function (response) {
-                $scope.userData = getFullNamesOfUserAttributes(response.data);
-                $scope.userGender = $scope.userData.gender;
-            }).catch(error => console.log("Error while retrieving data: " + error.data));
-    };
-    
-    let getFullNamesOfUserAttributes = function (user) {
-        let expandedUser = user;
-        expandedUser.genderLut = genderLookUpTable(user.gender);
-        expandedUser.roleLut = roleLookUpTable(user.role);
-        expandedUser.birthdateFormated = formatDate(user.birthdate, false);
-        expandedUser.lastValidLogin = formatDate(user.lastValidLogin, true);
-        expandedUser.lastInvalidLogin = formatDate(user.lastInvalidLogin, true);
-        return expandedUser;
-    };
-
-    $scope.availableGender = [{ id: 0, name: 'Mężczyzna' }, { id: 1, name: 'Kobieta' }];
-
-    let genderLookUpTable = function (genderId) {
-        return $scope.availableGender.filter(g => g.id === genderId)[0].name;
     };
 
 });

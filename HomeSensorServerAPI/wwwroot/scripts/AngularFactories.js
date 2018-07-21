@@ -18,8 +18,18 @@
             headers: {
                 'Authorization': 'Bearer '.concat(localStorage.getItem('token')),
                 'Accept': 'application-json'
-            },
-            'Accept': 'application/json'
+            }
+        });
+    };
+
+    this.posteData = function (url, data) {
+        console.log('POST data to: ' + url + ' using data:')
+        console.log(data);
+        return $http.post(url, data, {
+            headers: {
+                'Authorization': 'Bearer '.concat(localStorage.getItem('token')),
+                'Accept': 'application-json'
+            }
         });
     };
 
@@ -29,8 +39,8 @@
             headers: {
                 'Authorization': 'Bearer '.concat(localStorage.getItem('token')),
                 'Accept': 'application-json'
-            },
-            'Accept': 'application/json'
+            }
         });
     };
+
 });
