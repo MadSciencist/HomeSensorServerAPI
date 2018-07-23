@@ -3,7 +3,7 @@
     <title></title>
 </head>
 
-<div class="container bootstrap snippet" ng-controller="UserController" data-ng-init="get()">
+<div class="container-fluid bootstrap snippet" ng-controller="UserController" data-ng-init="initController()">
     <div class="panel-body inf-content">
         <div class="row">
             <div class="col-md-4" style="text-align: center;">
@@ -97,10 +97,14 @@
     </div><!--END OF PANEL-->
 
 
+
+
     <div class="container-fluid" style="text-align: center;">
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
-                ng-click="createCopyOfUserToEdit()" data-target="#userEditModal">Edytuj swoje dane</button>
+                ng-click="createCopyOfUserToEdit()" data-target="#userEditModal">
+            Edytuj swoje dane
+        </button>
 
         <!-- Modal edit user -->
         <div class="modal fade" id="userEditModal" tabindex="-1" role="dialog" aria-labelledby="userEditModalLabel" aria-hidden="true">
@@ -114,14 +118,15 @@
                     </div>
                     <div class="modal-body">
                         <!--modal body begin-->
-                        <form class="form-horizontal container-fluid" name="editUserForm" novalidate> <!--novalidate prevents HTML5 validation-->
+                        <form class="form-horizontal container-fluid" name="editUserForm" novalidate>
+                            <!--novalidate prevents HTML5 validation-->
 
                             <div class="row form-group" ng-class="{ 'has-error' : editUserForm.userName.$invalid && !editUserForm.userName.$pristine }">
                                 <label for="userName" class="control-label col-xs-3">Imię</label>
                                 <div class="col-xs-9">
                                     <input name="userName" value="{{userData.name}}" ng-model="userData.name" type="text" class="form-control" required>
-                                    <p ng-show="editUserForm.userName.$invalid && !editUserForm.userName.$pristine" 
-                                       class="help-block edit-user-form-validation-message">Musisz podać swoje imię. <span class="glyphicon glyphicon-exclamation-sign red"></span></p>
+                                    <p ng-show="editUserForm.userName.$invalid && !editUserForm.userName.$pristine"
+                                       class="help-block edit-user-form-validation-message">Musisz podać swoje imię.<span class="glyphicon glyphicon-exclamation-sign red"></span></p>
                                 </div>
                             </div>
 
@@ -130,7 +135,7 @@
                                 <div class="col-xs-9">
                                     <input name="userLastname" value="{{userData.lastname}}" ng-model="userData.lastname" type="text" class="form-control" required>
                                     <p ng-show="editUserForm.userLastname.$invalid && !editUserForm.userLastname.$pristine"
-                                       class="help-block edit-user-form-validation-message">Musisz podać swoje nazwisko. <span class="glyphicon glyphicon-exclamation-sign red"></span></p>
+                                       class="help-block edit-user-form-validation-message">Musisz podać swoje nazwisko.<span class="glyphicon glyphicon-exclamation-sign red"></span></p>
                                 </div>
                             </div>
 
@@ -148,7 +153,7 @@
                                 <div class="col-xs-9">
                                     <input name="userEmail" value="{{userData.email}}" ng-model="userData.email" type="email" class="form-control" required>
                                     <p ng-show="editUserForm.userEmail.$invalid && !editUserForm.userEmail.$pristine"
-                                       class="help-block edit-user-form-validation-message">Email nie jest prawidłowy. <span class="glyphicon glyphicon-exclamation-sign red"></span></p>
+                                       class="help-block edit-user-form-validation-message">Email nie jest prawidłowy.<span class="glyphicon glyphicon-exclamation-sign red"></span></p>
                                 </div>
                             </div>
 
@@ -158,7 +163,7 @@
                                 <div class="col-xs-9">
                                     <input name="userPassword" value="{{userData.password}}" ng-model="userData.password" type="password" class="form-control" required ng-minlength="5" ng-maxlength="20">
                                     <p ng-show="editUserForm.userPassword.$invalid && !editUserForm.userPassword.$pristine"
-                                       class="help-block edit-user-form-validation-message">Hasło musi zawierać od 5 do 20 znaków. <span class="glyphicon glyphicon-exclamation-sign red"></span></p>
+                                       class="help-block edit-user-form-validation-message">Hasło musi zawierać od 5 do 20 znaków.<span class="glyphicon glyphicon-exclamation-sign red"></span></p>
                                 </div>
                             </div>
 
@@ -166,7 +171,8 @@
                             <div class="row form-group">
                                 <label for="userBirthdate" class="control-label col-xs-3">Data urodzenia</label>
                                 <div class="col-xs-9">
-                                    <input name="userBirthdate" value="{{userData.birthdateFormated}}" ng-model="userData.birthdateFormated" type="text" class="form-control">
+                                    <input name="userBirthdate" value="{{userData.birthdateFormated}}" 
+                                           ng-model="userData.birthdateFormated" type="text" class="form-control date-picker-anchor">
                                 </div>
                             </div>
                         </form>
@@ -178,7 +184,8 @@
                                 <form id="avatarUploadForm" enctype="multipart/form-data" name="avatarUploadForm" novalidate>
                                     <div style="text-align: center;">
 
-                                        <label class="btn btn-default btn-file">Wybierz plik
+                                        <label class="btn btn-default btn-file">
+                                            Wybierz plik
                                             <input name="file" type="file" accept=".jpg, .jpeg, .png .gif" style="display: none;" required />
                                         </label>
 
