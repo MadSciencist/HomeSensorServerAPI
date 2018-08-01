@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <TypeScriptToolsVersion>2.8</TypeScriptToolsVersion>
+    <UserSecretsId>a87c2633-ee1a-4247-9279-8eb99cc6e04b</UserSecretsId>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -21,6 +22,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="_client\src\js\app.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="_client\src\js\app.js">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
@@ -29,6 +40,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\img\uploads\" />
+    <Folder Include="_client\src\js\controllers\" />
   </ItemGroup>
 
 </Project>
