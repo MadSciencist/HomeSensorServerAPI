@@ -15,13 +15,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="wwwroot\scripts\NewFolder\**" />
-    <Content Remove="wwwroot\scripts\NewFolder\**" />
-    <EmbeddedResource Remove="wwwroot\scripts\NewFolder\**" />
-    <None Remove="wwwroot\scripts\NewFolder\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="_client\favicon.ico" />
     <None Remove="_client\src\js\app.js" />
     <None Remove="_client\src\js\controllers\ChartsController.js" />
