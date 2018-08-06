@@ -13,7 +13,7 @@ app.config(function ($routeProvider) {
             auth: true
         })
         .when("/control", {
-            templateUrl: "pages/control.html",
+            templateUrl: "pages/control.html",  
             controller: "NodesController",
             auth: true
         })
