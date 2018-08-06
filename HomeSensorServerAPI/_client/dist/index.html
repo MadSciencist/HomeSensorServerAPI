@@ -1,6 +1,6 @@
 <html ng-app="smartHomeApp" lang="pl">
 <head>
-    <link href="css/main.css" rel="stylesheet" />
+    <link href="css/bundle.css" rel="stylesheet" />
 </head>
 <body>
     <div ng-controller="RootController">
@@ -11,20 +11,20 @@
             <div class="menu-list">
                 <ul id="menu-content" class="menu-content collapse out">
                     <li>
-                        <a href="#!charts"><i class="fa fa-chart-bar fa-lg"></i> Dane z czujników</a>
+                        <a href="#!"><i class="fa fa-chart-bar fa-lg"></i> Dane z czujników</a>
                     </li>
 
                     <li>
-                        <a href="#!control"><i class="fa fa-sitemap fa-lg"></i> Sterowanie</a>
+                        <a href="#!no"><i class="fa fa-sitemap fa-lg"></i> Sterowanie</a>
                     </li>
-                    </ul>
+                </ul>
             </div>
         </div>
-
         <div class="main-content">
             <div class="panel panel-default">
                 <div class="panel-heading" id="view-title">Strona główna</div>
                 <div class="panel-body">
+                    {{ test }}
                     <main>
                         <div ng-view></div>
                     </main>
@@ -32,6 +32,6 @@
             </div>
         </div>
     </div>
-    <script src="js/scripts.js"></script>
+    <script src="js/bundle.js"></script>
 </body>
 </html>

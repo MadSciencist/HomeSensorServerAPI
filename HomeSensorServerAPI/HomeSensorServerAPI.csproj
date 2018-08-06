@@ -22,11 +22,43 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="_client\favicon.ico" />
     <None Remove="_client\src\js\app.js" />
+    <None Remove="_client\src\templates\charts.html" />
+    <None Remove="_client\src\templates\control.html" />
+    <None Remove="_client\src\templates\login.html" />
+    <None Remove="_client\src\templates\nodes.html" />
+    <None Remove="_client\src\templates\not-found.html" />
+    <None Remove="_client\src\templates\user.html" />
+    <None Remove="_client\src\templates\users.html" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="_client\dist\favicon.ico">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
     <Content Include="_client\src\js\app.js">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="_client\src\templates\charts.html">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="_client\src\templates\control.html">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="_client\src\templates\login.html">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="_client\src\templates\nodes.html">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="_client\src\templates\not-found.html">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="_client\src\templates\user.html">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="_client\src\templates\users.html">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
   </ItemGroup>

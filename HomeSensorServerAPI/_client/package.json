@@ -4,8 +4,9 @@
   "author": "Mateusz Kryszczak",
   "private": true,
   "scripts": {
-    "start": "http-server -p 8082 -a localhost",
-    "test": "echo \"Error\" && exit 1"
+    "start": "gulp start",
+    "build": "gulp build",
+    "test": "echo \"Not specified\" && exit 1"
   },
   "dependencies": {
     "angular": "1.6.10",
