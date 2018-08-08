@@ -61,5 +61,5 @@
 #*.PDF   diff=astextplain
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
-wwwroot/* linguist-vendored
-_client/* linguist-vendored
+HomeSensorServerAPI/wwwroot/* linguist-vendored
+HomeSensorServerAPI/_client/* linguist-vendored
