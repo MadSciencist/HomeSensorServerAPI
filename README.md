@@ -11,3 +11,26 @@ Main features:
  *handle user accounts
  *grant and revoke permissions (view, control, admin, add-data {sensors}) to users
  
+ Publishing to Raspberry PI (Only RPi 2+ versions work):
+ 1) On develompent machine:
+	dotnet clean
+	dotnet publish -r linux-arm
+	
+	Use WinSCP to transfer files via FTP to Rpi.
+	Make main file HomeSensorServerAPI executable (755 chmod)
+	
+2) On Rpi:
+	Go to location where project was copied
+	Make sure that Apache with MySQL is running
+	Make sure that Nginx is running
+	./HomeSensorServerAPI
+
+
+Nginx config:
+todo
+
+Apache config:
+todo
+	
+	
+ 

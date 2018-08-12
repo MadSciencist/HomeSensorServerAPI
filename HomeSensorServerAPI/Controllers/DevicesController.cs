@@ -10,7 +10,7 @@ using HomeSensorServerAPI.BusinessLogic;
 
 namespace HomeSensorServerAPI.Controllers
 {
-    [Authorize(Roles = "Admin, Manager")]
+    //[Authorize(Roles = "Admin, Manager")]
     [Route("api/[controller]")]
     [Produces("application/json")]
     public class DevicesController : ControllerBase

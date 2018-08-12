@@ -15,81 +15,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="_client\favicon.ico" />
-    <None Remove="_client\src\js\app.js" />
-    <None Remove="_client\src\js\controllers\ChartsController.js" />
-    <None Remove="_client\src\js\controllers\LoginController.js" />
-    <None Remove="_client\src\js\controllers\NodesController.js" />
-    <None Remove="_client\src\js\controllers\RootController.js" />
-    <None Remove="_client\src\js\controllers\UserController.js" />
-    <None Remove="_client\src\js\controllers\UsersController.js" />
-    <None Remove="_client\src\js\factories\AngularFactories.js" />
-    <None Remove="_client\src\js\main.js" />
-    <None Remove="_client\src\js\utils.js" />
-    <None Remove="_client\src\templates\charts.html" />
-    <None Remove="_client\src\templates\control.html" />
-    <None Remove="_client\src\templates\login.html" />
-    <None Remove="_client\src\templates\nodes.html" />
-    <None Remove="_client\src\templates\not-found.html" />
-    <None Remove="_client\src\templates\user.html" />
-    <None Remove="_client\src\templates\users.html" />
+    <Compile Remove="%2a%2a\**" />
+    <Compile Remove="_client\**" />
+    <Content Remove="%2a%2a\**" />
+    <Content Remove="_client\**" />
+    <EmbeddedResource Remove="%2a%2a\**" />
+    <EmbeddedResource Remove="_client\**" />
+    <None Remove="%2a%2a\**" />
+    <None Remove="_client\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="_client\dist\favicon.ico">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="_client\src\js\app.js">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="_client\src\js\controllers\ChartsController.js">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="_client\src\js\controllers\LoginController.js">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="_client\src\js\controllers\NodesController.js">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="_client\src\js\controllers\RootController.js">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="_client\src\js\controllers\UserController.js">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="_client\src\js\controllers\UsersController.js">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="_client\src\js\factories\AngularFactories.js">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="_client\src\js\main.js">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="_client\src\js\utils.js">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="_client\src\templates\charts.html">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="_client\src\templates\control.html">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="_client\src\templates\login.html">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="_client\src\templates\nodes.html">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="_client\src\templates\not-found.html">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="_client\src\templates\user.html">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="_client\src\templates\users.html">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
+    <Content Remove="%2a%2a\%2a.config" />
+    <Content Remove="%2a%2a\%2a.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -100,10 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\img\uploads\" />
-    <Folder Include="_client\dist\css\" />
-    <Folder Include="_client\dist\img\uploads\avatars\" />
-    <Folder Include="_client\dist\js\" />
+    <ProjectReference Include="..\RpiProcessHandler\RpiProcessHandler.csproj" />
   </ItemGroup>
 
 </Project>
