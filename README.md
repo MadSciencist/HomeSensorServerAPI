@@ -23,6 +23,9 @@ Main features:
 	Go to location where project was copied
 	Make sure that Apache with MySQL is running
 	Make sure that Nginx is running
+	If necessary, apply migration:
+	dotnet ef database update
+	Then run:
 	./HomeSensorServerAPI
 
 

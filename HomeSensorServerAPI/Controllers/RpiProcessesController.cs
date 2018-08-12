@@ -1,12 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RpiProcessHandler;
+using RpiProcessHandler.FFmpeg;
 
 namespace HomeSensorServerAPI.Controllers
 {
+    //TODO Authorization
     [Route("api/[controller]")]
     [ApiController]
     public class RpiProcessesController : ControllerBase
     {
+        //ngix -> authorize only for admins
         [Route("nginx/start")]
         [HttpGet]
         public IActionResult StartNginx()
@@ -17,8 +20,7 @@ namespace HomeSensorServerAPI.Controllers
             return Ok();
         }
 
-        [Route("nginx/stop")]
-        [HttpGet]
+        [HttpGet("nginx/stop")]
         public IActionResult StopNginx()
         {
             var rpi = new RpiNginxProcesses();
@@ -27,8 +29,7 @@ namespace HomeSensorServerAPI.Controllers
             return Ok();
         }
 
-        [Route("nginx/restart")]
-        [HttpGet]
+        [HttpGet("nginx/restart")]
         public IActionResult RestartNginx()
         {
             var rpi = new RpiNginxProcesses();
@@ -37,12 +38,21 @@ namespace HomeSensorServerAPI.Controllers
             return Ok();
         }
 
-        [Route("ffmpeg/start")]
-        [HttpGet]
+        //ffmpeg -> authorized for users
+        [HttpGet("ffmpeg/start")]
         public IActionResult StartFfmpeg()
         {
+            var rtsp = @"rtsp://192.168.0.80:554/axis-media/media.amp";
             var rpi = new RpiFFmpegProcesses();
-            rpi.FFmpegStartStreaming();
+            rpi.FFmpegStartStreaming(rtsp, EResolution.Res640x480);
+
+            return Ok();
+        }
+        [HttpGet("ffmpeg/stop")]
+        public IActionResult StopFFmpeg()
+        {
+            var rpi = new RpiFFmpegProcesses();
+            rpi.FFmpegStopStreaming();
 
             return Ok();
         }

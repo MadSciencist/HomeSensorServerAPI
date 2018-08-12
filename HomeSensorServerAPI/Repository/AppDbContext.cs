@@ -16,5 +16,6 @@ namespace HomeSensorServerAPI.Repository
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<UserGender> UserGenders { get; set; }
         public DbSet<LogEvent> LogEvents { get; set; }
+        public DbSet<StreamingDevice> StreamingDevices { get; set; }
     }
 }

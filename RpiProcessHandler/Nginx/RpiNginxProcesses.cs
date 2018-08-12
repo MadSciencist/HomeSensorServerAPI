@@ -2,8 +2,8 @@
 {
     public class RpiNginxProcesses : RpiProcessHandler
     {
-        public string NginxStartCommand { get; set; } = $"sudo /usr/local/nginx/sbin/nginx";
-        public string NginxStopCommand { get; set; } = $"sudo /usr/local/nginx/sbin/nginx -s stop";
+        public string NginxStartCommand { get; set; } = @"sudo /usr/local/nginx/sbin/nginx";
+        public string NginxStopCommand { get; set; } = @"sudo /usr/local/nginx/sbin/nginx -s stop";
 
         public void StartNginx()
         {

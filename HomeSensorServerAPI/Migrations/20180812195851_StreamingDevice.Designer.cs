@@ -3,14 +3,16 @@ using System;
 using HomeSensorServerAPI.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HomeSensorServerAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180812195851_StreamingDevice")]
+    partial class StreamingDevice
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,24 +79,6 @@ namespace HomeSensorServerAPI.Migrations
                     b.ToTable("sensors");
                 });
 
-            modelBuilder.Entity("HomeSensorServerAPI.Models.StreamingDevice", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("ConnectionString");
-
-                    b.Property<string>("Login");
-
-                    b.Property<string>("Name");
-
-                    b.Property<string>("Password");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("streaming_devices");
-                });
-
             modelBuilder.Entity("HomeSensorServerAPI.Models.User", b =>
                 {
                     b.Property<long>("Id")
@@ -125,11 +109,7 @@ namespace HomeSensorServerAPI.Migrations
 
                     b.Property<int>("Role");
 
-                    b.Property<long?>("StreamingDeviceId");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("StreamingDeviceId");
 
                     b.ToTable("users");
                 });
@@ -160,13 +140,6 @@ namespace HomeSensorServerAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("dictionary_roles");
-                });
-
-            modelBuilder.Entity("HomeSensorServerAPI.Models.User", b =>
-                {
-                    b.HasOne("HomeSensorServerAPI.Models.StreamingDevice")
-                        .WithMany("AuthorizedUsers")
-                        .HasForeignKey("StreamingDeviceId");
                 });
 #pragma warning restore 612, 618
         }
