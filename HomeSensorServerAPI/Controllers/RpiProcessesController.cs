@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using HomeSensorServerAPI.Models;
+using Microsoft.AspNetCore.Mvc;
 using RpiProcessHandler;
 using RpiProcessHandler.FFmpeg;
 
@@ -39,16 +40,23 @@ namespace HomeSensorServerAPI.Controllers
         }
 
         //ffmpeg -> authorized for users
-        [HttpGet("ffmpeg/start")]
-        public IActionResult StartFfmpeg()
+        [HttpPost("ffmpeg/start")]
+        public IActionResult StartFfmpeg([FromBody] FFmpegProcessEndpoint ffmpeg)
         {
-            var rtsp = @"rtsp://192.168.0.80:554/axis-media/media.amp";
-            var rpi = new RpiFFmpegProcesses();
-            rpi.FFmpegStartStreaming(rtsp, EResolution.Res640x480);
+            if (ModelState.IsValid)
+            {
+                var rtspUrl = ffmpeg.Url;
 
-            return Ok();
+                //todo parse resolution
+                var rpi = new RpiFFmpegProcesses();
+                rpi.FFmpegStartStreaming(rtspUrl, EResolution.Res640x480);
+
+                return Ok();
+            }
+            return BadRequest();
         }
-        [HttpGet("ffmpeg/stop")]
+
+        [HttpPost("ffmpeg/stop")]
         public IActionResult StopFFmpeg()
         {
             var rpi = new RpiFFmpegProcesses();
