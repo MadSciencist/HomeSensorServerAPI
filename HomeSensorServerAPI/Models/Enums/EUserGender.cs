@@ -1,4 +1,4 @@
-﻿namespace HomeSensorServerAPI.Models
+﻿namespace HomeSensorServerAPI.Models.Enums
 {
     public enum EUserGender : int
     {

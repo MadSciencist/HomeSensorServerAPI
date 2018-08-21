@@ -8,6 +8,7 @@ using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using HomeSensorServerAPI.Repository;
 using HomeSensorServerAPI.Models;
+using HomeSensorServerAPI.Models.Enums;
 
 namespace HomeSensorServerAPI.Controllers
 {
@@ -30,11 +31,11 @@ namespace HomeSensorServerAPI.Controllers
             return _context.Nodes;
         }
 
-        //GET: /api/nodes/type/nodeactuator
+        //GET: /api/nodes/type/1
         [HttpGet("type/{type}")]
-        public IActionResult GetSpecifiedTypeNode(string type)
+        public IActionResult GetSpecifiedTypeNode(ENodeType type)
         {
-            var node = _context.Nodes.Where(n => n.Type == type);
+            var node = _context.Nodes.Where(n => n.NodeType == type);
 
             if (node == null || (!node.Any()))
             {
@@ -81,7 +82,7 @@ namespace HomeSensorServerAPI.Controllers
             IPAddress sensorIP = null, sensorGatewayIP = null;
             
             //validate IPs only for actuators - we do not carry about sensor IP, cause they might have non-static IP and thats fine
-            if (node.Type == "nodeActuator")
+            if (node.NodeType == ENodeType.Actuator)
             {
                 try
                 {
@@ -99,7 +100,7 @@ namespace HomeSensorServerAPI.Controllers
                     return BadRequest("Podany adres IP nie jest prawidłowy");
                 }
             }
-            else if(node.Type == "nodeSensor")
+            else if(node.NodeType == ENodeType.Sensor)
             {
                 node.IpAddress = "-";
                 node.GatewayAddress = "-";
@@ -146,7 +147,7 @@ namespace HomeSensorServerAPI.Controllers
             IPAddress sensorIP = null, sensorGatewayIP = null;
 
             //validate IPs only for actuators - we do not carry about sensor IP, cause they might have non-static IP and thats fine
-            if (node.Type == "nodeActuator")
+            if (node.NodeType == ENodeType.Actuator)
             {
                 try
                 {
@@ -169,8 +170,10 @@ namespace HomeSensorServerAPI.Controllers
             {
                 Name = node.Name,
                 Identifier = node.Identifier,
-                Type = node.Type,
-                ExactType = node.ExactType,
+                Description = node.Description,
+                NodeType = node.NodeType,
+                SensorType = node.SensorType,
+                ActuatorType = node.ActuatorType,
                 IpAddress = sensorIP == null ? "-" : sensorIP.ToString(),
                 GatewayAddress = sensorGatewayIP == null ? "-" : sensorGatewayIP.ToString(),
                 LoginName = node.LoginName,

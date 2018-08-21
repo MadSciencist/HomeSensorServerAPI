@@ -1,4 +1,4 @@
-﻿using HomeSensorServerAPI.Extensions;
+﻿using HomeSensorServerAPI.Models.Enums;
 using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -18,6 +18,7 @@ namespace HomeSensorServerAPI.Models
 
         public string Login { get; set; }
 
+        //reduce this due to some MySQL connector issues
         [StringLength(100)]
         public string Password { get; set; }
 
@@ -25,7 +26,7 @@ namespace HomeSensorServerAPI.Models
 
         public EUserGender? Gender { get; set; }
 
-        [Required(ErrorMessage = "Rola jest konieczna")]
+        [Required]
         public EUserRole? Role { get; set; }
 
         public string PhotoUrl { get; set; }

@@ -3,6 +3,8 @@ using System;
 using System.Linq;
 using HomeSensorServerAPI.BusinessLogic;
 using System.Collections.Generic;
+using HomeSensorServerAPI.Models.Dictionaries;
+using HomeSensorServerAPI.Models.Enums;
 
 namespace HomeSensorServerAPI.Repository
 {
@@ -87,8 +89,8 @@ namespace HomeSensorServerAPI.Repository
                 {
                     context.UserRoles.Add(new UserRole
                     {
-                        Value = (int)role,
-                        Dictionary = role.ToString()
+                        Key = (int)role,
+                        Value = role.ToString()
                     });
                 }
 
@@ -101,8 +103,50 @@ namespace HomeSensorServerAPI.Repository
                 {
                     context.UserGenders.Add(new UserGender
                     {
-                        Value = (int)gender,
-                        Dictionary = gender.ToString()
+                        Key = (int)gender,
+                        Value = gender.ToString()
+                    });
+                }
+
+                context.SaveChanges();
+            }
+
+            if (!context.NodeTypes.Any())
+            {
+                foreach (ENodeType nodeType in (ENodeType[])Enum.GetValues(typeof(ENodeType)))
+                {
+                    context.NodeTypes.Add(new NodeType
+                    {
+                        Key = (int)nodeType,
+                        Value = nodeType.ToString()
+                    });
+                }
+
+                context.SaveChanges();
+            }
+
+            if (!context.SensorTypes.Any())
+            {
+                foreach (ESensorType sensorType in (ESensorType[])Enum.GetValues(typeof(ESensorType)))
+                {
+                    context.SensorTypes.Add(new SensorType
+                    {
+                        Key = (int)sensorType,
+                        Value = sensorType.ToString()
+                    });
+                }
+
+                context.SaveChanges();
+            }
+
+            if (!context.ActuatorTypes.Any())
+            {
+                foreach (EActuatorType actuatorType in (EActuatorType[])Enum.GetValues(typeof(EActuatorType)))
+                {
+                    context.ActuatorTypes.Add(new ActuatorType
+                    {
+                        Key = (int)actuatorType,
+                        Value = actuatorType.ToString()
                     });
                 }
 

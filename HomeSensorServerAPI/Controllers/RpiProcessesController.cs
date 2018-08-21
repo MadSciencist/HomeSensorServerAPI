@@ -1,7 +1,10 @@
 ﻿using HomeSensorServerAPI.Models;
+using HomeSensorServerAPI.Repository;
 using Microsoft.AspNetCore.Mvc;
 using RpiProcessHandler;
+using System.Linq;
 using RpiProcessHandler.FFmpeg;
+using RpiProcessHandler.Rtsp;
 
 namespace HomeSensorServerAPI.Controllers
 {
@@ -10,6 +13,12 @@ namespace HomeSensorServerAPI.Controllers
     [ApiController]
     public class RpiProcessesController : ControllerBase
     {
+        private readonly AppDbContext _context;
+
+        public RpiProcessesController(AppDbContext context)
+        {
+            _context = context;
+        }
         //ngix -> authorize only for admins
         [Route("nginx/start")]
         [HttpGet]
@@ -45,11 +54,12 @@ namespace HomeSensorServerAPI.Controllers
         {
             if (ModelState.IsValid)
             {
-                var rtspUrl = ffmpeg.Url;
+                var selectedDevice = _context.StreamingDevices.FirstOrDefault(d => d.Id == ffmpeg.StreamingDeviceId);
+                var rtspWithCredentials = RtspHelper.InjectCredentialsToUrl(selectedDevice.ConnectionString, selectedDevice.Login, selectedDevice.Password);
 
                 //todo parse resolution
                 var rpi = new RpiFFmpegProcesses();
-                rpi.FFmpegStartStreaming(rtspUrl, EResolution.Res640x480);
+                rpi.FFmpegStartStreaming(rtspWithCredentials, EResolution.Res640x480);
 
                 return Ok();
             }

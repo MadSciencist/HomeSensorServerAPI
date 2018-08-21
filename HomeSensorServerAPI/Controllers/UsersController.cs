@@ -1,6 +1,7 @@
 ﻿using HomeSensorServerAPI.BusinessLogic;
 using HomeSensorServerAPI.Logger;
 using HomeSensorServerAPI.Models;
+using HomeSensorServerAPI.Models.Enums;
 using HomeSensorServerAPI.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

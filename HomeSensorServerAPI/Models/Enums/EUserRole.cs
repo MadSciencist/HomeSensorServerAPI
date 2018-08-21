@@ -1,6 +1,5 @@
-﻿namespace HomeSensorServerAPI.Models
+﻿namespace HomeSensorServerAPI.Models.Enums
 {
-    //order of these is important!
     public enum EUserRole : int
     {
         Sensor = 0,

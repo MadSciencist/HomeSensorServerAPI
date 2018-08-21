@@ -1,5 +1,4 @@
-﻿using HomeSensorServerAPI.Extensions;
-using Newtonsoft.Json;
+﻿using HomeSensorServerAPI.Models.Enums;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
