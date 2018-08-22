@@ -90,8 +90,9 @@ namespace HomeSensorServerAPI.Controllers
                     sensorGatewayIP = IPAddress.Parse(node.GatewayAddress);
 
                     //actuator IP must be unique
-                    if(IsIPAddressUnique(sensorIP))
+                    if(!IsIpAddressUnique(sensorIP))
                     {
+                        //TODO check here, if adres is not unique, but it is my address - modify PUT
                         return BadRequest("Podany adres IP urządzenia już jest na liście. Adres powinien być unikalny.");
                     }
                 }
@@ -155,7 +156,7 @@ namespace HomeSensorServerAPI.Controllers
                     sensorGatewayIP = IPAddress.Parse(node.GatewayAddress);
 
                     //actuator IP must be unique
-                    if (IsIPAddressUnique(sensorIP))
+                    if (!IsIpAddressUnique(sensorIP))
                     {
                         return BadRequest("Podany adres IP urządzenia już jest na liście. Adres powinien być unikalny.");
                     }
@@ -209,8 +210,8 @@ namespace HomeSensorServerAPI.Controllers
         }
 
         //returns true if it is unique
-        private bool IsIPAddressUnique(IPAddress IPToCompare)
-            => _context.Nodes.Where(n => n.IpAddress != "-").Any(n => IPAddress.Parse(n.IpAddress).Equals(IPToCompare)) ? true : false;
+        private bool IsIpAddressUnique(IPAddress IPToCompare)
+            => _context.Nodes.Where(n => n.IpAddress != "-").Any(n => IPAddress.Parse(n.IpAddress).Equals(IPToCompare)) ? false : true;
 
         private bool NodeExists(int id) => _context.Nodes.Any(e => e.Id == id);
     }
