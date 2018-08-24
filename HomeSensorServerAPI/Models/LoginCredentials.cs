@@ -2,7 +2,7 @@
 
 namespace HomeSensorServerAPI.Models
 {
-    public class LoginCredentials
+    public class LoginCredentials : ILoginCredentials
     {
         [Required]
         public string Username { get; set; }

@@ -6,7 +6,7 @@ namespace HomeSensorServerAPI.BusinessLogic
 {
     public class UserPublicDataProvider
     {
-        public IEnumerable<PublicUser> ConvertFullUsersDataToPublicData(IEnumerable<User> users)
+        public IEnumerable<PublicUser> ConvertFullUsersDataToPublicData(IEnumerable<IUser> users)
         {
             var result = from u in users
                          select new PublicUser()
@@ -30,7 +30,7 @@ namespace HomeSensorServerAPI.BusinessLogic
 
         public PublicUser ConvertFullUserDataToPublicData(User user)
         {
-            PublicUser publicUser = new PublicUser()
+            var publicUser = new PublicUser()
             {
                 Name = user.Name,
                 Lastname = user.Lastname,

@@ -8,8 +8,9 @@ namespace HomeSensorServerAPI.Models
 {
     //TODO: more validation
     [Table("users")]
-    public class User : Entity
+    public class User : Entity, IUser
     {
+        public override long Id { get; set; }
         public string Name { get; set; }
         public string Lastname { get; set; }
         public string Email { get; set; }

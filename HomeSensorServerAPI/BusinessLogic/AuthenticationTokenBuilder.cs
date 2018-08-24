@@ -16,7 +16,7 @@ namespace HomeSensorServerAPI.BusinessLogic
         {
             _config = config;
         }
-        public string BuildToken(User user)
+        public string BuildToken(IUser user)
         {
             var claims = new List<Claim>
             {

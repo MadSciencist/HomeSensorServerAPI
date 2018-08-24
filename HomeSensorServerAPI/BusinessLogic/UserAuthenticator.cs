@@ -8,7 +8,7 @@ namespace HomeSensorServerAPI.BusinessLogic
 {
     public class UserAuthenticator
     {
-        public User Authenticate(IEnumerable<User> users, LoginCredentials login)
+        public IUser Authenticate(IEnumerable<User> users, ILoginCredentials login)
         {
             User user = null;
 

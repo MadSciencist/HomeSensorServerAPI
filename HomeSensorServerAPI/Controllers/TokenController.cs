@@ -54,7 +54,7 @@ namespace HomeSensorServerAPI.Controllers
             return response;
         }
 
-        private IActionResult CreateResponseToken(User user, string tokenString)
+        private IActionResult CreateResponseToken(IUser user, string tokenString)
         {
             return Ok(JsonConvert.SerializeObject(new
             {
@@ -66,7 +66,7 @@ namespace HomeSensorServerAPI.Controllers
             }));
         }
 
-        private async Task UpdateLastLoginInfo(User user)
+        private async Task UpdateLastLoginInfo(IUser user)
         {
             if (user != null)
             {
