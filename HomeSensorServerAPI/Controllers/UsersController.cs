@@ -77,7 +77,7 @@ namespace LocalSensorServer.Controllers
                     user.Email = candidate.Email;
 
                     //prevent null reference exception, because we dont keep user password at front end due to security reasons
-                    if(candidate.Password != null)
+                    if (candidate.Password != null)
                     {
                         user.Password = new PasswordCryptoSerivce().CreateHashString(candidate.Password);
                     }
@@ -105,6 +105,25 @@ namespace LocalSensorServer.Controllers
                     return Unauthorized();
                 }
             }
+            return BadRequest();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RegisterUser([FromBody]User user)
+        {
+            if (ModelState.IsValid)
+            {
+                var cryptoService = new PasswordCryptoSerivce();
+                user.JoinDate = DateTime.Now;
+                user.LastInvalidLogin = DateTime.Now;
+                user.Role = EUserRole.NotAproved;
+                user.Password = cryptoService.CreateHashString(user.Password);
+
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync();
+                return CreatedAtAction("RegisterUser", new { id = user.Id }, user);
+            }
+
             return BadRequest();
         }
 

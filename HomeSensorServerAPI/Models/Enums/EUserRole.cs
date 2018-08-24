@@ -2,9 +2,10 @@
 {
     public enum EUserRole : int
     {
-        Sensor = 0,
+        NotAproved = 0,
         Viewer = 1,
         Manager = 2,
-        Admin = 3
+        Admin = 3,
+        Sensor = 4
     }
 }
