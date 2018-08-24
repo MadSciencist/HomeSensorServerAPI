@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\HomeSensorServerAPI\HomeSensorServerAPI.csproj" />
+    <ProjectReference Include="..\PasswordCryptoService\PasswordCryptoService.csproj" />
     <ProjectReference Include="..\RpiProcessHandler\RpiProcessHandler.csproj" />
   </ItemGroup>
 

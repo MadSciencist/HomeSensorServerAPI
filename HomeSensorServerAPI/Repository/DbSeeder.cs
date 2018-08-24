@@ -1,10 +1,9 @@
 ﻿using HomeSensorServerAPI.Models;
-using System;
-using System.Linq;
-using HomeSensorServerAPI.BusinessLogic;
-using System.Collections.Generic;
 using HomeSensorServerAPI.Models.Dictionaries;
 using HomeSensorServerAPI.Models.Enums;
+using HomeSensorServerAPI.PasswordCryptography;
+using System;
+using System.Linq;
 
 namespace HomeSensorServerAPI.Repository
 {

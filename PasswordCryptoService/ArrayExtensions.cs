@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HomeSensorServerAPI.Extensions
+namespace HomeSensorServerAPI.PasswordCryptography
 {
     public static class ArrayExtensions
     {
