@@ -5,7 +5,7 @@ namespace HomeSensorServerAPI.Models
 {
     public interface IUser
     {
-        long Id { get; set; }
+        int Id { get; set; }
         DateTime? Birthdate { get; set; }
         string Email { get; set; }
         EUserGender? Gender { get; set; }

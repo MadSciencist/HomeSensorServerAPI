@@ -1,14 +1,12 @@
-﻿using System;
+﻿using HomeSensorServerAPI.Exceptions;
+using HomeSensorServerAPI.Models;
+using HomeSensorServerAPI.Models.Enums;
+using HomeSensorServerAPI.Repository.Users;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Net;
-using Microsoft.AspNetCore.Authorization;
-using HomeSensorServerAPI.Repository;
-using HomeSensorServerAPI.Models;
-using HomeSensorServerAPI.Models.Enums;
 
 namespace HomeSensorServerAPI.Controllers
 {
@@ -17,44 +15,40 @@ namespace HomeSensorServerAPI.Controllers
     [Route("api/[controller]")]
     public class NodesController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly INodeRepository _nodeRepository;
 
-        public NodesController(AppDbContext context)
+        public NodesController(INodeRepository nodeRepository)
         {
-            _context = context;
+            _nodeRepository = nodeRepository;
         }
 
         // GET: api/Nodes
         [HttpGet]
         public IEnumerable<Node> GetAllNodes()
         {
-            return _context.Nodes;
+            return _nodeRepository.GetAll();
         }
+
 
         //GET: /api/nodes/type/1
         [HttpGet("type/{type}")]
         public IActionResult GetSpecifiedTypeNode(ENodeType type)
         {
-            var node = _context.Nodes.Where(n => n.NodeType == type);
+            var specifiedTypeNodes = _nodeRepository.GetWithType(type);
 
-            if (node == null || (!node.Any()))
+            if (specifiedTypeNodes == null || (!specifiedTypeNodes.Any()))
             {
                 return NotFound();
             }
 
-            return Ok(node);
+            return Ok(specifiedTypeNodes);
         }
 
         // GET: api/Nodes/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetNode([FromRoute] int id)
+        public async Task<IActionResult> GetNode(int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var node = await _context.Nodes.SingleOrDefaultAsync(m => m.Id == id);
+            var node = await _nodeRepository.GetByIdAsync(id);
 
             if (node == null)
             {
@@ -69,150 +63,85 @@ namespace HomeSensorServerAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutNode([FromRoute] int id, [FromBody] Node node)
         {
+            Node updatedNode = null;
+
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
             if (id != node.Id)
-            {
                 return BadRequest();
-            }
-
-            IPAddress sensorIP = null, sensorGatewayIP = null;
-            
-            //validate IPs only for actuators - we do not carry about sensor IP, cause they might have non-static IP and thats fine
-            if (node.NodeType == ENodeType.Actuator)
-            {
-                try
-                {
-                    sensorIP = IPAddress.Parse(node.IpAddress);
-                    sensorGatewayIP = IPAddress.Parse(node.GatewayAddress);
-
-                    //actuator IP must be unique
-                    if(!IsIpAddressUnique(sensorIP))
-                    {
-                        //TODO check here, if adres is not unique, but it is my address - modify PUT
-                        return BadRequest("Podany adres IP urządzenia już jest na liście. Adres powinien być unikalny.");
-                    }
-                }
-                catch (FormatException)
-                {
-                    return BadRequest("Podany adres IP nie jest prawidłowy");
-                }
-            }
-            else if(node.NodeType == ENodeType.Sensor)
-            {
-                node.IpAddress = "-";
-                node.GatewayAddress = "-";
-            }
-
-            _context.Entry(node).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                updatedNode = await _nodeRepository.UpdateAsync(node);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (IdentifierNotUniqueException)
             {
-                if (!NodeExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    return BadRequest();
-                }
-            }catch (DbUpdateException)
+                return BadRequest("Identyfikator nie jest unikalny");
+            }
+            catch (IpAddressNotUniqueException)
             {
-                return BadRequest();
+                return BadRequest("Adres IP nie jest unikalny");
+            }
+            catch (FormatException)
+            {
+                return BadRequest("Adres IP nie jest prawidłowy.");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
             }
 
-            return Ok();
+                return Ok(new { Action = "Update", updatedNode });
         }
 
         // POST: api/Nodes
         [HttpPost]
         public async Task<IActionResult> PostNode([FromBody] Node node)
         {
+            Node createdNode = null;
+
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
+
+            try
+            {
+                createdNode = await _nodeRepository.CreateAsync(node);
+            }
+            catch (IdentifierNotUniqueException)
+            {
+                return BadRequest("Identyfikator nie jest unikalny");
+            }
+            catch (IpAddressNotUniqueException)
+            {
+                return BadRequest("Adres IP nie jest unikalny");
+            }
+            catch (FormatException)
+            {
+                return BadRequest("Adres IP nie jest prawidłowy.");
+            }
+            catch (Exception)
+            {
+                return BadRequest();
             }
 
-            if (_context.Nodes.Any(n => n.Identifier == node.Identifier))
-            {
-                return BadRequest("Identyfikator nie jest unikalny.");
-            }
-
-            IPAddress sensorIP = null, sensorGatewayIP = null;
-
-            //validate IPs only for actuators - we do not carry about sensor IP, cause they might have non-static IP and thats fine
-            if (node.NodeType == ENodeType.Actuator)
-            {
-                try
-                {
-                    sensorIP = IPAddress.Parse(node.IpAddress);
-                    sensorGatewayIP = IPAddress.Parse(node.GatewayAddress);
-
-                    //actuator IP must be unique
-                    if (!IsIpAddressUnique(sensorIP))
-                    {
-                        return BadRequest("Podany adres IP urządzenia już jest na liście. Adres powinien być unikalny.");
-                    }
-                }
-                catch (FormatException)
-                {
-                    return BadRequest("Podany adres IP nie jest prawidłowy");
-                }
-            }
-
-            var verifiedNode = new Node()
-            {
-                Name = node.Name,
-                Identifier = node.Identifier,
-                Description = node.Description,
-                NodeType = node.NodeType,
-                SensorType = node.SensorType,
-                ActuatorType = node.ActuatorType,
-                IpAddress = sensorIP == null ? "-" : sensorIP.ToString(),
-                GatewayAddress = sensorGatewayIP == null ? "-" : sensorGatewayIP.ToString(),
-                LoginName = node.LoginName,
-                LoginPassword = node.LoginPassword
-            };
-
-            _context.Nodes.Add(verifiedNode);
-
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetNode", new { id = node.Id }, node);
+            return CreatedAtAction("PostNode", createdNode);
         }
 
         // DELETE: api/Nodes/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteNode([FromRoute] int id)
+        public async Task<IActionResult> DeleteNode(int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            var node = await _nodeRepository.GetByIdAsync(id);
 
-            var node = await _context.Nodes.SingleOrDefaultAsync(m => m.Id == id);
             if (node == null)
             {
                 return NotFound();
             }
 
-            _context.Nodes.Remove(node);
-            await _context.SaveChangesAsync();
+            await _nodeRepository.DeleteAsync(node);
 
-            return Ok(node);
+            return Ok(new { Action = "Deleted", node});
         }
-
-        //returns true if it is unique
-        private bool IsIpAddressUnique(IPAddress IPToCompare)
-            => _context.Nodes.Where(n => n.IpAddress != "-").Any(n => IPAddress.Parse(n.IpAddress).Equals(IPToCompare)) ? false : true;
-
-        private bool NodeExists(int id) => _context.Nodes.Any(e => e.Id == id);
     }
 }

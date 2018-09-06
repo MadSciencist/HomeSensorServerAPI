@@ -1,7 +1,10 @@
-﻿namespace HomeSensorServerAPI.Models
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+
+namespace HomeSensorServerAPI.Models
 {
     public class Entity
     {
-        public virtual long Id { get; set; }
+        [BindNever]
+        public virtual int Id { get; set; }
     }
 }

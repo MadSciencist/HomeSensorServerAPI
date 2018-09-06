@@ -1,4 +1,6 @@
 ﻿using HomeSensorServerAPI.Repository;
+using HomeSensorServerAPI.Repository.Generic;
+using HomeSensorServerAPI.Repository.Users;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -32,10 +34,13 @@ namespace HomeSensorServerAPI
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContextPool<AppDbContext>(o =>
-                o.UseMySql(Configuration["ConnectionStrings:MySqlConnection"],
-                mysqlOptions => mysqlOptions.ServerVersion(new Version(10, 1, 29), ServerType.MariaDb)
-            ));
+            services.AddDbContext<AppDbContext>(options =>
+            {
+                options.EnableSensitiveDataLogging(true);
+                options.UseMySql(Configuration["ConnectionStrings:MySqlConnection"], mysqlOptions => mysqlOptions.ServerVersion(new Version(10, 1, 29), ServerType.MariaDb));
+            });
+
+            services.AddScoped<INodeRepository, NodeRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 

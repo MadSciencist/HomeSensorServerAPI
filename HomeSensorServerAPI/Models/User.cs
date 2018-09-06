@@ -1,4 +1,5 @@
 ﻿using HomeSensorServerAPI.Models.Enums;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -10,7 +11,8 @@ namespace HomeSensorServerAPI.Models
     [Table("users")]
     public class User : Entity, IUser
     {
-        public override long Id { get; set; }
+        [BindNever]
+        public override int Id { get; set; }
         public string Name { get; set; }
         public string Lastname { get; set; }
         public string Email { get; set; }

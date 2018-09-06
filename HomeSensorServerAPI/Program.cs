@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Net;
+using NLog.Web;
+using Microsoft.Extensions.Logging;
 
 namespace HomeSensorServerAPI
 {
@@ -11,7 +13,9 @@ namespace HomeSensorServerAPI
     {
         public static void Main(string[] args)
         {
+           // var logger = NLog.Web.NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
             var host = CreateWebHostBuilder(args).Build();
+            //logger.Info("asd");
 
             using (IServiceScope scope = host.Services.CreateScope())
             {
