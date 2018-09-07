@@ -1,5 +1,4 @@
 ﻿using HomeSensorServerAPI.BusinessLogic;
-using HomeSensorServerAPI.Logger;
 using HomeSensorServerAPI.Models;
 using HomeSensorServerAPI.Models.Enums;
 using HomeSensorServerAPI.PasswordCryptography;
@@ -96,7 +95,6 @@ namespace LocalSensorServer.Controllers
                     }
                     catch (Exception e)
                     {
-                        new LogService().LogToDatabase(_context, e);
                     }
 
                     return Ok(user);

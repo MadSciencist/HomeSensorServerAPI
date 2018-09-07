@@ -1,14 +1,11 @@
 ﻿using HomeSensorServerAPI.Models;
 using HomeSensorServerAPI.Models.Enums;
 using HomeSensorServerAPI.Repository.Generic;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace HomeSensorServerAPI.Repository.Users
+namespace HomeSensorServerAPI.Repository.Nodes
 {
-    public interface INodeRepository : IRepository<Node>
+    public interface INodeRepository : IGenericRepository<Node>
     {
         IEnumerable<Node> GetWithType(ENodeType type);
     }

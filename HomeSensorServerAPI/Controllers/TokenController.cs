@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
-using HomeSensorServerAPI.Logger;
 
 namespace HomeSensorServerAPI.Controllers
 {
@@ -77,15 +76,9 @@ namespace HomeSensorServerAPI.Controllers
                 }
                 catch(Exception e)
                 {
-                    LogException(e);
+
                 }
             }
-        }
-
-        private void LogException(Exception e)
-        {
-            var logger = new LogService();
-            logger.LogToDatabase(_context, e);
         }
     }
 }

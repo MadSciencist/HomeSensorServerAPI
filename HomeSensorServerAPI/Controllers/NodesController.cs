@@ -1,7 +1,7 @@
 ﻿using HomeSensorServerAPI.Exceptions;
 using HomeSensorServerAPI.Models;
 using HomeSensorServerAPI.Models.Enums;
-using HomeSensorServerAPI.Repository.Users;
+using HomeSensorServerAPI.Repository.Nodes;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;

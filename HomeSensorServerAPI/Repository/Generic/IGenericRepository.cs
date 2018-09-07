@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace HomeSensorServerAPI.Repository.Generic
 {
-    public interface IRepository<T> where T : class
+    public interface IGenericRepository<T> where T : class
     {
         IQueryable<T> GetAll();
         IEnumerable<T> Find(Func<T, bool> predicate);

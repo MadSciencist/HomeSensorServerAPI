@@ -31,6 +31,7 @@ namespace HomeSensorServerAPI
                     catch (Exception e)
                     {
                         logger.Error(e);
+                        throw;
                     }
                 }
                 host.Run();

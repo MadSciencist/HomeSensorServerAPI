@@ -3,17 +3,22 @@ using HomeSensorServerAPI.Models;
 using HomeSensorServerAPI.Models.Enums;
 using HomeSensorServerAPI.Repository.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace HomeSensorServerAPI.Repository.Users
+namespace HomeSensorServerAPI.Repository.Nodes
 {
-    public class NodeRepository : Repository<Node>, INodeRepository
+    public class NodeRepository : GenericRepository<Node>, INodeRepository
     {
-        public NodeRepository(AppDbContext context) : base(context) { }
+        private readonly ILogger<NodeRepository> _logger;
+
+        public NodeRepository(AppDbContext context, ILogger<NodeRepository> logger) : base(context) {
+            _logger = logger;
+        }
 
         public IEnumerable<Node> GetWithType(ENodeType type)
         {
@@ -99,7 +104,7 @@ namespace HomeSensorServerAPI.Repository.Users
             }
             catch (DbUpdateException e)
             {
-                Console.WriteLine(e.Message);
+                _logger.LogError(e, "Exception while updating node entity");
             }
 
             return node;
