@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Net;
-using NLog.Web;
 using Microsoft.Extensions.Logging;
+using NLog.Web;
 
 namespace HomeSensorServerAPI
 {
@@ -13,32 +13,48 @@ namespace HomeSensorServerAPI
     {
         public static void Main(string[] args)
         {
-           // var logger = NLog.Web.NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
-            var host = CreateWebHostBuilder(args).Build();
-            //logger.Info("asd");
+            var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
 
-            using (IServiceScope scope = host.Services.CreateScope())
+            try
             {
-                IServiceProvider services = scope.ServiceProvider;
-                AppDbContext context = services.GetRequiredService<AppDbContext>();
+                var host = CreateWebHostBuilder(args).Build();
+                using (IServiceScope scope = host.Services.CreateScope())
+                {
+                    IServiceProvider services = scope.ServiceProvider;
+                    AppDbContext context = services.GetRequiredService<AppDbContext>();
 
-                try
-                {
-                    DbSeeder seeder = new DbSeeder();
-                    seeder.EnsurePopulated(context);
+                    try
+                    {
+                        DbSeeder seeder = new DbSeeder();
+                        seeder.EnsurePopulated(context);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e);
+                    }
                 }
-                catch (Exception ex)
-                {
-                    //TODO proper exception logging
-                    Console.WriteLine(ex.Message);
-                }
+                host.Run();
             }
-            host.Run();
+            catch (Exception e)
+            {
+                logger.Error(e);
+            }
+            finally
+            {
+                NLog.LogManager.Shutdown();
+            }
+
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-               .UseKestrel(options => options.Listen(IPAddress.Any, 80));
+                .ConfigureLogging(logger =>
+                {
+                    //logger.ClearProviders();
+                    logger.SetMinimumLevel(LogLevel.Trace);
+                })
+                .UseNLog()
+                .UseKestrel(options => options.Listen(IPAddress.Any, 80));
     }
 }

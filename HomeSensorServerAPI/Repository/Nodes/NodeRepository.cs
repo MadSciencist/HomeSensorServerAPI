@@ -87,11 +87,12 @@ namespace HomeSensorServerAPI.Repository.Users
             }
             else if (node.NodeType == ENodeType.Sensor)
             {
-                node.IpAddress = "";
-                node.GatewayAddress = "";
+                node.IpAddress = String.Empty;
+                node.GatewayAddress = String.Empty;
             }
 
             _context.Entry(node).State = EntityState.Modified;
+
             try
             {
                 await _context.SaveChangesAsync();
@@ -101,12 +102,11 @@ namespace HomeSensorServerAPI.Repository.Users
                 Console.WriteLine(e.Message);
             }
 
-
             return node;
         }
 
         //returns true if it is unique
         private bool IsIpAddressUnique(IPAddress IPToCompare)
-            => _context.Nodes.Where(n => n.IpAddress != "-").Any(n => IPAddress.Parse(n.IpAddress).Equals(IPToCompare)) ? false : true;
+            => _context.Nodes.Where(n => n.NodeType == ENodeType.Actuator).Any(n => IPAddress.Parse(n.IpAddress).Equals(IPToCompare)) ? false : true;
     }
 }

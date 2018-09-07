@@ -11,9 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLogicTests", "Busin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PasswordCryptoService", "PasswordCryptoService\PasswordCryptoService.csproj", "{2D4F4639-F302-4AC0-B9D4-49384583C4B0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logger", "Logger\Logger.csproj", "{CBDC3BB9-6E50-4D69-A76B-AAF74F29FF66}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainTests.cs", "MainTests.cs\MainTests.cs.csproj", "{7508DE0F-D848-45BE-A611-6B404757A817}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MainTests.cs", "MainTests.cs\MainTests.cs.csproj", "{7508DE0F-D848-45BE-A611-6B404757A817}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,10 +35,6 @@ Global
 		{2D4F4639-F302-4AC0-B9D4-49384583C4B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D4F4639-F302-4AC0-B9D4-49384583C4B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D4F4639-F302-4AC0-B9D4-49384583C4B0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CBDC3BB9-6E50-4D69-A76B-AAF74F29FF66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CBDC3BB9-6E50-4D69-A76B-AAF74F29FF66}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CBDC3BB9-6E50-4D69-A76B-AAF74F29FF66}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CBDC3BB9-6E50-4D69-A76B-AAF74F29FF66}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7508DE0F-D848-45BE-A611-6B404757A817}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7508DE0F-D848-45BE-A611-6B404757A817}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7508DE0F-D848-45BE-A611-6B404757A817}.Release|Any CPU.ActiveCfg = Release|Any CPU
