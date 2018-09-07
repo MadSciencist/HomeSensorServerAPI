@@ -51,9 +51,7 @@ namespace HomeSensorServerAPI.Controllers
             var node = await _nodeRepository.GetByIdAsync(id);
 
             if (node == null)
-            {
                 return NotFound();
-            }
 
             return Ok(node);
         }
@@ -87,12 +85,12 @@ namespace HomeSensorServerAPI.Controllers
             {
                 return BadRequest("Adres IP nie jest prawidłowy.");
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Console.WriteLine(e.Message);
+                return BadRequest();
             }
 
-                return Ok(new { Action = "Update", updatedNode });
+            return Ok(new { Action = "Update", updatedNode });
         }
 
         // POST: api/Nodes

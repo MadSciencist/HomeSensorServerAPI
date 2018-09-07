@@ -57,9 +57,8 @@ namespace HomeSensorServerAPI.Repository.Users
 
         public override async Task<Node> UpdateAsync(Node node)
         {
-            var existingNode = _context.Nodes.FirstOrDefault(n => n.Id == node.Id);
+            var existingNode = await _context.Nodes.AsNoTracking().SingleOrDefaultAsync(n => n.Id == node.Id);
             IPAddress sensorIP = null, sensorGatewayIP = null;
-            _context.Entry(node).State = EntityState.Detached;
 
             //check if there already exissts node with that identifier, if yes, then if it's identifier is other than new one 
             if (existingNode != null && existingNode.Identifier != node.Identifier)
