@@ -15,7 +15,7 @@ namespace HomeSensorServerAPI.Repository
         public GenericRepository(AppDbContext context, ILoggerFactory loggerFactory)
         {
             _context = context;
-            _logger = loggerFactory.CreateLogger("a");
+            _logger = loggerFactory.CreateLogger("HomeSensorServerAPI.Repository.GenericRepository");
         }
 
         public virtual async Task<T> CreateAsync(T entity)

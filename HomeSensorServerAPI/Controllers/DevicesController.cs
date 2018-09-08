@@ -1,18 +1,16 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using HomeSensorServerAPI.BusinessLogic;
+using HomeSensorServerAPI.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using HomeSensorServerAPI.Repository;
-using HomeSensorServerAPI.Models;
-using HomeSensorServerAPI.BusinessLogic;
 
 namespace HomeSensorServerAPI.Controllers
 {
-    //[Authorize(Roles = "Admin, Manager")]
+    [Authorize]
     [Route("api/[controller]")]
-    [Produces("application/json")]
     public class DevicesController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -22,6 +20,7 @@ namespace HomeSensorServerAPI.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "Admin,Manager,Viewer")]
         [Route("set")]
         [HttpPost]
         public async Task<IActionResult> SetDeviceStateAsync(int id, int subId, string value)
@@ -69,7 +68,7 @@ namespace HomeSensorServerAPI.Controllers
 
         }
 
-        // TODO
+        // TODO on ebedded and here
         // implement this on embedded, add subIdentifier if one device has multiple outputs
         [Route("get")]
         [HttpGet]

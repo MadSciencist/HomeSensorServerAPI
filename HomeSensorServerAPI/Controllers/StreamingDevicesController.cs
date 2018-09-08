@@ -1,29 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using HomeSensorServerAPI.Models;
+﻿using HomeSensorServerAPI.Models;
 using HomeSensorServerAPI.Repository;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace HomeSensorServerAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
-    [ApiController]
     public class StreamingDevicesController : ControllerBase
     {
-        private readonly AppDbContext _context;
         private readonly IStreamingDeviceRepository _streamingDeviceRepository;
 
-        public StreamingDevicesController(IStreamingDeviceRepository streamingDeviceRepository, AppDbContext context)
+        public StreamingDevicesController(IStreamingDeviceRepository streamingDeviceRepository)
         {
-            _context = context;
             _streamingDeviceRepository = streamingDeviceRepository;
         }
 
         // GET: api/StreamingDevices
+        [Authorize(Roles = "Admin,Manager,Viewer")]
         [HttpGet]
         public IEnumerable<StreamingDevice> GetStreamingDevices()
         {
@@ -31,6 +27,7 @@ namespace HomeSensorServerAPI.Controllers
         }
 
         // GET: api/StreamingDevices/5
+        [Authorize(Roles = "Admin,Manager,Viewer")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetStreamingDevice([FromRoute] int id)
         {
@@ -47,6 +44,7 @@ namespace HomeSensorServerAPI.Controllers
 
         // PUT: api/StreamingDevices/5
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> PutStreamingDevice([FromRoute] int id, [FromBody] StreamingDevice streamingDevice)
         {
             if (!ModelState.IsValid)
@@ -62,6 +60,7 @@ namespace HomeSensorServerAPI.Controllers
 
         // POST: api/StreamingDevices
         [HttpPost]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> PostStreamingDevice([FromBody] StreamingDevice streamingDevice)
         {
             if (!ModelState.IsValid)
@@ -74,6 +73,7 @@ namespace HomeSensorServerAPI.Controllers
 
         // DELETE: api/StreamingDevices/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> DeleteStreamingDevice([FromRoute] int id)
         {
             if (!ModelState.IsValid)

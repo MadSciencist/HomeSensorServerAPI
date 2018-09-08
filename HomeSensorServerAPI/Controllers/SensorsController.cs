@@ -1,13 +1,13 @@
 ﻿using HomeSensorServerAPI.Models;
 using HomeSensorServerAPI.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
 namespace ServerMvc.Models
 {
-    // [Authorize(Roles = "Admin")]
+    [Authorize]
     [Route("api/[controller]")]
-    [Produces("application/json")]
     public class SensorsController : ControllerBase
     {
         private readonly ISensorRepository _sensorRepository;
@@ -18,6 +18,7 @@ namespace ServerMvc.Models
         }
 
         //api/sensors/kitchen
+        [Authorize(Roles = "Admin,Manager,Viewer")]
         [HttpGet("{identifier}")]
         public IEnumerable<Sensor> Get(string identifier)
         {
@@ -26,6 +27,7 @@ namespace ServerMvc.Models
 
         [HttpPost]
         [Route("specified")]
+        [Authorize(Roles = "Sensor")]
         public void Post([FromBody]Sensor sensor)
         {
             if (sensor != null && ModelState.IsValid)

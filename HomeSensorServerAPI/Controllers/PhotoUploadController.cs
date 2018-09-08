@@ -1,4 +1,5 @@
 ﻿using HomeSensorServerAPI.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,8 +10,8 @@ using System.Threading.Tasks;
 
 namespace HomeSensorServerAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
-    [ApiController]
     public class PhotoUploadController : ControllerBase
     {
         private readonly IHostingEnvironment _environment;
@@ -23,6 +24,7 @@ namespace HomeSensorServerAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,Manager,Viewer")]
         [Route("Upload")]
         public async Task<IActionResult> Post(IFormFile file)
         {

@@ -1,4 +1,5 @@
-﻿using HomeSensorServerAPI.Repository;
+﻿using HomeSensorServerAPI.Models;
+using HomeSensorServerAPI.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -40,6 +41,7 @@ namespace HomeSensorServerAPI
             services.AddTransient<INodeRepository, NodeRepository>();
             services.AddTransient<ISensorRepository, SensorRepository>();
             services.AddTransient<IStreamingDeviceRepository, StreamingDeviceRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -88,10 +90,10 @@ namespace HomeSensorServerAPI
         {
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
-                options.AddPolicy("Manager", policy => policy.RequireRole("Manager"));
-                options.AddPolicy("Viewer", policy => policy.RequireRole("Viewer"));
-                options.AddPolicy("Sensor", policy => policy.RequireRole("Sensor"));
+                options.AddPolicy("Admin", policy => policy.RequireClaim("Admin"));
+                options.AddPolicy("Manager", policy => policy.RequireClaim("Manager"));
+                options.AddPolicy("Viewer", policy => policy.RequireClaim("Viewer"));
+                options.AddPolicy("Sensor", policy => policy.RequireClaim("Sensor"));
                 //options.AddPolicy("OnlyCurrentUser", policy => policy.RequireClaim()
             });
         }

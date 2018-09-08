@@ -18,10 +18,12 @@ namespace HomeSensorServerAPI.Controllers
     {
         readonly IConfiguration _config;
         private readonly AppDbContext _context;
-        public TokenController(IConfiguration config, AppDbContext context)
+        private readonly IUserRepository _userRepository;
+        public TokenController(IConfiguration config, AppDbContext context, IUserRepository userRepository)
         {
             _context = context;
             _config = config;
+            _userRepository = userRepository;
         }
 
         [AllowAnonymous]

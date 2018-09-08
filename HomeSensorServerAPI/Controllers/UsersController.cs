@@ -3,6 +3,7 @@ using HomeSensorServerAPI.Models;
 using HomeSensorServerAPI.Models.Enums;
 using HomeSensorServerAPI.PasswordCryptography;
 using HomeSensorServerAPI.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -13,24 +14,27 @@ using System.Threading.Tasks;
 
 namespace LocalSensorServer.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IUserRepository _userRepository;
 
-        public UsersController(AppDbContext context)
+        public UsersController(AppDbContext context, IUserRepository userRepository)
         {
             _context = context;
+            _userRepository = userRepository;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllUsersPublicData()
+        public IActionResult GetAllUsersPublicData()
         {
             IEnumerable<PublicUser> publicData = null;
 
             if (GetClaimedUserRole(this.User) == EUserRole.Admin)
             {
-                var users = await _context.Users.ToListAsync();
+                var users = _userRepository.GetAll().ToList();
                 var publicDataProvider = new UserPublicDataProvider();
                 publicData = publicDataProvider.ConvertFullUsersDataToPublicData(users);
             }
@@ -43,21 +47,29 @@ namespace LocalSensorServer.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<PublicUser> GetUserInfo(int id)
+        public async Task<IActionResult> GetUserInfo(int id)
         {
-            PublicUser publicUser = null;
+            IActionResult response = null;
 
             if (IsUserIdentifierAsClaimed(id))
             {
-                var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+                var user = await _userRepository.GetByIdAsync(id);
 
-                if (user != null)
-                    publicUser = new UserPublicDataProvider().ConvertFullUserDataToPublicData(user);
+                if (user == null)
+                {
+                    response = NotFound();
+                }
                 else
-                    publicUser = new PublicUser();
+                {
+                    response = Ok(new UserPublicDataProvider().ConvertFullUserDataToPublicData(user));
+                }
+            }
+            else
+            {
+                response = Forbid();
             }
 
-            return publicUser;
+            return response;
         }
 
         [HttpPut("{id}")]
@@ -107,6 +119,7 @@ namespace LocalSensorServer.Controllers
             return BadRequest();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> RegisterUser([FromBody]User user)
         {

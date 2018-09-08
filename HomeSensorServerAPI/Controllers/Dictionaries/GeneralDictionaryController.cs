@@ -1,12 +1,12 @@
 ﻿using HomeSensorServerAPI.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 
 namespace HomeSensorServerAPI.Controllers.Dictionaries
 {
+    [Authorize]
     [Route("/api/dictionaries/")]
-    [Produces("application/json")]
-    [ApiController]
     public class GeneralDictionaryController : ControllerBase
     {
         private readonly AppDbContext _context;

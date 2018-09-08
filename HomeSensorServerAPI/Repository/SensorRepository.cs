@@ -14,7 +14,7 @@ namespace HomeSensorServerAPI.Repository
 
         public SensorRepository(AppDbContext context, ILoggerFactory loggerFactory) : base(context, loggerFactory)
         {
-            _logger = loggerFactory.CreateLogger("HomeSensorServerAPI.Repository.SensorRepository");
+            _logger = loggerFactory.CreateLogger(typeof(SensorRepository));
         }
         public IEnumerable<Sensor> GetWithIdentifier(string identifier)
         {

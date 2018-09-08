@@ -1,25 +1,26 @@
 ﻿using HomeSensorServerAPI.Models;
 using HomeSensorServerAPI.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RpiProcessHandler;
-using System.Linq;
 using RpiProcessHandler.FFmpeg;
 using RpiProcessHandler.Rtsp;
+using System.Threading.Tasks;
 
 namespace HomeSensorServerAPI.Controllers
 {
-    //TODO Authorization
+    [Authorize]
     [Route("api/[controller]")]
-    [ApiController]
     public class RpiProcessesController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IStreamingDeviceRepository _streamingDeviceRepository;
 
-        public RpiProcessesController(AppDbContext context)
+        public RpiProcessesController(IStreamingDeviceRepository streamingDeviceRepository)
         {
-            _context = context;
+            _streamingDeviceRepository = streamingDeviceRepository;
         }
-        //ngix -> authorize only for admins
+
+        [Authorize(Roles = "Admin")]
         [Route("nginx/start")]
         [HttpGet]
         public IActionResult StartNginx()
@@ -30,6 +31,7 @@ namespace HomeSensorServerAPI.Controllers
             return Ok();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("nginx/stop")]
         public IActionResult StopNginx()
         {
@@ -39,6 +41,7 @@ namespace HomeSensorServerAPI.Controllers
             return Ok();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("nginx/restart")]
         public IActionResult RestartNginx()
         {
@@ -48,13 +51,13 @@ namespace HomeSensorServerAPI.Controllers
             return Ok();
         }
 
-        //ffmpeg -> authorized for users
+        [Authorize(Roles = "Admin,Manager,Viewer")]
         [HttpPost("ffmpeg/start")]
-        public IActionResult StartFfmpeg([FromBody] FFmpegProcessEndpoint ffmpeg)
+        public async Task<IActionResult> StartFfmpeg([FromBody] FFmpegProcessEndpoint ffmpeg)
         {
             if (ModelState.IsValid)
             {
-                var selectedDevice = _context.StreamingDevices.FirstOrDefault(d => d.Id == ffmpeg.StreamingDeviceId);
+                var selectedDevice = await _streamingDeviceRepository.GetByIdAsync(ffmpeg.StreamingDeviceId);
                 var rtspWithCredentials = RtspHelper.InjectCredentialsToUrl(selectedDevice.ConnectionString, selectedDevice.Login, selectedDevice.Password);
 
                 //todo parse resolution
@@ -66,6 +69,7 @@ namespace HomeSensorServerAPI.Controllers
             return BadRequest();
         }
 
+        [Authorize(Roles = "Admin,Manager,Viewer")]
         [HttpPost("ffmpeg/stop")]
         public IActionResult StopFFmpeg()
         {

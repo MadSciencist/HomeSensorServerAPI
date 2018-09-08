@@ -9,7 +9,7 @@ namespace HomeSensorServerAPI.Repository
 
         public StreamingDeviceRepository(AppDbContext context, ILoggerFactory loggerFactory) : base(context, loggerFactory)
         {
-            _logger = loggerFactory.CreateLogger("HomeSensorServerAPI.Repository.StreamingDeviceRepository");
+            _logger = loggerFactory.CreateLogger(typeof(StreamingDeviceRepository));
         }
     }
 }

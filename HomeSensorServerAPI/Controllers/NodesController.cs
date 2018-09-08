@@ -2,6 +2,7 @@
 using HomeSensorServerAPI.Models;
 using HomeSensorServerAPI.Models.Enums;
 using HomeSensorServerAPI.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,8 +11,7 @@ using System.Threading.Tasks;
 
 namespace HomeSensorServerAPI.Controllers
 {
-    //[Authorize(Roles = "Admin")]
-    [Produces("application/json")]
+    [Authorize]
     [Route("api/[controller]")]
     public class NodesController : ControllerBase
     {
@@ -23,6 +23,8 @@ namespace HomeSensorServerAPI.Controllers
         }
 
         // GET: api/Nodes
+
+        [Authorize(Roles = "Admin,Manager,Viewer")]
         [HttpGet]
         public IEnumerable<Node> GetAllNodes()
         {
@@ -31,6 +33,7 @@ namespace HomeSensorServerAPI.Controllers
 
 
         //GET: /api/nodes/type/1
+        [Authorize(Roles = "Admin,Manager,Viewer")]
         [HttpGet("type/{type}")]
         public IActionResult GetSpecifiedTypeNode(ENodeType type)
         {
@@ -45,6 +48,7 @@ namespace HomeSensorServerAPI.Controllers
         }
 
         // GET: api/Nodes/5
+        [Authorize(Roles = "Admin,Manager,Viewer")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetNode(int id)
         {
@@ -56,9 +60,9 @@ namespace HomeSensorServerAPI.Controllers
             return Ok(node);
         }
 
-        //TODO update
         // PUT: api/Nodes/5
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> PutNode([FromRoute] int id, [FromBody] Node node)
         {
             Node updatedNode = null;
@@ -94,6 +98,7 @@ namespace HomeSensorServerAPI.Controllers
         }
 
         // POST: api/Nodes
+        [Authorize(Roles = "Admin,Manager")]
         [HttpPost]
         public async Task<IActionResult> PostNode([FromBody] Node node)
         {
@@ -127,6 +132,7 @@ namespace HomeSensorServerAPI.Controllers
         }
 
         // DELETE: api/Nodes/5
+        [Authorize(Roles = "Admin,Manager")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteNode(int id)
         {

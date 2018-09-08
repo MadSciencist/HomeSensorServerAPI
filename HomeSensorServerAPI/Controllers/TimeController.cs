@@ -4,14 +4,12 @@ using System;
 
 namespace HomeSensorServerAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
-    [Produces("application/json")]
-    [ApiController]
     public class TimeController : ControllerBase
     {
         [Route("now")]
         [HttpGet]
-        [AllowAnonymous]
         public IActionResult GetTime()
         {
             return Ok(DateTime.Now.ToString());
@@ -19,7 +17,6 @@ namespace HomeSensorServerAPI.Controllers
 
         [Route("now/utc")]
         [HttpGet]
-        [AllowAnonymous]
         public IActionResult GetUtcTime()
         {
             return Ok(DateTime.UtcNow.ToString());
