@@ -3,12 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using HomeSensorServerAPI.Repository;
 using HomeSensorServerAPI.Models;
-using HomeSensorServerAPI.BusinessLogic;
+using HomeSensorServerAPI.Utils;
 using System.Linq;
 using System.Collections.Generic;
 using System;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
+using HomeSensorServerAPI.BusinessLogic;
 
 namespace HomeSensorServerAPI.Controllers
 {
@@ -31,7 +32,7 @@ namespace HomeSensorServerAPI.Controllers
 
             if (ModelState.IsValid)
             {
-                IEnumerable<User> users = _context.Users.ToList();
+                var users = _context.Users.ToList();
 
                 var authenticator = new UserAuthenticator();
                 var user = authenticator.Authenticate(users, requestant);

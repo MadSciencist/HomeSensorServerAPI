@@ -5,15 +5,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace HomeSensorServerAPI.Repository.Generic
+namespace HomeSensorServerAPI.Repository
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         protected readonly AppDbContext _context;
+        private readonly ILogger _logger;
 
-        public GenericRepository(AppDbContext context)
+        public GenericRepository(AppDbContext context, ILoggerFactory loggerFactory)
         {
             _context = context;
+            _logger = loggerFactory.CreateLogger("a");
         }
 
         public virtual async Task<T> CreateAsync(T entity)
@@ -26,11 +28,11 @@ namespace HomeSensorServerAPI.Repository.Generic
             }
             catch (DbUpdateConcurrencyException e)
             {
-                //logger.LogError(e, "Error while updading entity - concurrency");
+                _logger.LogError(e, "Error while updading entity - concurrency");
             }
             catch (DbUpdateException e)
             {
-                //_logger.LogError(e, "Error while updading entity");
+                _logger.LogError(e, "Error while updading entity");
             }
 
             return entity;
@@ -46,11 +48,11 @@ namespace HomeSensorServerAPI.Repository.Generic
             }
             catch (DbUpdateConcurrencyException e)
             {
-               // _logger.LogError(e, "Error while updading entity - concurrency");
+                _logger.LogError(e, "Error while updading entity - concurrency");
             }
             catch (DbUpdateException e)
             {
-               // _logger.LogError(e, "Error while updading entity");
+                _logger.LogError(e, "Error while updading entity");
             }
         }
 
@@ -59,7 +61,7 @@ namespace HomeSensorServerAPI.Repository.Generic
             return _context.Set<T>().Where(predicate);
         }
 
-        public IQueryable<T> GetAll()
+        public IEnumerable<T> GetAll()
         {
             return _context.Set<T>();
         }
@@ -79,11 +81,11 @@ namespace HomeSensorServerAPI.Repository.Generic
             }
             catch (DbUpdateConcurrencyException e)
             {
-               // _logger.LogError(e, "Error while updading entity - concurrency");
+                _logger.LogError(e, "Error while updading entity - concurrency");
             }
             catch (DbUpdateException e)
             {
-                //_logger.LogError(e, "Error while updading entity");
+                _logger.LogError(e, "Error while updading entity");
             }
 
             return entity;

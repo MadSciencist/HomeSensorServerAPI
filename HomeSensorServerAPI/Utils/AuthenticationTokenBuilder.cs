@@ -7,7 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace HomeSensorServerAPI.BusinessLogic
+namespace HomeSensorServerAPI.Utils
 {
     public class AuthenticationTokenBuilder
     {

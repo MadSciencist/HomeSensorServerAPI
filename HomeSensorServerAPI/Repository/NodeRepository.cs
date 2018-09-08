@@ -1,7 +1,6 @@
 ﻿using HomeSensorServerAPI.Exceptions;
 using HomeSensorServerAPI.Models;
 using HomeSensorServerAPI.Models.Enums;
-using HomeSensorServerAPI.Repository.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -10,14 +9,14 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace HomeSensorServerAPI.Repository.Nodes
+namespace HomeSensorServerAPI.Repository
 {
     public class NodeRepository : GenericRepository<Node>, INodeRepository
     {
-        private readonly ILogger<NodeRepository> _logger;
+        private readonly ILogger _logger;
 
-        public NodeRepository(AppDbContext context, ILogger<NodeRepository> logger) : base(context) {
-            _logger = logger;
+        public NodeRepository(AppDbContext context, ILoggerFactory loggerFactory) : base(context, loggerFactory) {
+            _logger = loggerFactory.CreateLogger("HomeSensorServerAPI.Repository.NodeRepository");
         }
 
         public IEnumerable<Node> GetWithType(ENodeType type)
@@ -31,6 +30,7 @@ namespace HomeSensorServerAPI.Repository.Nodes
 
             if (_context.Nodes.Any(n => n.Identifier == node.Identifier))
             {
+                _logger.LogWarning("Create node failed: Identifier is not unique.");
                 throw new IdentifierNotUniqueException("Identifier is not unique.");
             }
 
@@ -45,11 +45,13 @@ namespace HomeSensorServerAPI.Repository.Nodes
                     //actuator IP must be unique
                     if (!IsIpAddressUnique(nodeIP))
                     {
-                        throw new IpAddressNotUniqueException("IP address is already on the list");
+                        _logger.LogWarning("Create node failed: IP address is not unique.");
+                        throw new IpAddressNotUniqueException("IP address is already on the list.");
                     }
                 }
                 catch (FormatException)
                 {
+                    _logger.LogWarning("Create node failed: IP address is not valid.");
                     throw new FormatException("The IP address is not valid.");
                 }
             }
@@ -68,6 +70,7 @@ namespace HomeSensorServerAPI.Repository.Nodes
             //check if there already exissts node with that identifier, if yes, then if it's identifier is other than new one 
             if (existingNode != null && existingNode.Identifier != node.Identifier)
             {
+                _logger.LogWarning("Update node failed: Identifier is not unique.");
                 throw new IdentifierNotUniqueException("Identifier is not unique.");
             }
 
@@ -82,11 +85,13 @@ namespace HomeSensorServerAPI.Repository.Nodes
                     //actuator IP must be unique
                     if (!IsIpAddressUnique(sensorIP) && existingNode.IpAddress != node.IpAddress)
                     {
-                        throw new IpAddressNotUniqueException("IP address is already on the list");
+                        _logger.LogWarning("Update node failed: IP adress is not unique.");
+                        throw new IpAddressNotUniqueException("IP address is already on the list.");
                     }
                 }
                 catch (FormatException)
                 {
+                    _logger.LogWarning("Update node failed: IP address is not valid.");
                     throw new FormatException("The IP address is not valid.");
                 }
             }
@@ -104,7 +109,7 @@ namespace HomeSensorServerAPI.Repository.Nodes
             }
             catch (DbUpdateException e)
             {
-                _logger.LogError(e, "Exception while updating node entity");
+                _logger.LogError(e, "Exception while updating node entity.");
             }
 
             return node;

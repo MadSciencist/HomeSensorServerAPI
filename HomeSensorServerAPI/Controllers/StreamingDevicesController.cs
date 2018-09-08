@@ -15,71 +15,49 @@ namespace HomeSensorServerAPI.Controllers
     public class StreamingDevicesController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IStreamingDeviceRepository _streamingDeviceRepository;
 
-        public StreamingDevicesController(AppDbContext context)
+        public StreamingDevicesController(IStreamingDeviceRepository streamingDeviceRepository, AppDbContext context)
         {
             _context = context;
+            _streamingDeviceRepository = streamingDeviceRepository;
         }
 
         // GET: api/StreamingDevices
         [HttpGet]
         public IEnumerable<StreamingDevice> GetStreamingDevices()
         {
-            return _context.StreamingDevices;
+            return _streamingDeviceRepository.GetAll();
         }
 
         // GET: api/StreamingDevices/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetStreamingDevice([FromRoute] long id)
+        public async Task<IActionResult> GetStreamingDevice([FromRoute] int id)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
-            var streamingDevice = await _context.StreamingDevices.FindAsync(id);
+            var streamingDevice = await _streamingDeviceRepository.GetByIdAsync(id);
 
             if (streamingDevice == null)
-            {
                 return NotFound();
-            }
 
             return Ok(streamingDevice);
         }
 
         // PUT: api/StreamingDevices/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutStreamingDevice([FromRoute] long id, [FromBody] StreamingDevice streamingDevice)
+        public async Task<IActionResult> PutStreamingDevice([FromRoute] int id, [FromBody] StreamingDevice streamingDevice)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
             if (id != streamingDevice.Id)
-            {
                 return BadRequest();
-            }
 
-            _context.Entry(streamingDevice).State = EntityState.Modified;
+            var updatedDevice = await _streamingDeviceRepository.UpdateAsync(streamingDevice);
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!StreamingDeviceExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return Ok(new { Action = "Update", updatedDevice });
         }
 
         // POST: api/StreamingDevices
@@ -87,40 +65,30 @@ namespace HomeSensorServerAPI.Controllers
         public async Task<IActionResult> PostStreamingDevice([FromBody] StreamingDevice streamingDevice)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
-            _context.StreamingDevices.Add(streamingDevice);
-            await _context.SaveChangesAsync();
+            var createdDevice = await _streamingDeviceRepository.CreateAsync(streamingDevice);
 
-            return CreatedAtAction("GetStreamingDevice", new { id = streamingDevice.Id }, streamingDevice);
+            return CreatedAtAction("PostStreamingDevice", new { id = streamingDevice.Id }, createdDevice);
         }
 
         // DELETE: api/StreamingDevices/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteStreamingDevice([FromRoute] long id)
+        public async Task<IActionResult> DeleteStreamingDevice([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var streamingDevice = await _context.StreamingDevices.FindAsync(id);
+            var streamingDevice = await _streamingDeviceRepository.GetByIdAsync(id);
+
             if (streamingDevice == null)
-            {
                 return NotFound();
-            }
 
-            _context.StreamingDevices.Remove(streamingDevice);
-            await _context.SaveChangesAsync();
+            await _streamingDeviceRepository.DeleteAsync(streamingDevice);
 
-            return Ok(streamingDevice);
-        }
-
-        private bool StreamingDeviceExists(long id)
-        {
-            return _context.StreamingDevices.Any(e => e.Id == id);
+            return Ok(new { Action = "DeleteStreamingDevice", id });
         }
     }
 }

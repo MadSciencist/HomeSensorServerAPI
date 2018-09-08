@@ -1,7 +1,7 @@
 ﻿using HomeSensorServerAPI.Exceptions;
 using HomeSensorServerAPI.Models;
 using HomeSensorServerAPI.Models.Enums;
-using HomeSensorServerAPI.Repository.Nodes;
+using HomeSensorServerAPI.Repository;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -73,19 +73,19 @@ namespace HomeSensorServerAPI.Controllers
             {
                 updatedNode = await _nodeRepository.UpdateAsync(node);
             }
-            catch (IdentifierNotUniqueException)
+            catch (IdentifierNotUniqueException e)
             {
                 return BadRequest("Identyfikator nie jest unikalny");
             }
-            catch (IpAddressNotUniqueException)
+            catch (IpAddressNotUniqueException e)
             {
                 return BadRequest("Adres IP nie jest unikalny");
             }
-            catch (FormatException)
+            catch (FormatException e)
             {
                 return BadRequest("Adres IP nie jest prawidłowy.");
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return BadRequest();
             }
@@ -106,19 +106,19 @@ namespace HomeSensorServerAPI.Controllers
             {
                 createdNode = await _nodeRepository.CreateAsync(node);
             }
-            catch (IdentifierNotUniqueException)
+            catch (IdentifierNotUniqueException e)
             {
                 return BadRequest("Identyfikator nie jest unikalny");
             }
-            catch (IpAddressNotUniqueException)
+            catch (IpAddressNotUniqueException e)
             {
                 return BadRequest("Adres IP nie jest unikalny");
             }
-            catch (FormatException)
+            catch (FormatException e)
             {
                 return BadRequest("Adres IP nie jest prawidłowy.");
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return BadRequest();
             }

@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using HomeSensorServerAPI.Repository;
-using Microsoft.AspNetCore.Authorization;
+﻿using HomeSensorServerAPI.Utils;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace HomeSensorServerAPI.Controllers
 {
@@ -15,13 +13,13 @@ namespace HomeSensorServerAPI.Controllers
     [ApiController]
     public class PhotoUploadController : ControllerBase
     {
-        private readonly AppDbContext _context;
         private readonly IHostingEnvironment _environment;
+        private readonly ILogger<PhotoUploadController> _logger;
 
-        public PhotoUploadController(AppDbContext context, IHostingEnvironment env)
+        public PhotoUploadController(IHostingEnvironment env, ILogger<PhotoUploadController> logger)
         {
-            _context = context;
             _environment = env;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -33,37 +31,29 @@ namespace HomeSensorServerAPI.Controllers
                 return BadRequest();
             }
 
+            var fileHelper = new FileUploadHelper();
+
             var uploads = Path.Combine(_environment.WebRootPath, "img", "uploads", "avatars");
-            var fullPath = Path.Combine(uploads, GetUniqueFileName(file.FileName));
+            var fullPath = Path.Combine(uploads, fileHelper.GetUniqueFileName(file.FileName));
 
-            EnsureFolderCreation(uploads);
+            fileHelper.EnsureFolderCreation(uploads);
 
-            if (file.Length > 0)
+            try
             {
-                using (var stream = new FileStream(fullPath, FileMode.Create))
+                if (file.Length > 0)
                 {
-                    await file.CopyToAsync(stream);
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
                 }
+            }
+            catch(Exception e)
+            {
+                _logger.LogError(e, "Error while uploading avatar photo.");
             }
 
             return Ok(new { url = fullPath });
-        }
-
-        private string GetUniqueFileName(string fileName)
-        {
-            fileName = Path.GetFileName(fileName);
-            return Path.GetFileNameWithoutExtension(fileName)
-                      + "_"
-                      + Guid.NewGuid().ToString().Substring(0, 4)
-                      + Path.GetExtension(fileName);
-        }
-
-        private void EnsureFolderCreation(string path)
-        {
-            if ((path.Length > 0) && (!Directory.Exists(path)))
-            {
-                Directory.CreateDirectory(path);
-            }
         }
     }
 }

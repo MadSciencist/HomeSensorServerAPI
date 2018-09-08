@@ -17,7 +17,7 @@ namespace HomeSensorServerAPI.Controllers
             return Ok(DateTime.Now.ToString());
         }
 
-        [Route("utcnow")]
+        [Route("now/utc")]
         [HttpGet]
         [AllowAnonymous]
         public IActionResult GetUtcTime()

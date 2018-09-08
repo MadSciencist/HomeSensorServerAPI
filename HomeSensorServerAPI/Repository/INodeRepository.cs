@@ -1,9 +1,8 @@
 ﻿using HomeSensorServerAPI.Models;
 using HomeSensorServerAPI.Models.Enums;
-using HomeSensorServerAPI.Repository.Generic;
 using System.Collections.Generic;
 
-namespace HomeSensorServerAPI.Repository.Nodes
+namespace HomeSensorServerAPI.Repository
 {
     public interface INodeRepository : IGenericRepository<Node>
     {

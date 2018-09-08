@@ -1,5 +1,4 @@
 ﻿using HomeSensorServerAPI.Repository;
-using HomeSensorServerAPI.Repository.Nodes;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -38,7 +37,9 @@ namespace HomeSensorServerAPI
                 options.UseMySql(Configuration["ConnectionStrings:MySqlConnection"], mysqlOptions => mysqlOptions.ServerVersion(new Version(10, 1, 29), ServerType.MariaDb));
             });
 
-            services.AddScoped<INodeRepository, NodeRepository>();
+            services.AddTransient<INodeRepository, NodeRepository>();
+            services.AddTransient<ISensorRepository, SensorRepository>();
+            services.AddTransient<IStreamingDeviceRepository, StreamingDeviceRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -52,6 +53,7 @@ namespace HomeSensorServerAPI
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseDatabaseErrorPage();
             }
 
             app.UseDefaultFiles();
