@@ -1,4 +1,5 @@
-﻿using HomeSensorServerAPI.Models;
+﻿using System.Threading.Tasks;
+using HomeSensorServerAPI.Models;
 using Microsoft.Extensions.Logging;
 
 namespace HomeSensorServerAPI.Repository

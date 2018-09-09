@@ -16,8 +16,5 @@ namespace HomeSensorServerAPI.Models
         public string Description { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
-
-        //TODO authorization for users
-        public List<User> AuthorizedUsers { get; set; }
     }
 }

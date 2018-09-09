@@ -14,7 +14,8 @@ using HomeSensorServerAPI.BusinessLogic;
 namespace HomeSensorServerAPI.Controllers
 {
     [Route("api/[controller]")]
-    public class TokenController : ControllerBase
+    [ApiController]
+    public class TokenController : Controller
     {
         readonly IConfiguration _config;
         private readonly AppDbContext _context;
@@ -34,7 +35,7 @@ namespace HomeSensorServerAPI.Controllers
 
             if (ModelState.IsValid)
             {
-                var users = _context.Users.ToList();
+                var users = _userRepository.GetAll();
 
                 var authenticator = new UserAuthenticator();
                 var user = authenticator.Authenticate(users, requestant);
@@ -71,17 +72,7 @@ namespace HomeSensorServerAPI.Controllers
         private async Task UpdateLastLoginInfo(IUser user)
         {
             if (user != null)
-            {
-                try
-                {
-                    _context.Update(user);
-                    await _context.SaveChangesAsync();
-                }
-                catch(Exception e)
-                {
-
-                }
-            }
+                await _userRepository.UpdateAsync(user as User);
         }
     }
 }

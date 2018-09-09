@@ -6,8 +6,9 @@ using System.Linq;
 namespace HomeSensorServerAPI.Controllers.Dictionaries
 {
     [Authorize]
+    [ApiController]
     [Route("/api/dictionaries/")]
-    public class GeneralDictionaryController : ControllerBase
+    public class GeneralDictionaryController : Controller
     {
         private readonly AppDbContext _context;
         public GeneralDictionaryController(AppDbContext context) =>  _context = context;

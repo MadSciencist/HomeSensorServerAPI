@@ -1,13 +1,11 @@
-﻿using HomeSensorServerAPI.BusinessLogic;
-using HomeSensorServerAPI.Models;
+﻿using HomeSensorServerAPI.Models;
 using HomeSensorServerAPI.Models.Enums;
 using HomeSensorServerAPI.PasswordCryptography;
 using HomeSensorServerAPI.Repository;
+using HomeSensorServerAPI.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -15,33 +13,24 @@ using System.Threading.Tasks;
 namespace LocalSensorServer.Controllers
 {
     [Authorize]
+    [ApiController]
     [Route("api/[controller]")]
-    public class UsersController : ControllerBase
+    public class UsersController : Controller
     {
-        private readonly AppDbContext _context;
         private readonly IUserRepository _userRepository;
 
-        public UsersController(AppDbContext context, IUserRepository userRepository)
+        public UsersController(IUserRepository userRepository)
         {
-            _context = context;
             _userRepository = userRepository;
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult GetAllUsersPublicData()
         {
-            IEnumerable<PublicUser> publicData = null;
-
-            if (GetClaimedUserRole(this.User) == EUserRole.Admin)
-            {
-                var users = _userRepository.GetAll().ToList();
-                var publicDataProvider = new UserPublicDataProvider();
-                publicData = publicDataProvider.ConvertFullUsersDataToPublicData(users);
-            }
-            else
-            {
-                return Unauthorized();
-            }
+            var users = _userRepository.GetAll();
+            var publicDataProvider = new UserPublicDataProvider();
+            var publicData = publicDataProvider.ConvertFullUsersDataToPublicData(users);
 
             return Ok(publicData);
         }
@@ -72,109 +61,98 @@ namespace LocalSensorServer.Controllers
             return response;
         }
 
+        [Authorize(Roles = "Admin,Manager")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, [FromBody]User candidate)
         {
-            if (ModelState.IsValid)
+            IActionResult response = null;
+
+            if (IsUserIdentifierAsClaimed(id) || IsUserAdmin(User) || IsUserManager(User))
             {
-                if (IsUserIdentifierAsClaimed(id) || IsUserAdmin())
+                var user = await _userRepository.GetByIdAsync(id);
+
+                user.Name = candidate.Name;
+                user.Gender = candidate.Gender;
+                user.Lastname = candidate.Lastname;
+                user.PhotoUrl = candidate.PhotoUrl;
+                user.Birthdate = candidate.Birthdate;
+                user.Email = candidate.Email;
+
+                //prevent null reference exception, because we dont keep user password at front end due to security reasons
+                if (candidate.Password != null)
                 {
-                    var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
-
-                    user.Name = candidate.Name;
-                    user.Gender = candidate.Gender;
-                    user.Lastname = candidate.Lastname;
-                    user.PhotoUrl = candidate.PhotoUrl;
-                    user.Birthdate = candidate.Birthdate;
-                    user.Email = candidate.Email;
-
-                    //prevent null reference exception, because we dont keep user password at front end due to security reasons
-                    if (candidate.Password != null)
-                    {
-                        user.Password = new PasswordCryptoSerivce().CreateHashString(candidate.Password);
-                    }
-
-                    //prevent non-priviledged user to change his status to admin by i.e fiddler request
-                    if (IsUserAdmin() && !IsAdminTryingToDeleteOrRemovePrivilegesItself(id))
-                    {
-                        user.Role = candidate.Role;
-                    }
-
-                    try
-                    {
-                        _context.Update(user);
-                        await _context.SaveChangesAsync();
-                    }
-                    catch (Exception e)
-                    {
-                    }
-
-                    return Ok(user);
+                    user.Password = new PasswordCryptoSerivce().CreateHashString(candidate.Password);
                 }
-                else
+
+                //prevent non-priviledged user to change his status to admin by i.e fiddler request
+                if (IsUserAdmin(User) && !IsAdminTryingToDeleteOrRemovePrivilegesItself(id))
                 {
-                    return Unauthorized();
+                    user.Role = candidate.Role;
                 }
+
+                await _userRepository.UpdateAsync(user);
+
+               response =  Ok(new { Action = "Update", user });
             }
-            return BadRequest();
+            else
+            {
+                response =  Forbid();
+            }
+
+            return response;
         }
 
+        //api/users/new
+        [Route("new")]
         [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> RegisterUser([FromBody]User user)
         {
-            if (ModelState.IsValid)
-            {
-                var cryptoService = new PasswordCryptoSerivce();
-                user.JoinDate = DateTime.Now;
-                user.LastInvalidLogin = DateTime.Now;
-                user.Role = EUserRole.NotAproved;
-                user.Password = cryptoService.CreateHashString(user.Password);
+            var cryptoService = new PasswordCryptoSerivce();
+            user.JoinDate = DateTime.Now;
+            user.LastInvalidLogin = DateTime.Now;
+            user.Role = EUserRole.NotAproved;
+            user.Password = cryptoService.CreateHashString(user.Password);
 
-                _context.Users.Add(user);
-                await _context.SaveChangesAsync();
-                return CreatedAtAction("RegisterUser", new { id = user.Id }, user);
-            }
-
-            return BadRequest();
+            await _userRepository.CreateAsync(user);
+            return CreatedAtAction("RegisterUser", new { id = user.Id }, user);
         }
 
+        //api/users/delete/id
+        [Authorize(Roles = "Admin,Manager")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            if (ModelState.IsValid)
+            IActionResult response = null;
+
+            if (IsUserIdentifierAsClaimed(id) || IsUserAdmin(User)) //user can delete only its account, admin can delete all accounts
             {
-                if (IsUserIdentifierAsClaimed(id) || IsUserAdmin()) //user can delete only its account, admin can delete all accounts
+                if (!IsAdminTryingToDeleteOrRemovePrivilegesItself(id))
                 {
-                    if (!IsAdminTryingToDeleteOrRemovePrivilegesItself(id))
-                    {
-                        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
-                        _context.Users.Remove(user);
-                        await _context.SaveChangesAsync();
-
-                        return Ok();
-                    }
-                    else
-                    {
-                        BadRequest("Admin cannot delete itself, but can be delete by other admin.");
-                    }
-
+                    var user = await _userRepository.GetByIdAsync(id);
+                    await _userRepository.DeleteAsync(user);
+                    response = Ok(new { Action = "Delete", user });
                 }
                 else
                 {
-                    return Unauthorized();
+                    response = BadRequest("Admin cannot delete itself, but can be delete by other admin.");
                 }
             }
-            return BadRequest();
+            else
+            {
+                response = Unauthorized();
+            }
+
+            return response;
         }
 
         private bool IsAdminTryingToDeleteOrRemovePrivilegesItself(int removedUserId)
         {
-            if (IsUserAdmin())
+            if (IsUserAdmin(User))
             {
                 string adminIdString = GetClaimedUserIdentifier(this.User);
 
-                if(Int32.TryParse(adminIdString, out int adminId))
+                if (Int32.TryParse(adminIdString, out int adminId))
                     return removedUserId == adminId;
             }
 
@@ -190,11 +168,12 @@ namespace LocalSensorServer.Controllers
             else
                 return false;
         }
-        private bool IsUserAdmin()
-        {
-            return GetClaimedUserRole(this.User).ToString() == EUserRole.Admin.ToString();
-        }
 
+        /* adapter helper functions */
+        private bool IsUserAdmin(ClaimsPrincipal principal) => GetClaimedUserRole(principal).ToString() == EUserRole.Admin.ToString();
+
+        private bool IsUserManager(ClaimsPrincipal principal) => GetClaimedUserRole(principal).ToString() == EUserRole.Manager.ToString();
+        
         private string GetClaimedUserIdentifier(ClaimsPrincipal claimsPrincipal) => claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
 
         private EUserRole GetClaimedUserRole(ClaimsPrincipal claimsPrincipal)

@@ -10,8 +10,9 @@ using System.Threading.Tasks;
 namespace HomeSensorServerAPI.Controllers
 {
     [Authorize]
+    [ApiController]
     [Route("api/[controller]")]
-    public class DevicesController : ControllerBase
+    public class DevicesController : Controller
     {
         private readonly AppDbContext _context;
 

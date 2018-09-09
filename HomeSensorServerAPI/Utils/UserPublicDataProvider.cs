@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace HomeSensorServerAPI.BusinessLogic
+namespace HomeSensorServerAPI.Utils
 {
     public class UserPublicDataProvider
     {

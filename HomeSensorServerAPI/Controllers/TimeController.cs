@@ -5,8 +5,9 @@ using System;
 namespace HomeSensorServerAPI.Controllers
 {
     [Authorize]
+    [ApiController]
     [Route("api/[controller]")]
-    public class TimeController : ControllerBase
+    public class TimeController : Controller
     {
         [Route("now")]
         [HttpGet]

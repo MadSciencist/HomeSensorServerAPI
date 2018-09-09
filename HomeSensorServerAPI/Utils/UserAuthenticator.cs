@@ -4,11 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace HomeSensorServerAPI.BusinessLogic
+namespace HomeSensorServerAPI.Utils
 {
     public class UserAuthenticator
     {
-        public IUser Authenticate(IEnumerable<User> users, ILoginCredentials login)
+        public IUser Authenticate(IEnumerable<User> users, LoginCredentials login)
         {
             User user = null;
 

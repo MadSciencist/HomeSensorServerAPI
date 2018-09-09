@@ -11,8 +11,9 @@ using System.Threading.Tasks;
 namespace HomeSensorServerAPI.Controllers
 {
     [Authorize]
+    [ApiController]
     [Route("api/[controller]")]
-    public class PhotoUploadController : ControllerBase
+    public class PhotoUploadController : Controller
     {
         private readonly IHostingEnvironment _environment;
         private readonly ILogger<PhotoUploadController> _logger;
@@ -24,8 +25,8 @@ namespace HomeSensorServerAPI.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin,Manager,Viewer")]
         [Route("Upload")]
+        [Authorize(Roles = "Admin,Manager,Viewer")]
         public async Task<IActionResult> Post(IFormFile file)
         {
             if(file == null)

@@ -12,8 +12,9 @@ using System.Threading.Tasks;
 namespace HomeSensorServerAPI.Controllers
 {
     [Authorize]
+    [ApiController]
     [Route("api/[controller]")]
-    public class NodesController : ControllerBase
+    public class NodesController : Controller
     {
         private readonly INodeRepository _nodeRepository;
 

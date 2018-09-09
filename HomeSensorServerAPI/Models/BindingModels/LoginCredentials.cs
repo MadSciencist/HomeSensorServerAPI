@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HomeSensorServerAPI.Models
 {
-    public class LoginCredentials : ILoginCredentials
+    [NotMapped]
+    public class LoginCredentials
     {
         [Required]
         public string Username { get; set; }

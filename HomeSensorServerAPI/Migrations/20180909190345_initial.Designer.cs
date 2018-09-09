@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HomeSensorServerAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20180815184105_streamDescription")]
-    partial class streamDescription
+    [Migration("20180909190345_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -19,28 +19,84 @@ namespace HomeSensorServerAPI.Migrations
                 .HasAnnotation("ProductVersion", "2.1.0-rtm-30799")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("HomeSensorServerAPI.Logger.LogEvent", b =>
+            modelBuilder.Entity("HomeSensorServerAPI.Models.Dictionaries.ActuatorType", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("DateOccured");
+                    b.Property<int>("Key");
 
-                    b.Property<int>("LogLevel");
-
-                    b.Property<string>("LogMessage");
+                    b.Property<string>("Value");
 
                     b.HasKey("Id");
 
-                    b.ToTable("logevents");
+                    b.ToTable("dictionary_actuator_types");
+                });
+
+            modelBuilder.Entity("HomeSensorServerAPI.Models.Dictionaries.NodeType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Key");
+
+                    b.Property<string>("Value");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("dictionary_node_types");
+                });
+
+            modelBuilder.Entity("HomeSensorServerAPI.Models.Dictionaries.SensorType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Key");
+
+                    b.Property<string>("Value");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("dictionary_sensor_types");
+                });
+
+            modelBuilder.Entity("HomeSensorServerAPI.Models.Dictionaries.UserGender", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Key");
+
+                    b.Property<string>("Value");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("dictionary_genders");
+                });
+
+            modelBuilder.Entity("HomeSensorServerAPI.Models.Dictionaries.UserRole", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Key");
+
+                    b.Property<string>("Value");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("dictionary_roles");
                 });
 
             modelBuilder.Entity("HomeSensorServerAPI.Models.Node", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ExactType");
+                    b.Property<int?>("ActuatorType");
+
+                    b.Property<string>("Description");
 
                     b.Property<string>("GatewayAddress");
 
@@ -56,7 +112,9 @@ namespace HomeSensorServerAPI.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<string>("Type");
+                    b.Property<int?>("NodeType");
+
+                    b.Property<int?>("SensorType");
 
                     b.HasKey("Id");
 
@@ -65,7 +123,7 @@ namespace HomeSensorServerAPI.Migrations
 
             modelBuilder.Entity("HomeSensorServerAPI.Models.Sensor", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Data");
@@ -81,7 +139,7 @@ namespace HomeSensorServerAPI.Migrations
 
             modelBuilder.Entity("HomeSensorServerAPI.Models.StreamingDevice", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("ConnectionString")
@@ -103,7 +161,7 @@ namespace HomeSensorServerAPI.Migrations
 
             modelBuilder.Entity("HomeSensorServerAPI.Models.User", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime?>("Birthdate");
@@ -129,50 +187,11 @@ namespace HomeSensorServerAPI.Migrations
 
                     b.Property<string>("PhotoUrl");
 
-                    b.Property<int>("Role");
-
-                    b.Property<long?>("StreamingDeviceId");
+                    b.Property<int?>("Role");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("StreamingDeviceId");
 
                     b.ToTable("users");
-                });
-
-            modelBuilder.Entity("HomeSensorServerAPI.Models.UserGender", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Dictionary");
-
-                    b.Property<int>("Value");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("dictionary_genders");
-                });
-
-            modelBuilder.Entity("HomeSensorServerAPI.Models.UserRole", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Dictionary");
-
-                    b.Property<int>("Value");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("dictionary_roles");
-                });
-
-            modelBuilder.Entity("HomeSensorServerAPI.Models.User", b =>
-                {
-                    b.HasOne("HomeSensorServerAPI.Models.StreamingDevice")
-                        .WithMany("AuthorizedUsers")
-                        .HasForeignKey("StreamingDeviceId");
                 });
 #pragma warning restore 612, 618
         }

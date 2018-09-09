@@ -7,8 +7,9 @@ using System.Collections.Generic;
 namespace ServerMvc.Models
 {
     [Authorize]
+    [ApiController]
     [Route("api/[controller]")]
-    public class SensorsController : ControllerBase
+    public class SensorsController : Controller
     {
         private readonly ISensorRepository _sensorRepository;
 

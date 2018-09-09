@@ -17,22 +17,6 @@ namespace HomeSensorServerAPI.Migrations
                 .HasAnnotation("ProductVersion", "2.1.0-rtm-30799")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("HomeSensorServerAPI.Logger.LogEvent", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("DateOccured");
-
-                    b.Property<int>("LogLevel");
-
-                    b.Property<string>("LogMessage");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("logevents");
-                });
-
             modelBuilder.Entity("HomeSensorServerAPI.Models.Dictionaries.ActuatorType", b =>
                 {
                     b.Property<int>("Id")
@@ -203,20 +187,9 @@ namespace HomeSensorServerAPI.Migrations
 
                     b.Property<int?>("Role");
 
-                    b.Property<int?>("StreamingDeviceId");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("StreamingDeviceId");
-
                     b.ToTable("users");
-                });
-
-            modelBuilder.Entity("HomeSensorServerAPI.Models.User", b =>
-                {
-                    b.HasOne("HomeSensorServerAPI.Models.StreamingDevice")
-                        .WithMany("AuthorizedUsers")
-                        .HasForeignKey("StreamingDeviceId");
                 });
 #pragma warning restore 612, 618
         }

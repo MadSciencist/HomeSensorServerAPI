@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 namespace HomeSensorServerAPI.Controllers
 {
     [Authorize]
+    [ApiController]
     [Route("api/[controller]")]
-    public class StreamingDevicesController : ControllerBase
+    public class StreamingDevicesController : Controller
     {
         private readonly IStreamingDeviceRepository _streamingDeviceRepository;
 

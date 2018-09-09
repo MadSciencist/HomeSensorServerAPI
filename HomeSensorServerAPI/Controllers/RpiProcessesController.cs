@@ -10,8 +10,9 @@ using System.Threading.Tasks;
 namespace HomeSensorServerAPI.Controllers
 {
     [Authorize]
+    [ApiController]
     [Route("api/[controller]")]
-    public class RpiProcessesController : ControllerBase
+    public class RpiProcessesController : Controller
     {
         private readonly IStreamingDeviceRepository _streamingDeviceRepository;
 
@@ -22,7 +23,7 @@ namespace HomeSensorServerAPI.Controllers
 
         [Authorize(Roles = "Admin")]
         [Route("nginx/start")]
-        [HttpGet]
+        [HttpPost]
         public IActionResult StartNginx()
         {
             var rpi = new RpiNginxProcesses();
@@ -32,7 +33,7 @@ namespace HomeSensorServerAPI.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("nginx/stop")]
+        [HttpPost("nginx/stop")]
         public IActionResult StopNginx()
         {
             var rpi = new RpiNginxProcesses();
@@ -42,7 +43,7 @@ namespace HomeSensorServerAPI.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("nginx/restart")]
+        [HttpPost("nginx/restart")]
         public IActionResult RestartNginx()
         {
             var rpi = new RpiNginxProcesses();
