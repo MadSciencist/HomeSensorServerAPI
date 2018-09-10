@@ -261,3 +261,9 @@ paket-files/
 __pycache__/
 *.pyc
 /HomeSensorServerAPI/wwwroot/img/uploads/avatars
+/HomeSensorServerAPI/appsettings.Production.json
+/HomeSensorServerAPI/Properties/PublishProfiles/kryszczak - Web Deploy3.pubxml
+/HomeSensorServerAPI/Properties/PublishProfiles/kryszczak - Web Deploy2.pubxml
+/HomeSensorServerAPI/Properties/PublishProfiles/kryszczak - Web Deploy1.pubxml
+/HomeSensorServerAPI/Properties/PublishProfiles/kryszczak - Web Deploy.pubxml
+/HomeSensorServerAPI/Properties/PublishProfiles/kryszczak - FTP.pubxml

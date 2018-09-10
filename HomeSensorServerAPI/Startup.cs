@@ -57,6 +57,9 @@ namespace HomeSensorServerAPI
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
+            } else if (env.IsProduction())
+            {
+                Console.WriteLine("PROD");
             }
 
             app.UseDefaultFiles();
