@@ -112,19 +112,19 @@ namespace HomeSensorServerAPI.Controllers
             {
                 createdNode = await _nodeRepository.CreateAsync(node);
             }
-            catch (IdentifierNotUniqueException e)
+            catch (IdentifierNotUniqueException)
             {
                 return BadRequest("Identyfikator nie jest unikalny");
             }
-            catch (IpAddressNotUniqueException e)
+            catch (IpAddressNotUniqueException)
             {
                 return BadRequest("Adres IP nie jest unikalny");
             }
-            catch (FormatException e)
+            catch (FormatException)
             {
                 return BadRequest("Adres IP nie jest prawidłowy.");
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return BadRequest();
             }

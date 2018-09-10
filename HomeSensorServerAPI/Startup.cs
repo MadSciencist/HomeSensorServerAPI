@@ -42,6 +42,7 @@ namespace HomeSensorServerAPI
             services.AddTransient<ISensorRepository, SensorRepository>();
             services.AddTransient<IStreamingDeviceRepository, StreamingDeviceRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<ISystemSettingsRepository, SystemSettingsRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 

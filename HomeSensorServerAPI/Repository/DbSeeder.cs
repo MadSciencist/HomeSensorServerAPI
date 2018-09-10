@@ -151,6 +151,19 @@ namespace HomeSensorServerAPI.Repository
 
                 context.SaveChanges();
             }
+
+            if (!context.SystemData.Any())
+            {
+                context.SystemData.Add(new SystemData
+                {
+                    RpiUrl = "url",
+                    RpiLogin = "login",
+                    RpiPassword = "passw",
+                    AppVersion = "1.0.0"
+                });
+
+                context.SaveChanges();
+            }
         }
     }
 }
