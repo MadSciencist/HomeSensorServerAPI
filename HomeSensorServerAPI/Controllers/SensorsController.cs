@@ -2,7 +2,11 @@
 using HomeSensorServerAPI.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ServerMvc.Models
 {
@@ -12,10 +16,12 @@ namespace ServerMvc.Models
     public class SensorsController : Controller
     {
         private readonly ISensorRepository _sensorRepository;
+        private readonly ILogger<SensorsController> _logger;
 
-        public SensorsController(ISensorRepository sensorRepository)
+        public SensorsController(ISensorRepository sensorRepository, ILogger<SensorsController> logger)
         {
             _sensorRepository = sensorRepository;
+            _logger = logger;
         }
 
         //api/sensors/kitchen
@@ -29,12 +35,29 @@ namespace ServerMvc.Models
         [HttpPost]
         [Route("specified")]
         [Authorize(Roles = "Sensor")]
-        public void Post([FromBody]Sensor sensor)
+        public async Task<IActionResult> Post([FromBody] dynamic sensorDataObject)
         {
-            if (sensor != null && ModelState.IsValid)
+            //this sorcery is due to dynamic object, to allow wide-range of sensor without modyfining server side logic (no models needed)
+
+            Sensor sensor = null;
+            try
             {
-                _sensorRepository.PostNewData(sensor);
+                sensor = new Sensor
+                {
+                    Identifier = sensorDataObject.identifier.Value,
+                    Data = JsonConvert.SerializeObject(sensorDataObject.data),
+                    TimeStamp = DateTime.Now
+                };
             }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Invalid sensor data received, cannot parse.");
+                return BadRequest();
+            }
+
+            await _sensorRepository.PostNewData(sensor);
+
+            return Ok();
         }
     }
 }

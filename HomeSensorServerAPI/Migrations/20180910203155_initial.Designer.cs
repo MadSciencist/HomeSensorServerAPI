@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HomeSensorServerAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20180909190345_initial")]
+    [Migration("20180910203155_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -157,6 +157,24 @@ namespace HomeSensorServerAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("streaming_devices");
+                });
+
+            modelBuilder.Entity("HomeSensorServerAPI.Models.SystemData", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("AppVersion");
+
+                    b.Property<string>("RpiLogin");
+
+                    b.Property<string>("RpiPassword");
+
+                    b.Property<string>("RpiUrl");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("system_data");
                 });
 
             modelBuilder.Entity("HomeSensorServerAPI.Models.User", b =>

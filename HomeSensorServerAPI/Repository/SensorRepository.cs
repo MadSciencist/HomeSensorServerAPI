@@ -34,7 +34,7 @@ namespace HomeSensorServerAPI.Repository
                         var toRemove = _context.Sensors.Where(s => s.Identifier == sensor.Identifier).OrderBy(s => s.Id).Take(1);
                         _context.Sensors.RemoveRange(toRemove);
                     }
-                    _context.Sensors.Add(new Sensor() { Identifier = sensor.Identifier, Data = sensor.Data.ToLower(), TimeStamp = DateTime.Now });
+                    _context.Sensors.Add(sensor);
 
                     await _context.SaveChangesAsync();
                 }

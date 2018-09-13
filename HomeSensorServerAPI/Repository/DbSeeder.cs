@@ -2,6 +2,7 @@
 using HomeSensorServerAPI.Models.Dictionaries;
 using HomeSensorServerAPI.Models.Enums;
 using HomeSensorServerAPI.PasswordCryptography;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 
@@ -9,6 +10,11 @@ namespace HomeSensorServerAPI.Repository
 {
     public class DbSeeder
     {
+        public void UpdateDatabase(AppDbContext context)
+        {
+            context.Database.Migrate();
+        }
+
         public void EnsurePopulated(AppDbContext context)
         {
             context.Database.EnsureCreated();

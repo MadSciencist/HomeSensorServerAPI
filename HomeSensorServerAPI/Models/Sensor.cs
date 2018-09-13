@@ -9,6 +9,7 @@ namespace HomeSensorServerAPI.Models
         public DateTime TimeStamp { get; set; }
 
         public string Identifier { get; set; }
+
         public string Data { get; set; }
     }
 }

@@ -33,9 +33,11 @@ namespace HomeSensorServerAPI
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            var dbConnectionString = Configuration["ConnectionStrings:MySqlConnection"];
+
             services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseMySql(Configuration["ConnectionStrings:MySqlConnection"], mysqlOptions => mysqlOptions.ServerVersion(new Version(10, 1, 29), ServerType.MariaDb));
+                options.UseMySql(dbConnectionString, mysqlOptions => mysqlOptions.ServerVersion(new Version(10, 1, 29), ServerType.MariaDb));
             });
 
             services.AddTransient<INodeRepository, NodeRepository>();
@@ -45,7 +47,6 @@ namespace HomeSensorServerAPI
             services.AddTransient<ISystemSettingsRepository, SystemSettingsRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
 
             AddJwtAuthentication(services);
             AddAuthorizationPolicies(services);
@@ -58,7 +59,8 @@ namespace HomeSensorServerAPI
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
-            } else if (env.IsProduction())
+            }
+            else if (env.IsProduction())
             {
                 Console.WriteLine("PROD");
             }
@@ -99,7 +101,6 @@ namespace HomeSensorServerAPI
                 options.AddPolicy("Manager", policy => policy.RequireClaim("Manager"));
                 options.AddPolicy("Viewer", policy => policy.RequireClaim("Viewer"));
                 options.AddPolicy("Sensor", policy => policy.RequireClaim("Sensor"));
-                //options.AddPolicy("OnlyCurrentUser", policy => policy.RequireClaim()
             });
         }
     }

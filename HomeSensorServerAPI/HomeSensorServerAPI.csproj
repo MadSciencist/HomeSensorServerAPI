@@ -39,6 +39,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <DotNetCliToolReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.1.0-*" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\PasswordCryptoService\PasswordCryptoService.csproj" />
     <ProjectReference Include="..\RpiProcessHandler\RpiProcessHandler.csproj" />
   </ItemGroup>
@@ -47,6 +51,10 @@
     <Content Update="nlog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\img\uploads\avatars\" />
   </ItemGroup>
 
 </Project>
