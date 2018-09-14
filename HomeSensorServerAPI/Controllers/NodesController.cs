@@ -8,7 +8,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
+[assembly:ApiConventionType(typeof(DefaultApiConventions))]
 namespace HomeSensorServerAPI.Controllers
 {
     [Authorize]
@@ -24,7 +26,6 @@ namespace HomeSensorServerAPI.Controllers
         }
 
         // GET: api/Nodes
-
         [Authorize(Roles = "Admin,Manager,Viewer")]
         [HttpGet]
         public IEnumerable<Node> GetAllNodes()
@@ -67,10 +68,6 @@ namespace HomeSensorServerAPI.Controllers
         public async Task<IActionResult> PutNode([FromRoute] int id, [FromBody] Node node)
         {
             Node updatedNode = null;
-
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             if (id != node.Id)
                 return BadRequest();
 
@@ -78,19 +75,19 @@ namespace HomeSensorServerAPI.Controllers
             {
                 updatedNode = await _nodeRepository.UpdateAsync(node);
             }
-            catch (IdentifierNotUniqueException e)
+            catch (IdentifierNotUniqueException)
             {
                 return BadRequest("Identyfikator nie jest unikalny");
             }
-            catch (IpAddressNotUniqueException e)
+            catch (IpAddressNotUniqueException)
             {
                 return BadRequest("Adres IP nie jest unikalny");
             }
-            catch (FormatException e)
+            catch (FormatException)
             {
                 return BadRequest("Adres IP nie jest prawidłowy.");
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return BadRequest();
             }
@@ -104,10 +101,6 @@ namespace HomeSensorServerAPI.Controllers
         public async Task<IActionResult> PostNode([FromBody] Node node)
         {
             Node createdNode = null;
-
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             try
             {
                 createdNode = await _nodeRepository.CreateAsync(node);

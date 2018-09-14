@@ -26,11 +26,6 @@ namespace HomeSensorServerAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> SetDeviceStateAsync(int id, int subId, string value)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var selectedDevice = _context.Nodes.FirstOrDefault(n => n.Id == id);
             var deviceUri = new Uri("http://" + selectedDevice.IpAddress);
 

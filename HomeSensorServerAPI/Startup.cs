@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Text;
 
@@ -46,7 +47,12 @@ namespace HomeSensorServerAPI
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<ISystemSettingsRepository, SystemSettingsRepository>();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
+
+            services.AddSwaggerGen(swagger =>
+            {
+                swagger.SwaggerDoc("dev", new Info { Title = "Home Sensor Server API", Version = "v1", Contact = new Contact { Email = "mkrysz1337@gmail.com" } });
+            });
 
             AddJwtAuthentication(services);
             AddAuthorizationPolicies(services);
@@ -72,6 +78,11 @@ namespace HomeSensorServerAPI
             app.UseHttpsRedirection();
             app.UseCookiePolicy();
             app.UseMvc();
+            app.UseSwagger();
+            app.UseSwaggerUI(swagger =>
+            {
+                swagger.SwaggerEndpoint("/swagger/dev/swagger.json", "Home Sensor Server API");
+            });
         }
 
         private void AddJwtAuthentication(IServiceCollection services)

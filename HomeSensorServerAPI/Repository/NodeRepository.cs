@@ -23,6 +23,15 @@ namespace HomeSensorServerAPI.Repository
         {
             return _context.Nodes.Where(n => n.NodeType == type);
         }
+        public async Task<Node> GetWithIdentifierAsync(string identifier)
+        {
+            var node = await _context.Nodes.FirstOrDefaultAsync(n => n.Identifier == identifier);
+
+            if (node == null)
+                _logger.LogWarning($"Tried to search for non existing identifier: {identifier}");
+
+            return node;
+        }
 
         public override async Task<Node> CreateAsync(Node node)
         {

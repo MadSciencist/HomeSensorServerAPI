@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ServerMvc.Models
@@ -16,20 +17,33 @@ namespace ServerMvc.Models
     public class SensorsController : Controller
     {
         private readonly ISensorRepository _sensorRepository;
+        private readonly INodeRepository _nodeRepository;
         private readonly ILogger<SensorsController> _logger;
 
-        public SensorsController(ISensorRepository sensorRepository, ILogger<SensorsController> logger)
+        public SensorsController(ISensorRepository sensorRepository, INodeRepository nodeRepository, ILogger<SensorsController> logger)
         {
             _sensorRepository = sensorRepository;
+            _nodeRepository = nodeRepository;
             _logger = logger;
         }
 
         //api/sensors/kitchen
         [Authorize(Roles = "Admin,Manager,Viewer")]
         [HttpGet("{identifier}")]
-        public IEnumerable<Sensor> Get(string identifier)
+        public async Task<IActionResult> Get(string identifier, int? skip, int? take)
         {
-            return _sensorRepository.GetWithIdentifier(identifier);
+            var node = await _nodeRepository.GetWithIdentifierAsync(identifier);
+
+            var sensorData = _sensorRepository.GetWithIdentifier(identifier)
+                .OrderBy(o => o.TimeStamp)
+                .Skip(skip ?? 0)
+                .Take(take ?? 1000);
+            
+            return Ok(new {
+                Identifier = identifier,
+                node.RegistredProperties,
+                Data = sensorData.Select(d => new { d.Data, d.TimeStamp }).ToList()
+            });
         }
 
         [HttpPost]
