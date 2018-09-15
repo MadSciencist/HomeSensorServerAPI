@@ -16,9 +16,9 @@ namespace HomeSensorServerAPI.Models
         public ENodeType? NodeType { get; set; }
         public string RegistredProperties { get; set; }
 
-        [Obsolete]
+       // [Obsolete]
         public ESensorType? SensorType { get; set; }
-        [Obsolete]
+       // [Obsolete]
         public EActuatorType? ActuatorType { get; set; }
 
 

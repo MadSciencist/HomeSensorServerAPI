@@ -26,7 +26,7 @@ namespace HomeSensorServerAPI
                     try
                     {
                         DbSeeder seeder = new DbSeeder();
-                        seeder.UpdateDatabase(context);
+                        //seeder.UpdateDatabase(context);
                         seeder.EnsurePopulated(context);
                     }
                     catch (Exception e)

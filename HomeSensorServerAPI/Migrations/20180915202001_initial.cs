@@ -90,6 +90,7 @@ namespace HomeSensorServerAPI.Migrations
                     LoginName = table.Column<string>(nullable: true),
                     LoginPassword = table.Column<string>(nullable: true),
                     NodeType = table.Column<int>(nullable: true),
+                    RegistredProperties = table.Column<string>(nullable: true),
                     SensorType = table.Column<int>(nullable: true),
                     ActuatorType = table.Column<int>(nullable: true),
                     IpAddress = table.Column<string>(nullable: true),

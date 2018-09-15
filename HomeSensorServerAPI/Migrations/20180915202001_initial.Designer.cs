@@ -9,14 +9,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HomeSensorServerAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20180913184905_registredProps")]
-    partial class registredProps
+    [Migration("20180915202001_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.0-rtm-30799")
+                .HasAnnotation("ProductVersion", "2.2.0-preview2-35157")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("HomeSensorServerAPI.Models.Dictionaries.ActuatorType", b =>

@@ -8,15 +8,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 
-[assembly:ApiConventionType(typeof(DefaultApiConventions))]
+
 namespace HomeSensorServerAPI.Controllers
 {
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class NodesController : Controller
+    public class NodesController : ControllerBase
     {
         private readonly INodeRepository _nodeRepository;
 

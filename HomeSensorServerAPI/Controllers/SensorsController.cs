@@ -14,7 +14,7 @@ namespace ServerMvc.Models
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class SensorsController : Controller
+    public class SensorsController : ControllerBase
     {
         private readonly ISensorRepository _sensorRepository;
         private readonly INodeRepository _nodeRepository;
@@ -33,6 +33,8 @@ namespace ServerMvc.Models
         public async Task<IActionResult> Get(string identifier, int? skip, int? take)
         {
             var node = await _nodeRepository.GetWithIdentifierAsync(identifier);
+
+            if (node == null) return NotFound();
 
             var sensorData = _sensorRepository.GetWithIdentifier(identifier)
                 .OrderBy(o => o.TimeStamp)
