@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -30,22 +30,57 @@ namespace ServerMvc.Models
         //api/sensors/kitchen
         [Authorize(Roles = "Admin,Manager,Viewer")]
         [HttpGet("{identifier}")]
-        public async Task<IActionResult> Get(string identifier, int? skip, int? take)
+        public async Task<IActionResult> Get(string identifier, int? skip, int? take, string property, DateTime? from, DateTime? to)
         {
+            const int defaultSkip = 0;
+            const int defaultTake = 0;
+            var dateFrom = from ?? new DateTime(2000, 1, 1);
+            var dateTo = to ?? DateTime.Now;
+
             var node = await _nodeRepository.GetWithIdentifierAsync(identifier);
 
             if (node == null) return NotFound();
 
-            var sensorData = _sensorRepository.GetWithIdentifier(identifier)
-                .OrderBy(o => o.TimeStamp)
-                .Skip(skip ?? 0)
-                .Take(take ?? 1000);
-            
-            return Ok(new {
-                Identifier = identifier,
-                node.RegistredProperties,
-                Data = sensorData.Select(d => new { d.Data, d.TimeStamp }).ToList()
-            });
+            if (string.IsNullOrEmpty(property) || string.Equals(property, "all"))
+            {
+                var sensorData = _sensorRepository.GetWithIdentifier(identifier)
+                    .Where(x => x.TimeStamp >= dateFrom && x.TimeStamp <= dateTo)
+                    .OrderBy(x => x.TimeStamp)
+                    .Skip(skip ?? defaultSkip)
+                    .Take(take ?? defaultTake)
+                    .ToList();
+
+                return Ok(new
+                {
+                    Identifier = identifier,
+                    node.RegistredProperties,
+                    Data = sensorData.Select(d => new { val = d.Data, timeStamp = d.TimeStamp })
+                });
+            }
+            else if (node.RegistredProperties.Contains(property))
+            {                
+                var sensorData = _sensorRepository.GetWithIdentifier(identifier)
+                    .Where(x => x.TimeStamp >= dateFrom && x.TimeStamp <= dateTo)
+                    .OrderBy(x => x.TimeStamp)
+                    .Skip(skip ?? defaultSkip)
+                    .Take(take ?? defaultTake)
+                    .Select(x => new { x.TimeStamp, x.Data })
+                    .ToList();
+
+                var parsed = sensorData.Select(x => new { val = JObject.Parse(x.Data)[property], timeStamp = x.TimeStamp });
+
+                return Ok(new
+                {
+                    Identifier = identifier,
+                    Property = property,
+                    Data = parsed
+                });
+            }
+            else
+            {
+                return NotFound();
+            }
+  
         }
 
         [HttpPost]
@@ -56,6 +91,7 @@ namespace ServerMvc.Models
             //this sorcery is due to dynamic object, to allow wide-range of sensor without modyfining server side logic (no models needed)
 
             Sensor sensor = null;
+
             try
             {
                 sensor = new Sensor
@@ -77,3 +113,4 @@ namespace ServerMvc.Models
         }
     }
 }
+ 

@@ -77,7 +77,9 @@ namespace HomeSensorServerAPI.Repository
             IPAddress sensorIP = null, sensorGatewayIP = null;
 
             //check if there already exissts node with that identifier, if yes, then if it's identifier is other than new one 
-            if (existingNode != null && existingNode.Identifier != node.Identifier)
+            bool isUnique = IsIdentifierUnique(node.Identifier);
+            bool isEditingHisself = existingNode.Identifier == node.Identifier;
+            if (existingNode != null && (!isUnique && !isEditingHisself))
             {
                 _logger.LogWarning("Update node failed: Identifier is not unique.");
                 throw new IdentifierNotUniqueException("Identifier is not unique.");
@@ -127,5 +129,9 @@ namespace HomeSensorServerAPI.Repository
         //returns true if it is unique
         private bool IsIpAddressUnique(IPAddress IPToCompare)
             => _context.Nodes.Where(n => n.NodeType == ENodeType.Actuator).Any(n => IPAddress.Parse(n.IpAddress).Equals(IPToCompare)) ? false : true;
+
+        //returns true if it is unique
+        private bool IsIdentifierUnique(string identifier)
+            => _context.Nodes.Any(n => n.Identifier == identifier) ? false : true;
     }
 }

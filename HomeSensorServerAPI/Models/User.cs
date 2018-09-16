@@ -1,8 +1,6 @@
 ﻿using HomeSensorServerAPI.Models.Enums;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -25,11 +23,16 @@ namespace HomeSensorServerAPI.Models
         public EUserGender? Gender { get; set; }
         public EUserRole? Role { get; set; }
         public string PhotoUrl { get; set; }
+
+        [BindNever]
         public DateTime? LastValidLogin { get; set; }
+        [BindNever]
         public DateTime? LastInvalidLogin { get; set; }
+        [BindNever]
         public DateTime? JoinDate { get; set; }
 
         [NotMapped]
+        [BindNever]
         public bool IsSuccessfullyAuthenticated { get; set; }
     }
 }
