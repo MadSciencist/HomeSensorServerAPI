@@ -1,6 +1,7 @@
 ﻿using HomeSensorServerAPI.Models.Enums;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -23,6 +24,9 @@ namespace HomeSensorServerAPI.Models
         public EUserGender? Gender { get; set; }
         public EUserRole? Role { get; set; }
         public string PhotoUrl { get; set; }
+
+        public ICollection<Node> NodesOwner { get; set; }
+        public ICollection<StreamingDevice> StreamingDevicesOwner { get; set; }
 
         [BindNever]
         public DateTime? LastValidLogin { get; set; }

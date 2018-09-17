@@ -1,5 +1,6 @@
 ﻿using HomeSensorServerAPI.Models;
 using HomeSensorServerAPI.Repository;
+using HomeSensorServerAPI.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -13,10 +14,12 @@ namespace HomeSensorServerAPI.Controllers
     public class StreamingDevicesController : Controller
     {
         private readonly IStreamingDeviceRepository _streamingDeviceRepository;
+        private readonly IUserRepository _userRepository;
 
-        public StreamingDevicesController(IStreamingDeviceRepository streamingDeviceRepository)
+        public StreamingDevicesController(IStreamingDeviceRepository streamingDeviceRepository, IUserRepository userRepository)
         {
             _streamingDeviceRepository = streamingDeviceRepository;
+            _userRepository = userRepository;
         }
 
         // GET: api/StreamingDevices
@@ -32,9 +35,6 @@ namespace HomeSensorServerAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetStreamingDevice([FromRoute] int id)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             var streamingDevice = await _streamingDeviceRepository.GetByIdAsync(id);
 
             if (streamingDevice == null)
@@ -48,9 +48,6 @@ namespace HomeSensorServerAPI.Controllers
         [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> PutStreamingDevice([FromRoute] int id, [FromBody] StreamingDevice streamingDevice)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             if (id != streamingDevice.Id)
                 return BadRequest();
 
@@ -64,8 +61,10 @@ namespace HomeSensorServerAPI.Controllers
         [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> PostStreamingDevice([FromBody] StreamingDevice streamingDevice)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            var userId = int.Parse(ClaimsPrincipalHelper.GetClaimedUserIdentifier(this.User));
+            var user = await _userRepository.GetByIdAsync(userId);
+
+            streamingDevice.Owner = user;
 
             var createdDevice = await _streamingDeviceRepository.CreateAsync(streamingDevice);
 
@@ -77,11 +76,6 @@ namespace HomeSensorServerAPI.Controllers
         [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> DeleteStreamingDevice([FromRoute] int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var streamingDevice = await _streamingDeviceRepository.GetByIdAsync(id);
 
             if (streamingDevice == null)

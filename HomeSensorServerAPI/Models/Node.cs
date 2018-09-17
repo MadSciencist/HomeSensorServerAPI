@@ -1,6 +1,7 @@
 ﻿using HomeSensorServerAPI.Models.Enums;
-using System;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HomeSensorServerAPI.Models
@@ -10,7 +11,14 @@ namespace HomeSensorServerAPI.Models
     {
         public string Name { get; set; }
         public string Description { get; set; }
+
         public string Identifier { get; set; }
+
+        public int SensorUpdateRateSec { get; set; }
+
+        [BindNever]
+        public User Owner { get; set; }
+
         public string LoginName { get; set; }
         public string LoginPassword { get; set; }
         public ENodeType? NodeType { get; set; }

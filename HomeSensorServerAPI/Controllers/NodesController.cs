@@ -2,6 +2,7 @@
 using HomeSensorServerAPI.Models;
 using HomeSensorServerAPI.Models.Enums;
 using HomeSensorServerAPI.Repository;
+using HomeSensorServerAPI.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -18,10 +19,12 @@ namespace HomeSensorServerAPI.Controllers
     public class NodesController : ControllerBase
     {
         private readonly INodeRepository _nodeRepository;
+        private readonly IUserRepository _userRepository;
 
-        public NodesController(INodeRepository nodeRepository)
+        public NodesController(INodeRepository nodeRepository, IUserRepository userRepository)
         {
             _nodeRepository = nodeRepository;
+            _userRepository = userRepository;
         }
 
         // GET: api/Nodes
@@ -66,9 +69,9 @@ namespace HomeSensorServerAPI.Controllers
         [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> PutNode([FromRoute] int id, [FromBody] Node node)
         {
-            Node updatedNode = null;
             if (id != node.Id)
                 return BadRequest();
+            Node updatedNode = null;
 
             try
             {
@@ -100,6 +103,11 @@ namespace HomeSensorServerAPI.Controllers
         public async Task<IActionResult> PostNode([FromBody] Node node)
         {
             Node createdNode = null;
+            var userId = int.Parse(ClaimsPrincipalHelper.GetClaimedUserIdentifier(this.User));
+            var user = await _userRepository.GetByIdAsync(userId);
+
+            node.Owner = user;
+
             try
             {
                 createdNode = await _nodeRepository.CreateAsync(node);

@@ -3,14 +3,16 @@ using System;
 using HomeSensorServerAPI.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HomeSensorServerAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180917201702_SensorUpdateRate")]
+    partial class SensorUpdateRate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -98,7 +100,9 @@ namespace HomeSensorServerAPI.Migrations
 
                     b.Property<string>("GatewayAddress");
 
-                    b.Property<string>("Identifier");
+                    b.Property<string>("Identifier")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
                     b.Property<string>("IpAddress");
 
@@ -139,6 +143,8 @@ namespace HomeSensorServerAPI.Migrations
                     b.Property<DateTime>("TimeStamp");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Identifier");
 
                     b.ToTable("sensors");
                 });
@@ -227,6 +233,14 @@ namespace HomeSensorServerAPI.Migrations
                     b.HasOne("HomeSensorServerAPI.Models.User", "Owner")
                         .WithMany("NodesOwner")
                         .HasForeignKey("OwnerId");
+                });
+
+            modelBuilder.Entity("HomeSensorServerAPI.Models.Sensor", b =>
+                {
+                    b.HasOne("HomeSensorServerAPI.Models.Node", "Node")
+                        .WithMany("Sensors")
+                        .HasForeignKey("Identifier")
+                        .HasPrincipalKey("Identifier");
                 });
 
             modelBuilder.Entity("HomeSensorServerAPI.Models.StreamingDevice", b =>

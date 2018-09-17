@@ -47,7 +47,10 @@ namespace HomeSensorServerAPI
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<ISystemSettingsRepository, SystemSettingsRepository>();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .AddJsonOptions(json => json.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+     
 
             services.AddSwaggerGen(swagger =>
             {

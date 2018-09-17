@@ -2,6 +2,7 @@
 using HomeSensorServerAPI.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -19,12 +20,14 @@ namespace ServerMvc.Models
         private readonly ISensorRepository _sensorRepository;
         private readonly INodeRepository _nodeRepository;
         private readonly ILogger<SensorsController> _logger;
+        private readonly AppDbContext _context;
 
-        public SensorsController(ISensorRepository sensorRepository, INodeRepository nodeRepository, ILogger<SensorsController> logger)
+        public SensorsController(ISensorRepository sensorRepository, INodeRepository nodeRepository, ILogger<SensorsController> logger, AppDbContext context)
         {
             _sensorRepository = sensorRepository;
             _nodeRepository = nodeRepository;
             _logger = logger;
+            _context = context;
         }
 
         //api/sensors/kitchen
@@ -33,7 +36,7 @@ namespace ServerMvc.Models
         public async Task<IActionResult> Get(string identifier, int? skip, int? take, string property, DateTime? from, DateTime? to)
         {
             const int defaultSkip = 0;
-            const int defaultTake = 0;
+            const int defaultTake = 200;
             var dateFrom = from ?? new DateTime(2000, 1, 1);
             var dateTo = to ?? DateTime.Now;
 
@@ -45,9 +48,10 @@ namespace ServerMvc.Models
             {
                 var sensorData = _sensorRepository.GetWithIdentifier(identifier)
                     .Where(x => x.TimeStamp >= dateFrom && x.TimeStamp <= dateTo)
-                    .OrderBy(x => x.TimeStamp)
+                    .OrderByDescending(x => x.TimeStamp)
                     .Skip(skip ?? defaultSkip)
                     .Take(take ?? defaultTake)
+                    .OrderBy(x => x.TimeStamp)
                     .ToList();
 
                 return Ok(new
@@ -91,6 +95,8 @@ namespace ServerMvc.Models
             //this sorcery is due to dynamic object, to allow wide-range of sensor without modyfining server side logic (no models needed)
 
             Sensor sensor = null;
+
+            
 
             try
             {

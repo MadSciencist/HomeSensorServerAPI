@@ -67,7 +67,7 @@ namespace LocalSensorServer.Controllers
         {
             IActionResult response = null;
 
-            if (IsUserIdentifierAsClaimed(id) || IsUserAdmin(User) || IsUserManager(User))
+            if (IsUserIdentifierAsClaimed(id) || ClaimsPrincipalHelper.IsUserAdmin(User) || ClaimsPrincipalHelper.IsUserManager(User))
             {
                 var user = await _userRepository.GetByIdAsync(id);
 
@@ -85,7 +85,7 @@ namespace LocalSensorServer.Controllers
                 }
 
                 //prevent non-priviledged user to change his status to admin by i.e fiddler request
-                if (IsUserAdmin(User) && !IsAdminTryingToDeleteOrRemovePrivilegesItself(id))
+                if (ClaimsPrincipalHelper.IsUserAdmin(User) && !IsAdminTryingToDeleteOrRemovePrivilegesItself(id))
                 {
                     user.Role = candidate.Role;
                 }
@@ -125,7 +125,7 @@ namespace LocalSensorServer.Controllers
         {
             IActionResult response = null;
 
-            if (IsUserIdentifierAsClaimed(id) || IsUserAdmin(User)) //user can delete only its account, admin can delete all accounts
+            if (IsUserIdentifierAsClaimed(id) || ClaimsPrincipalHelper.IsUserAdmin(User)) //user can delete only its account, admin can delete all accounts
             {
                 if (!IsAdminTryingToDeleteOrRemovePrivilegesItself(id))
                 {
@@ -148,9 +148,9 @@ namespace LocalSensorServer.Controllers
 
         private bool IsAdminTryingToDeleteOrRemovePrivilegesItself(int removedUserId)
         {
-            if (IsUserAdmin(User))
+            if (ClaimsPrincipalHelper.IsUserAdmin(User))
             {
-                string adminIdString = GetClaimedUserIdentifier(this.User);
+                string adminIdString = ClaimsPrincipalHelper.GetClaimedUserIdentifier(this.User);
 
                 if (Int32.TryParse(adminIdString, out int adminId))
                     return removedUserId == adminId;
@@ -161,7 +161,7 @@ namespace LocalSensorServer.Controllers
 
         private bool IsUserIdentifierAsClaimed(int requestedId)
         {
-            var claimedUserIdentifier = GetClaimedUserIdentifier(this.User);
+            var claimedUserIdentifier = ClaimsPrincipalHelper.GetClaimedUserIdentifier(this.User);
 
             if (Int32.TryParse(claimedUserIdentifier, out int claimedUserId))
                 return claimedUserId == requestedId;
@@ -170,16 +170,6 @@ namespace LocalSensorServer.Controllers
         }
 
         /* adapter helper functions */
-        private bool IsUserAdmin(ClaimsPrincipal principal) => GetClaimedUserRole(principal).ToString() == EUserRole.Admin.ToString();
 
-        private bool IsUserManager(ClaimsPrincipal principal) => GetClaimedUserRole(principal).ToString() == EUserRole.Manager.ToString();
-        
-        private string GetClaimedUserIdentifier(ClaimsPrincipal claimsPrincipal) => claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
-
-        private EUserRole GetClaimedUserRole(ClaimsPrincipal claimsPrincipal)
-        {
-            var claimedRoleString = claimsPrincipal.FindFirstValue(ClaimTypes.Role); //get role
-            return Enum.GetValues(typeof(EUserRole)).Cast<EUserRole>().FirstOrDefault(ur => ur.ToString() == claimedRoleString); //and check if it exists in enum
-        }
     }
 }

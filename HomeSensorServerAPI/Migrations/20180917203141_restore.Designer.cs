@@ -9,14 +9,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HomeSensorServerAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20180915202001_initial")]
-    partial class initial
+    [Migration("20180917203141_restore")]
+    partial class restore
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.0-preview2-35157")
+                .HasAnnotation("ProductVersion", "2.1.3-rtm-32065")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("HomeSensorServerAPI.Models.Dictionaries.ActuatorType", b =>
@@ -114,11 +114,17 @@ namespace HomeSensorServerAPI.Migrations
 
                     b.Property<int?>("NodeType");
 
+                    b.Property<int?>("OwnerId");
+
                     b.Property<string>("RegistredProperties");
 
                     b.Property<int?>("SensorType");
 
+                    b.Property<int>("SensorUpdateRateSec");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
 
                     b.ToTable("nodes");
                 });
@@ -154,9 +160,13 @@ namespace HomeSensorServerAPI.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
+                    b.Property<int?>("OwnerId");
+
                     b.Property<string>("Password");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
 
                     b.ToTable("streaming_devices");
                 });
@@ -212,6 +222,20 @@ namespace HomeSensorServerAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("users");
+                });
+
+            modelBuilder.Entity("HomeSensorServerAPI.Models.Node", b =>
+                {
+                    b.HasOne("HomeSensorServerAPI.Models.User", "Owner")
+                        .WithMany("NodesOwner")
+                        .HasForeignKey("OwnerId");
+                });
+
+            modelBuilder.Entity("HomeSensorServerAPI.Models.StreamingDevice", b =>
+                {
+                    b.HasOne("HomeSensorServerAPI.Models.User", "Owner")
+                        .WithMany("StreamingDevicesOwner")
+                        .HasForeignKey("OwnerId");
                 });
 #pragma warning restore 612, 618
         }

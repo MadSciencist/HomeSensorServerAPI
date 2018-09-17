@@ -22,5 +22,16 @@ namespace HomeSensorServerAPI.Repository
         public DbSet<NodeType> NodeTypes { get; set; }
         public DbSet<SensorType> SensorTypes { get; set; }
         public DbSet<ActuatorType> ActuatorTypes { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<User>()
+                .HasMany(n => n.NodesOwner)
+                .WithOne(u => u.Owner);
+
+            builder.Entity<User>()
+                .HasMany(s => s.StreamingDevicesOwner)
+                .WithOne(u => u.Owner);
+        }
     }
 }
