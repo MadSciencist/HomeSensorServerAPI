@@ -27,11 +27,11 @@ namespace HomeSensorServerAPI.Repository
         {
             builder.Entity<User>()
                 .HasMany(n => n.NodesOwner)
-                .WithOne(u => u.Owner);
+                .WithOne(u => u.Owner as User);
 
             builder.Entity<User>()
                 .HasMany(s => s.StreamingDevicesOwner)
-                .WithOne(u => u.Owner);
+                .WithOne(u => u.Owner as User);
         }
     }
 }

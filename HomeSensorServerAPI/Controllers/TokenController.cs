@@ -1,15 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using HomeSensorServerAPI.Models;
+using HomeSensorServerAPI.Repository;
+using HomeSensorServerAPI.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using HomeSensorServerAPI.Repository;
-using HomeSensorServerAPI.Models;
-using HomeSensorServerAPI.Utils;
-using System.Linq;
-using System.Collections.Generic;
-using System;
 using Newtonsoft.Json;
+using System;
 using System.Threading.Tasks;
-using HomeSensorServerAPI.BusinessLogic;
 
 namespace HomeSensorServerAPI.Controllers
 {
@@ -51,7 +48,7 @@ namespace HomeSensorServerAPI.Controllers
                 }
                 else //no matching user
                 {
-                    response = NotFound("Podany użytkownik nie istnieje");
+                    response = Unauthorized();
                 }
             }
             return response;

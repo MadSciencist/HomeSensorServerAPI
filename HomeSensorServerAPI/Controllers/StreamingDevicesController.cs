@@ -1,4 +1,5 @@
 ﻿using HomeSensorServerAPI.Models;
+using HomeSensorServerAPI.Models.Enums;
 using HomeSensorServerAPI.Repository;
 using HomeSensorServerAPI.Utils;
 using Microsoft.AspNetCore.Authorization;
@@ -49,7 +50,18 @@ namespace HomeSensorServerAPI.Controllers
         public async Task<IActionResult> PutStreamingDevice([FromRoute] int id, [FromBody] StreamingDevice streamingDevice)
         {
             if (id != streamingDevice.Id)
+            {
                 return BadRequest();
+            }
+
+            var existingStreamingDevice = await _streamingDeviceRepository.GetByIdAsync(id);
+            var userRole = ClaimsPrincipalHelper.GetClaimedUserRole(this.User);
+            var userId = ClaimsPrincipalHelper.GetClaimedUserIdentifierInt(this.User);
+
+            if (!(userRole == EUserRole.Admin || userId == existingStreamingDevice.Owner.Id))
+            {
+                return Forbid();
+            }
 
             var updatedDevice = await _streamingDeviceRepository.UpdateAsync(streamingDevice);
 
@@ -79,7 +91,17 @@ namespace HomeSensorServerAPI.Controllers
             var streamingDevice = await _streamingDeviceRepository.GetByIdAsync(id);
 
             if (streamingDevice == null)
+            {
                 return NotFound();
+            }
+
+            var userRole = ClaimsPrincipalHelper.GetClaimedUserRole(this.User);
+            var userId = ClaimsPrincipalHelper.GetClaimedUserIdentifierInt(this.User);
+
+            if (!(userRole == EUserRole.Admin || userId == streamingDevice.Owner.Id))
+            {
+                return Forbid();
+            }
 
             await _streamingDeviceRepository.DeleteAsync(streamingDevice);
 

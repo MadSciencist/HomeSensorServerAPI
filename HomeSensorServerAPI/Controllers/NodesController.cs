@@ -5,6 +5,7 @@ using HomeSensorServerAPI.Repository;
 using HomeSensorServerAPI.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -70,7 +71,19 @@ namespace HomeSensorServerAPI.Controllers
         public async Task<IActionResult> PutNode([FromRoute] int id, [FromBody] Node node)
         {
             if (id != node.Id)
+            {
                 return BadRequest();
+            }
+
+            var existingNode = await _nodeRepository.GetByIdAsync(id);
+            var userRole = ClaimsPrincipalHelper.GetClaimedUserRole(this.User);
+            var userId = ClaimsPrincipalHelper.GetClaimedUserIdentifierInt(this.User);
+
+            if (!(userRole == EUserRole.Admin || userId == existingNode.Owner.Id))
+            {
+                return Forbid();
+            }
+
             Node updatedNode = null;
 
             try
@@ -144,9 +157,17 @@ namespace HomeSensorServerAPI.Controllers
                 return NotFound();
             }
 
+            var userRole = ClaimsPrincipalHelper.GetClaimedUserRole(this.User);
+            var userId = ClaimsPrincipalHelper.GetClaimedUserIdentifierInt(this.User);
+
+            if (!(userRole == EUserRole.Admin || userId == node.Owner.Id))
+            {
+                return Forbid();
+            }
+
             await _nodeRepository.DeleteAsync(node);
 
-            return Ok(new { Action = "Deleted", node});
+            return Ok(new { Action = "Deleted", node });
         }
     }
 }

@@ -12,6 +12,7 @@ namespace HomeSensorServerAPI.Utils
         public static  bool IsUserManager(ClaimsPrincipal principal) => GetClaimedUserRole(principal).ToString() == EUserRole.Manager.ToString();
 
         public static string GetClaimedUserIdentifier(ClaimsPrincipal claimsPrincipal) => claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+        public static int GetClaimedUserIdentifierInt(ClaimsPrincipal claimsPrincipal) => int.Parse(claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier));
 
         public static EUserRole GetClaimedUserRole(ClaimsPrincipal claimsPrincipal)
         {

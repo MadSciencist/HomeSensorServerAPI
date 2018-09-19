@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using HomeSensorServerAPI.Models.Enums;
 
 namespace HomeSensorServerAPI.Models
 {
     public interface IUser
     {
+        int Id { get; set; }
         DateTime? Birthdate { get; set; }
         string Email { get; set; }
         EUserGender? Gender { get; set; }
-        int Id { get; set; }
         bool IsSuccessfullyAuthenticated { get; set; }
         DateTime? JoinDate { get; set; }
         DateTime? LastInvalidLogin { get; set; }
@@ -17,10 +16,8 @@ namespace HomeSensorServerAPI.Models
         DateTime? LastValidLogin { get; set; }
         string Login { get; set; }
         string Name { get; set; }
-        ICollection<Node> NodesOwner { get; set; }
         string Password { get; set; }
         string PhotoUrl { get; set; }
         EUserRole? Role { get; set; }
-        ICollection<StreamingDevice> StreamingDevicesOwner { get; set; }
     }
 }

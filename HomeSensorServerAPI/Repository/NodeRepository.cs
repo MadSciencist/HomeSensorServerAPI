@@ -23,6 +23,11 @@ namespace HomeSensorServerAPI.Repository
         {
             return _context.Nodes.Where(n => n.NodeType == type);
         }
+        public override async Task<Node> GetByIdAsync(int id)
+        {
+            return await _context.Nodes.Include(x => x.Owner).FirstOrDefaultAsync(x => x.Id == id);
+        }
+
         public async Task<Node> GetWithIdentifierAsync(string identifier)
         {
             var node = await _context.Nodes.FirstOrDefaultAsync(n => n.Identifier == identifier);

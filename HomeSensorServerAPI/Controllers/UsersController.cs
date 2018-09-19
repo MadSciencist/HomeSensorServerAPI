@@ -140,7 +140,7 @@ namespace LocalSensorServer.Controllers
             }
             else
             {
-                response = Unauthorized();
+                response = Forbid();
             }
 
             return response;
@@ -168,8 +168,5 @@ namespace LocalSensorServer.Controllers
             else
                 return false;
         }
-
-        /* adapter helper functions */
-
     }
 }

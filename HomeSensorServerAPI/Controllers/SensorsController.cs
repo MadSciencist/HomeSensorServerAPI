@@ -20,14 +20,12 @@ namespace ServerMvc.Models
         private readonly ISensorRepository _sensorRepository;
         private readonly INodeRepository _nodeRepository;
         private readonly ILogger<SensorsController> _logger;
-        private readonly AppDbContext _context;
 
-        public SensorsController(ISensorRepository sensorRepository, INodeRepository nodeRepository, ILogger<SensorsController> logger, AppDbContext context)
+        public SensorsController(ISensorRepository sensorRepository, INodeRepository nodeRepository, ILogger<SensorsController> logger)
         {
             _sensorRepository = sensorRepository;
             _nodeRepository = nodeRepository;
             _logger = logger;
-            _context = context;
         }
 
         //api/sensors/kitchen
@@ -65,9 +63,10 @@ namespace ServerMvc.Models
             {                
                 var sensorData = _sensorRepository.GetWithIdentifier(identifier)
                     .Where(x => x.TimeStamp >= dateFrom && x.TimeStamp <= dateTo)
-                    .OrderBy(x => x.TimeStamp)
+                    .OrderByDescending(x => x.TimeStamp)
                     .Skip(skip ?? defaultSkip)
                     .Take(take ?? defaultTake)
+                    .OrderBy(x => x.TimeStamp)
                     .Select(x => new { x.TimeStamp, x.Data })
                     .ToList();
 
@@ -95,8 +94,6 @@ namespace ServerMvc.Models
             //this sorcery is due to dynamic object, to allow wide-range of sensor without modyfining server side logic (no models needed)
 
             Sensor sensor = null;
-
-            
 
             try
             {

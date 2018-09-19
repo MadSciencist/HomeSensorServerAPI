@@ -45,6 +45,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DeviceCaller\DeviceCaller.csproj" />
     <ProjectReference Include="..\PasswordCryptoService\PasswordCryptoService.csproj" />
     <ProjectReference Include="..\RpiProcessHandler\RpiProcessHandler.csproj" />
   </ItemGroup>

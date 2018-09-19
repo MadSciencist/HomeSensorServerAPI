@@ -1,56 +1,65 @@
-﻿using HomeSensorServerAPI.BusinessLogic;
-using HomeSensorServerAPI.Repository;
+﻿using HomeSensorServerAPI.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using NSDeviceCaller;
 using System;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace HomeSensorServerAPI.Controllers
 {
+    public class SetDeviceBindModel
+    {
+        public string State { get; set; }
+    }
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class DevicesController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly INodeRepository _nodeRepository;
+        private readonly ILogger<DevicesController> _logger;
 
-        public DevicesController(AppDbContext context)
+        public DevicesController(INodeRepository nodeRepository, ILogger<DevicesController> logger)
         {
-            _context = context;
+            _nodeRepository = nodeRepository;
+            _logger = logger;
         }
 
         [Authorize(Roles = "Admin,Manager,Viewer")]
-        [Route("set")]
+        [Route("set/{identifier}")]
         [HttpPost]
-        public async Task<IActionResult> SetDeviceStateAsync(int id, int subId, string value)
+        public async Task<IActionResult> SetDeviceStateAsync(string identifier, [FromBody]SetDeviceBindModel state)
         {
-            var selectedDevice = _context.Nodes.FirstOrDefault(n => n.Id == id);
-            var deviceUri = new Uri("http://" + selectedDevice.IpAddress);
+            var selectedDevice = await _nodeRepository.GetWithIdentifierAsync(identifier);
 
-            selectedDevice.IsOn = SingleRelay.GetNewState(value); //write new state
-            _context.Entry(selectedDevice).State = EntityState.Modified; //set modified flag
-            await _context.SaveChangesAsync();
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                Console.WriteLine();
-            }
+            if (selectedDevice == null) return NotFound();
 
             string deviceResponse = null;
+            var device = new Device() { Identifier = selectedDevice.IpAddress, IpAddress = selectedDevice.IpAddress };
+            var caller = new DeviceCaller(device);
+
+            //selectedDevice.IsOn  = String.Equals(value, "on") ? true : false;
+            //_context.Entry(selectedDevice).State = EntityState.Modified; //set modified flag
+            //await _context.SaveChangesAsync();           
+            //await _context.SaveChangesAsync();
 
             try
             {
-                deviceResponse = await CallDeviceApi.SendRequestAsync(deviceUri, selectedDevice.Identifier, value);
+                deviceResponse = await caller.SetStateAsync(state.State);
             }
-            catch (Exception e) //this might be nullreferenceexpcetion, but its actually caused by timeout - need to refactor
+            catch (TimeoutException e)
             {
-                return BadRequest("Timeout, Exception: " + e.Message.ToString());
+                _logger.LogError(e, "Cannot set device state: not responding");
+                return BadRequest("Cannot set device state: not responding");
+            }
+            catch(HttpRequestException e)
+            {
+                _logger.LogError(e, "Cannot set device state: not found");
+                return BadRequest("Cannot set device state: not found");
             }
 
             if (deviceResponse != null)
@@ -61,16 +70,15 @@ namespace HomeSensorServerAPI.Controllers
             {
                 return BadRequest();
             }
-
         }
 
         // TODO on ebedded and here
         // implement this on embedded, add subIdentifier if one device has multiple outputs
         [Route("get")]
         [HttpGet]
-        public IActionResult GetDeviceState(string identifier)
+        public async Task<IActionResult> GetDeviceStateAsync(string identifier)
         {
-            var device = _context.Nodes.FirstOrDefault(n => n.Identifier == identifier);
+            var device = await _nodeRepository.GetWithIdentifierAsync(identifier);
 
             if (device == null)
             {

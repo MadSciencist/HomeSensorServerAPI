@@ -28,7 +28,7 @@ namespace HomeSensorServerAPI.Utils
             return result;
         }
 
-        public PublicUser ConvertFullUserDataToPublicData(User user)
+        public PublicUser ConvertFullUserDataToPublicData(IUser user)
         {
             var publicUser = new PublicUser()
             {

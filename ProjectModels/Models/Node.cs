@@ -1,11 +1,12 @@
 ﻿using HomeSensorServerAPI.Models.Enums;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using ModelInterfaces;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HomeSensorServerAPI.Models
 {
     [Table("nodes")]
-    public class Node : Entity
+    public class Node : Entity, INode
     {
         public string Name { get; set; }
         public string Description { get; set; }
@@ -13,7 +14,7 @@ namespace HomeSensorServerAPI.Models
         public string Identifier { get; set; }
 
         [BindNever]
-        public IUser Owner { get; set; }
+        public User Owner { get; set; }
 
         public string LoginName { get; set; }
         public string LoginPassword { get; set; }

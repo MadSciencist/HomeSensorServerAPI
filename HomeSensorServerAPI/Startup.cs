@@ -38,7 +38,8 @@ namespace HomeSensorServerAPI
 
             services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseMySql(dbConnectionString, mysqlOptions => mysqlOptions.ServerVersion(new Version(10, 1, 29), ServerType.MariaDb));
+                options.UseMySql(dbConnectionString, mysqlOptions => mysqlOptions.ServerVersion(new Version(10, 1, 29), ServerType.MariaDb))
+                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
 
             services.AddTransient<INodeRepository, NodeRepository>();
