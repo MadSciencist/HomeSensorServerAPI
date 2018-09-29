@@ -5,28 +5,28 @@ Authentication is done using Json Web Token (JWT Bearer).
 This application is meant to be deployed on Raspberry PI 3B+ using Kestrel + NGINX servers.
 It can be published to internet using port redirection or 3rd partys like dataimplicity.
 
-Main features:
- *gather data from sensor nodes
- *control actuator nodes
- *handle user accounts
- *grant and revoke permissions (view, control, admin, add-data {sensors}) to users
+######Main features:
+ * gather data from sensor nodes
+ * control actuator nodes
+ * handle user accounts
+ * grant and revoke permissions (view, control, admin, add-data {sensors}) to users
  
  Publishing to Raspberry PI (Only RPi 2+ versions work):
- 1) On develompent machine:
-	dotnet clean
-	dotnet publish -c release -r linux-arm
+ 1. On develompent machine:
+	* dotnet clean
+	* dotnet publish -c release -r linux-arm
 	
-	Use WinSCP to transfer files via FTP to Rpi.
-	Make main file HomeSensorServerAPI executable (755 chmod)
+	* Use WinSCP to transfer files via FTP to Rpi.
+	* Make main file HomeSensorServerAPI executable (755 chmod)
 	
 2) On Rpi:
-	Go to location where project was copied
-	Make sure that Apache with MySQL is running
-	Make sure that Nginx is running
-	If necessary, apply migration:
-	dotnet ef database update
-	Then run:
-	./HomeSensorServerAPI
+	* Go to location where project was copied
+	* Make sure that Apache with MySQL is running
+	* Make sure that Nginx is running
+	* If necessary, apply migration:
+	* dotnet ef database update
+	* Then run:
+	* ./HomeSensorServerAPI
 
 
 ---
@@ -34,7 +34,7 @@ Nginx config
 I'm using nginx as a reverse proxy for kestrel. Also nginx is hangling the HTTPs connection.
 config: (you need SSL certificate from next steps, if you want to use only HTTP, comment out the second server definition)
 
-'server {
+```server {
     listen 80;
     include /etc/nginx/proxy_params;
 
@@ -71,7 +71,7 @@ server {
       proxy_pass          http://localhost:5000;
       proxy_read_timeout  90;
     }
-}'
+}```
 
 ---
 
