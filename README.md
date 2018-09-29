@@ -29,12 +29,12 @@ Main features:
 	./HomeSensorServerAPI
 
 
-###########################################################
+---
 Nginx config
 I'm using nginx as a reverse proxy for kestrel. Also nginx is hangling the HTTPs connection.
 config: (you need SSL certificate from next steps, if you want to use only HTTP, comment out the second server definition)
 
-server {
+'server {
     listen 80;
     include /etc/nginx/proxy_params;
 
@@ -71,11 +71,11 @@ server {
       proxy_pass          http://localhost:5000;
       proxy_read_timeout  90;
     }
-}
+}'
 
-###########################################################
+---
 
-###########################################################
+---
 Obtaining DNS
 
 use noip.com service or similair and DUC client
@@ -95,9 +95,9 @@ launch the client:
 
 To show config:
 sudo noip2 ­S
-###########################################################
+---
 
-###########################################################
+---
 Obtaining SSL certificate (when you already have your domain)
 I'm using letsencrypt service. 
 
@@ -106,10 +106,10 @@ sudo certbot certonly --authenticator standalone --pre-hook "nginx -s stop" --po
 
 The certificate is valid for 90, so you need to create some cron-job for frefreshing it:
 sudo certbot renew --dry-run
-###########################################################
+---
 
 
-###########################################################
+---
 Configure firewall (UFW)
 
 sudo apt-get install ufw
@@ -130,7 +130,7 @@ sudo ufw show added
 
 and current status by:
 sudo ufw status
-###########################################################
+---
 For autostart use supervisor:
 
 sudo apt-get install supervisor
@@ -154,4 +154,4 @@ Then:
 sudo supervisorctl reread
 sudo supervisorctl update
 sudo supervisor start aspnetcore
-###########################################################
+---
