@@ -3,7 +3,6 @@
 A smart-home-like application build using ASP.NET Core 2.1 WebAPI, MySQL, Entity Framework Core.
 Authentication is done using Json Web Token (JWT Bearer).
 This application is meant to be deployed on Raspberry PI 3B+ using Kestrel + NGINX servers.
-It can be published to internet using port redirection or 3rd partys like dataimplicity.
 
 ###### Main features:
  * gather data from sensor nodes
@@ -22,6 +21,7 @@ It can be published to internet using port redirection or 3rd partys like dataim
 2) On Rpi:
 	* Go to location where project was copied
 	* Make sure that Apache with MySQL is running
+	* Modify appsettings.json with DB connection string
 	* Make sure that Nginx is running
 	* If necessary, apply migration:
 	* dotnet ef database update
@@ -29,6 +29,11 @@ It can be published to internet using port redirection or 3rd partys like dataim
 	* ./HomeSensorServerAPI
 
 
+---
+###### Install MySQL 
+TODO setup user account
+
+---
 ---
 ###### Nginx config
 I'm using nginx as a reverse proxy for kestrel. Also nginx is hangling the HTTPs connection.
