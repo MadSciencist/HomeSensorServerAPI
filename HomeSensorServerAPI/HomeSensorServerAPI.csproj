@@ -45,7 +45,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DeviceCaller\DeviceCaller.csproj" />
+    <ProjectReference Include="..\DeviceCaller\DeviceServices.csproj" />
     <ProjectReference Include="..\PasswordCryptoService\PasswordCryptoService.csproj" />
     <ProjectReference Include="..\RpiProcessHandler\RpiProcessHandler.csproj" />
   </ItemGroup>
@@ -57,7 +57,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\img\uploads\avatars\" />
+    <Folder Include="wwwroot\img\" />
   </ItemGroup>
 
 </Project>

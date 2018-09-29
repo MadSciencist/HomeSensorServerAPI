@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HomeSensorServerAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20180917203141_restore")]
-    partial class restore
+    [Migration("20180929112556_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -119,8 +119,6 @@ namespace HomeSensorServerAPI.Migrations
                     b.Property<string>("RegistredProperties");
 
                     b.Property<int?>("SensorType");
-
-                    b.Property<int>("SensorUpdateRateSec");
 
                     b.HasKey("Id");
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NSDeviceCaller
 {
-    public class DeviceCaller
+    public class DeviceCaller : IDeviceCaller
     {
         private readonly Device _device;
         private readonly HttpClient _client;

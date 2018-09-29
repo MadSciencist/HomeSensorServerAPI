@@ -53,8 +53,8 @@ namespace HomeSensorServerAPI.Controllers
             }
             catch (TimeoutException e)
             {
-                _logger.LogError(e, "Cannot set device state: not responding");
-                return BadRequest("Cannot set device state: not responding");
+                _logger.LogError(e, "Cannot set device state: device not responding");
+                return BadRequest("Cannot set device state: device not responding");
             }
             catch(HttpRequestException e)
             {

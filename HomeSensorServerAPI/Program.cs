@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Net;
 using Microsoft.Extensions.Logging;
 using NLog.Web;
+using System;
+using System.Net;
 
 namespace HomeSensorServerAPI
 {
@@ -26,7 +26,11 @@ namespace HomeSensorServerAPI
                     try
                     {
                         DbSeeder seeder = new DbSeeder();
-                        //seeder.UpdateDatabase(context);
+
+                        logger.Info("Applying migrations to the DB");
+                        seeder.UpdateDatabase(context);
+
+                        logger.Info("Ensuring that DB has initial seed");
                         seeder.EnsurePopulated(context);
                     }
                     catch (Exception e)
@@ -38,7 +42,7 @@ namespace HomeSensorServerAPI
             }
             catch (Exception e)
             {
-                logger.Error(e);
+                logger.Fatal(e);
             }
             finally
             {
@@ -53,9 +57,14 @@ namespace HomeSensorServerAPI
                 .ConfigureLogging(logger =>
                 {
                     //logger.ClearProviders();
-                    logger.SetMinimumLevel(LogLevel.Trace);
+                    logger.SetMinimumLevel(LogLevel.Information);
                 })
                 .UseNLog()
-                .UseKestrel(options => options.Listen(IPAddress.Any, 80));
+                .UseKestrel(options =>
+                {
+                    options.Limits.MaxConcurrentConnections = 100;
+                    options.Limits.MaxConcurrentUpgradedConnections = 100;
+                    options.Listen(IPAddress.Any, 5000);
+                });
     }
 }

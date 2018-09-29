@@ -118,8 +118,6 @@ namespace HomeSensorServerAPI.Migrations
 
                     b.Property<int?>("SensorType");
 
-                    b.Property<int>("SensorUpdateRateSec");
-
                     b.HasKey("Id");
 
                     b.HasIndex("OwnerId");

@@ -79,6 +79,21 @@ namespace HomeSensorServerAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "sensors",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    TimeStamp = table.Column<DateTime>(nullable: false),
+                    Identifier = table.Column<string>(nullable: true),
+                    Data = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_sensors", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "system_data",
                 columns: table => new
                 {
@@ -126,7 +141,7 @@ namespace HomeSensorServerAPI.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
-                    Identifier = table.Column<string>(maxLength: 50, nullable: false),
+                    Identifier = table.Column<string>(nullable: true),
                     OwnerId = table.Column<int>(nullable: true),
                     LoginName = table.Column<string>(nullable: true),
                     LoginPassword = table.Column<string>(nullable: true),
@@ -141,7 +156,6 @@ namespace HomeSensorServerAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_nodes", x => x.Id);
-                    table.UniqueConstraint("AK_nodes_Identifier", x => x.Identifier);
                     table.ForeignKey(
                         name: "FK_nodes_users_OwnerId",
                         column: x => x.OwnerId,
@@ -174,36 +188,10 @@ namespace HomeSensorServerAPI.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "sensors",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    TimeStamp = table.Column<DateTime>(nullable: false),
-                    Identifier = table.Column<string>(nullable: true),
-                    Data = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_sensors", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_sensors_nodes_Identifier",
-                        column: x => x.Identifier,
-                        principalTable: "nodes",
-                        principalColumn: "Identifier",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_nodes_OwnerId",
                 table: "nodes",
                 column: "OwnerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_sensors_Identifier",
-                table: "sensors",
-                column: "Identifier");
 
             migrationBuilder.CreateIndex(
                 name: "IX_streaming_devices_OwnerId",
@@ -229,6 +217,9 @@ namespace HomeSensorServerAPI.Migrations
                 name: "dictionary_sensor_types");
 
             migrationBuilder.DropTable(
+                name: "nodes");
+
+            migrationBuilder.DropTable(
                 name: "sensors");
 
             migrationBuilder.DropTable(
@@ -236,9 +227,6 @@ namespace HomeSensorServerAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "system_data");
-
-            migrationBuilder.DropTable(
-                name: "nodes");
 
             migrationBuilder.DropTable(
                 name: "users");
