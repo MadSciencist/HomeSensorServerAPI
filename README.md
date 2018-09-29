@@ -155,6 +155,7 @@ sudo ufw status
 sudo apt-get install supervisor
 cd /etc/supervisor/config.d
 touch aspnetcore.conf 
+```
 
 edit this file (i.e sudo nano aspnetcore.conf) and put the config:
 ```bash
@@ -163,8 +164,8 @@ command=dotnet /home/pi/HomeAPI/HomeSensorServerAPI.dll
 directory=home/pi/HomeAPI/
 autostart=true
 autorestart=true
-stdout_logfile=/var/log/aspnetcore.out.log
-stderr_logfile=/var/log/aspnetcore.err.log
+#stdout_logfile=/var/log/aspnetcore.out.log
+#stderr_logfile=/var/log/aspnetcore.err.log
 environment=ASPNETCORE_ENVIRONMENT="Production"
 ```
 
