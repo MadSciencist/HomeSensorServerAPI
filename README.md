@@ -95,18 +95,18 @@ launch the client:
 > /usr/local/bin/noip2
 
 To show config:
-> sudo noip2 ­S
+> sudo noip2 \­S
 ---
 
 ---
 ###### Obtaining SSL certificate (when you already have your domain)
 I'm using letsencrypt service. 
 
-> sudo apt-get install python-certbot-nginx -t stretch-backports
-> sudo certbot certonly --authenticator standalone --pre-hook "nginx -s stop" --post-hook "nginx"
+> sudo apt-get install python\-certbot\-nginx \-t stretch\-backports
+> sudo certbot certonly \-\-authenticator standalone \-\-pre\-hook "nginx \-s stop" \-\-post\-hook "nginx"
 
 The certificate is valid for 90, so you need to create some cron-job for frefreshing it:
-> sudo certbot renew --dry-run
+> sudo certbot renew \-\-dry\-run
 ---
 
 
