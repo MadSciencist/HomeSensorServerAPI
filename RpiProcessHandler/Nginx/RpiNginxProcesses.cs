@@ -1,27 +1,27 @@
-﻿namespace RpiProcessHandler
+﻿namespace RpiProcesses
 {
     public class RpiNginxProcesses : RpiProcessHandler
     {
         public string NginxStartCommand { get; set; } = @"sudo /usr/local/nginx/sbin/nginx";
         public string NginxStopCommand { get; set; } = @"sudo /usr/local/nginx/sbin/nginx -s stop";
 
-        public void StartNginx()
+        public async void StartNginx()
         {
             var nginxProcess = new RpiProcessHandler();
-            nginxProcess.ExecuteShellCommand(NginxStartCommand);
+            await nginxProcess.ExecuteShellCommand(NginxStartCommand);
         }
 
-        public void StopNginx()
+        public async void StopNginx()
         {
             var nginxProcess = new RpiProcessHandler();
-            nginxProcess.ExecuteShellCommand(NginxStopCommand);
+            await nginxProcess.ExecuteShellCommand(NginxStopCommand);
         }
 
-        public void RestartNginx()
+        public async void RestartNginx()
         {
             var nginxProcess = new RpiProcessHandler();
-            nginxProcess.ExecuteShellCommand(NginxStopCommand);
-            nginxProcess.ExecuteShellCommand(NginxStartCommand);
+            await nginxProcess.ExecuteShellCommand(NginxStopCommand);
+            await nginxProcess.ExecuteShellCommand(NginxStartCommand);
         }
     }
 }

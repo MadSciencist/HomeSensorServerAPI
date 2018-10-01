@@ -2,9 +2,9 @@
 using HomeSensorServerAPI.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RpiProcessHandler;
-using RpiProcessHandler.FFmpeg;
-using RpiProcessHandler.Rtsp;
+using RpiProcesses;
+using RpiProcesses.FFmpeg;
+using RpiProcesses.Rtsp;
 using System.Threading.Tasks;
 
 namespace HomeSensorServerAPI.Controllers

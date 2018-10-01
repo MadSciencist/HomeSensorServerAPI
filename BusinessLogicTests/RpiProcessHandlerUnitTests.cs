@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
-using RpiProcessHandler.FFmpeg;
-using RpiProcessHandler.Rtsp;
+using RpiProcesses.FFmpeg;
+using RpiProcesses.Rtsp;
 using System;
 
 namespace BusinessLogicTests

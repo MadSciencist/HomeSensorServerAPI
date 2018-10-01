@@ -1,20 +1,17 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
-namespace RpiProcessHandler
+namespace RpiProcesses
 {
-    //TODO: 
-    //some exception handling
-    public class RpiProcessHandler
+    public class RpiProcessHandler : IRpiProcessHandler
     {
-        public void ExecuteShellCommand(string command)
+        public async Task<string> ExecuteShellCommand(string command)
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                Console.WriteLine("You cannot start this process on development machine.");
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            string stdOutput = string.Empty;
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
                 var escapeCommand = command.Replace("\"", "\\\"");
 
@@ -29,8 +26,31 @@ namespace RpiProcessHandler
                     }
                 };
 
-                process.Start();
+                stdOutput = await TryToRunProcess(stdOutput, process);
+
             }
+            else
+            {
+                Console.WriteLine("You cannot start this process on development machine.");
+            }
+
+            return stdOutput;
+        }
+
+        private async Task<string> TryToRunProcess(string stdOutput, Process process)
+        {
+            try
+            {
+                process.Start();
+                stdOutput = await process.StandardOutput.ReadToEndAsync();
+                process.WaitForExit();
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine(e.Message);
+            }
+
+            return stdOutput;
         }
     }
 }

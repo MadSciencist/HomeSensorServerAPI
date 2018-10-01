@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace RpiProcessHandler.Rtsp
+namespace RpiProcesses.Rtsp
 {
     public class RtspHelper
     {

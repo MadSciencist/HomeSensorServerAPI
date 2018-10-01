@@ -1,4 +1,4 @@
-﻿namespace RpiProcessHandler.FFmpeg
+﻿namespace RpiProcesses.FFmpeg
 {
     public enum EResolution : int
     {

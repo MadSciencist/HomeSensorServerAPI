@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace RpiProcessHandler.FFmpeg
+namespace RpiProcesses.FFmpeg
 {
     public static class Resolution
     {

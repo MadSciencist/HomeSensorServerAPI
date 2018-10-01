@@ -1,12 +1,12 @@
-﻿using RpiProcessHandler.FFmpeg;
+﻿using RpiProcesses.FFmpeg;
 
-namespace RpiProcessHandler
+namespace RpiProcesses
 {
     public class RpiFFmpegProcesses : RpiProcessHandler
     {
         public string KillFFmpeg { get; } = @"sudo killall ffmpeg";
 
-        public void FFmpegStartStreaming(string rtspUrl, EResolution resolution)
+        public async void FFmpegStartStreaming(string rtspUrl, EResolution resolution)
         {
             if (rtspUrl == null)
                 return;
@@ -15,13 +15,13 @@ namespace RpiProcessHandler
 
             var command = $@"ffmpeg -i {rtspUrl} -vcodec libx264 -acodec aac -f flv -r 25 -s {resolutionString} rtmp://localhost/show/stream";
             var rpi = new RpiProcessHandler();
-            rpi.ExecuteShellCommand(command);
+            await rpi.ExecuteShellCommand(command);
         }
 
-        public void FFmpegStopStreaming()
+        public async void FFmpegStopStreaming()
         {
             var rpi = new RpiProcessHandler();
-            rpi.ExecuteShellCommand(KillFFmpeg);
+            await rpi.ExecuteShellCommand(KillFFmpeg);
         }
     }
 }
