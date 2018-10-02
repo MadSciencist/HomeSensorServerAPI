@@ -23,11 +23,11 @@ namespace RpiProcesses
                         Arguments = $"-c \"{escapeCommand}\"",
                         UseShellExecute = false,
                         CreateNoWindow = true,
-                    }
+                        RedirectStandardOutput = true
+                    },
                 };
 
                 stdOutput = await TryToRunProcess(process);
-
             }
             else
             {
@@ -43,8 +43,7 @@ namespace RpiProcesses
             try
             {
                 process.Start();
-                stdOutput = process.StandardOutput.ReadToEndAsync().Result;
-                Console.WriteLine("STD output: " + stdOutput);
+                stdOutput = await process.StandardOutput.ReadToEndAsync();
                 process.WaitForExit();
                 process.Close();
             }
