@@ -16,7 +16,7 @@ namespace RpiAsSensor
 
             Console.WriteLine("Reading temperature...");
             var reader = new TemperatureReader();
-            var temperature = await reader.GetTemperatureAsync();
+            var temperature = reader.GetTemperature();
             Console.WriteLine("The temperature is: " + temperature);
 
             Console.WriteLine("Building JSON...");

@@ -7,7 +7,7 @@ namespace RpiAsSensor
     {
         private const string _command = @"/opt/vc/bin/vcgencmd measure_temp";
 
-        public string GetTemperatureAsync()
+        public string GetTemperature()
         {
             var process = new RpiProcessHandler();
             var stdOut = process.ExecuteShellCommand(_command);
@@ -18,7 +18,6 @@ namespace RpiAsSensor
         public string ParseTemperature(string stdOut)
         {
             string temperature = string.Empty;
-            Console.WriteLine("Parsing temperature (in func)...");
 
             try
             {

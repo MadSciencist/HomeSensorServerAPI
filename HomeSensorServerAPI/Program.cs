@@ -64,7 +64,7 @@ namespace HomeSensorServerAPI
                 {
                     options.Limits.MaxConcurrentConnections = 100;
                     options.Limits.MaxConcurrentUpgradedConnections = 100;
-                    options.Listen(IPAddress.Any, 5000);
+                    options.Listen(IPAddress.Any, 80);
                 });
     }
 }
