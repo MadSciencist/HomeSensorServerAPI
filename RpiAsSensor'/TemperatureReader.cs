@@ -19,7 +19,8 @@ namespace RpiAsSensor
 
         public string ParseTemperature(string stdOut)
         {
-            string temperature = String.Empty;
+            string temperature = string.Empty;
+            Console.WriteLine("Parsing temperature (in func)...");
 
             try
             {

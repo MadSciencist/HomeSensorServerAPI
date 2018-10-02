@@ -45,7 +45,8 @@ namespace RpiAsSensor
 
         private void PresetClient(HttpClient client)
         {
-            client.BaseAddress = new Uri("localhost");
+            //client.BaseAddress = new Uri("localhost");
+            client.BaseAddress = new Uri("http://192.168.0.223");
             client.Timeout = TimeSpan.FromSeconds(5.0d);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(

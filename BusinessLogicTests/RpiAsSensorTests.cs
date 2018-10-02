@@ -11,8 +11,8 @@ namespace BusinessLogicTests
         [Test]
         public void TemperatureReaderParserReturnProperValue()
         {
-            var stdOut = "temp=49.2'C";
-            var expectedResult = "49.2";
+            var stdOut = "temp=44.5'C";
+            var expectedResult = "44.5";
 
             var reader = new TemperatureReader();
             var result = reader.ParseTemperature(stdOut);

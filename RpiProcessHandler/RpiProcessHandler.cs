@@ -43,11 +43,13 @@ namespace RpiProcesses
             {
                 process.Start();
                 stdOutput = await process.StandardOutput.ReadToEndAsync();
+                Console.WriteLine("STD output: " + stdOutput);
                 process.WaitForExit();
+                process.Close();
             }
             catch (Exception e)
             {
-                Trace.WriteLine(e.Message);
+                Console.WriteLine(e.Message);
             }
 
             return stdOutput;
