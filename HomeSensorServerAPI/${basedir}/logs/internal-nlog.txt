@@ -16,3 +16,15 @@
 2018-10-02 20:24:59.3113 Info Adding target File Target[ownFile-web]
 2018-10-02 20:24:59.3113 Info Configured from an XML element in D:\localRepo\HomeSensorServerAPI\HomeSensorServerAPI\bin\Debug\netcoreapp2.1\nlog.config...
 2018-10-02 20:24:59.3390 Info Found 45 configuration items
+2018-10-02 21:53:08.0071 Info Message Template Auto Format enabled
+2018-10-02 21:53:08.0549 Info Loading assembly: NLog.Web.AspNetCore
+2018-10-02 21:53:08.2938 Info Adding target File Target[allfile]
+2018-10-02 21:53:08.2938 Info Adding target File Target[ownFile-web]
+2018-10-02 21:53:08.3154 Info Configured from an XML element in D:\localRepo\HomeSensorServerAPI\HomeSensorServerAPI\bin\Debug\netcoreapp2.1\nlog.config...
+2018-10-02 21:53:08.3372 Info Found 45 configuration items
+2018-10-02 21:53:42.7539 Info Message Template Auto Format enabled
+2018-10-02 21:53:42.7768 Info Loading assembly: NLog.Web.AspNetCore
+2018-10-02 21:53:42.9954 Info Adding target File Target[allfile]
+2018-10-02 21:53:42.9954 Info Adding target File Target[ownFile-web]
+2018-10-02 21:53:43.0200 Info Configured from an XML element in D:\localRepo\HomeSensorServerAPI\HomeSensorServerAPI\bin\Debug\netcoreapp2.1\nlog.config...
+2018-10-02 21:53:43.0411 Info Found 45 configuration items

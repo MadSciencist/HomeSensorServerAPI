@@ -4,6 +4,6 @@ namespace RpiProcesses
 {
     public interface IRpiProcessHandler
     {
-        Task<string> ExecuteShellCommand(string command);
+        string ExecuteShellCommand(string command);
     }
 }

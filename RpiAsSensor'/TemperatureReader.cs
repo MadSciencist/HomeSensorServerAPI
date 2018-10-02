@@ -1,7 +1,5 @@
 ﻿using RpiProcesses;
 using System;
-using System.Diagnostics;
-using System.Threading.Tasks;
 
 namespace RpiAsSensor
 {
@@ -9,12 +7,10 @@ namespace RpiAsSensor
     {
         private const string _command = @"/opt/vc/bin/vcgencmd measure_temp";
 
-        public async Task<string> GetTemperatureAsync()
+        public string GetTemperatureAsync()
         {
-            Console.WriteLine("In get temp async");
             var process = new RpiProcessHandler();
-            Console.WriteLine("created process handler");
-            var stdOut = await process.ExecuteShellCommand(_command);
+            var stdOut = process.ExecuteShellCommand(_command);
 
             return ParseTemperature(stdOut);
         }

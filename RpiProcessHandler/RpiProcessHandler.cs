@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 
 namespace RpiProcesses
 {
     public class RpiProcessHandler : IRpiProcessHandler
     {
-        public async Task<string> ExecuteShellCommand(string command)
+        public string ExecuteShellCommand(string command)
         {
             string stdOutput = string.Empty;
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                Console.WriteLine("Im linux");
                 var escapeCommand = command.Replace("\"", "\\\"");
 
                 var process = new Process()
@@ -27,8 +25,7 @@ namespace RpiProcesses
                         RedirectStandardOutput = true
                     },
                 };
-                Console.WriteLine("runing process...");
-                stdOutput = await TryToRunProcess(process);
+                stdOutput = TryToRunProcess(process);
             }
             else
             {
@@ -38,14 +35,14 @@ namespace RpiProcesses
             return stdOutput;
         }
 
-        private async Task<string> TryToRunProcess( Process process)
+        private string TryToRunProcess( Process process)
         {
             string stdOutput = string.Empty;
+
             try
             {
                 process.Start();
-                Console.WriteLine("process started");
-                stdOutput = await process.StandardOutput.ReadToEndAsync();
+                stdOutput = process.StandardOutput.ReadToEnd();
                 process.WaitForExit();
                 process.Close();
             }
