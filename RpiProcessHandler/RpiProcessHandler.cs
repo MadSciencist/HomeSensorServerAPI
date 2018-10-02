@@ -26,7 +26,7 @@ namespace RpiProcesses
                     }
                 };
 
-                stdOutput = await TryToRunProcess(stdOutput, process);
+                stdOutput = await TryToRunProcess(process);
 
             }
             else
@@ -37,12 +37,13 @@ namespace RpiProcesses
             return stdOutput;
         }
 
-        private async Task<string> TryToRunProcess(string stdOutput, Process process)
+        private async Task<string> TryToRunProcess( Process process)
         {
+            string stdOutput = string.Empty;
             try
             {
                 process.Start();
-                stdOutput = await process.StandardOutput.ReadToEndAsync();
+                stdOutput = process.StandardOutput.ReadToEndAsync().Result;
                 Console.WriteLine("STD output: " + stdOutput);
                 process.WaitForExit();
                 process.Close();
