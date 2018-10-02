@@ -11,7 +11,9 @@ namespace RpiAsSensor
 
         public async Task<string> GetTemperatureAsync()
         {
+            Console.WriteLine("In get temp async");
             var process = new RpiProcessHandler();
+            Console.WriteLine("created process handler");
             var stdOut = await process.ExecuteShellCommand(_command);
 
             return ParseTemperature(stdOut);
@@ -28,7 +30,7 @@ namespace RpiAsSensor
             }
             catch (Exception e)
             {
-                Trace.WriteLine(e.Message);
+                Console.WriteLine(e.Message);
             }
 
             return temperature;

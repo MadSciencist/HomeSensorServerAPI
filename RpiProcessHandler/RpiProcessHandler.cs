@@ -13,6 +13,7 @@ namespace RpiProcesses
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
+                Console.WriteLine("Im linux");
                 var escapeCommand = command.Replace("\"", "\\\"");
 
                 var process = new Process()
@@ -26,7 +27,7 @@ namespace RpiProcesses
                         RedirectStandardOutput = true
                     },
                 };
-
+                Console.WriteLine("runing process...");
                 stdOutput = await TryToRunProcess(process);
             }
             else
@@ -43,6 +44,7 @@ namespace RpiProcesses
             try
             {
                 process.Start();
+                Console.WriteLine("process started");
                 stdOutput = await process.StandardOutput.ReadToEndAsync();
                 process.WaitForExit();
                 process.Close();
