@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -8,61 +9,50 @@ namespace RpiAsSensor
 {
     public class RpiHttpClient
     {
+        private readonly string _baseUrl;
         private readonly HttpClient _client;
 
-        public RpiHttpClient()
+        public RpiHttpClient(string baseUrl)
         {
-            _client = new HttpClient();
-            PresetClient(_client);
+            _baseUrl = baseUrl;
+
+            _client = new HttpClient
+            {
+                Timeout = TimeSpan.FromSeconds(10.0)
+            };
         }
 
-        public async Task<string> PostData(string data)
+        public async Task<string> GetToken(string username, string password)
         {
-            HttpResponseMessage response = null;
-            string responseContent = null;
-            var request = CreateRequest(data);
+            string responseBody = String.Empty;
+            string token = String.Empty;
 
-            try
+            var credentials = new JObject
             {
-                response = await _client.SendAsync(request);
-            }
-            catch (HttpRequestException)
-            {
-                throw new HttpRequestException("No such host - device might be off");
-            }
-            catch (OperationCanceledException)
-            {
-                throw new TimeoutException("Device is found, but it is not responding");
-            }
+                { "username", username },
+                { "password", password }
+            };
+
+            var response = await _client.PostAsync($"{_baseUrl}/token", new StringContent(credentials.ToString(), Encoding.UTF8, "application/json"));
 
             if (response.IsSuccessStatusCode)
             {
-                responseContent = await response.Content.ReadAsStringAsync();
+                responseBody = await response.Content.ReadAsStringAsync();
             }
 
-            return responseContent;
-        }
-
-        private void PresetClient(HttpClient client)
-        {
-            //client.BaseAddress = new Uri("localhost");
-            client.BaseAddress = new Uri("http://192.168.0.223/sensors/specified");
-            client.Timeout = TimeSpan.FromSeconds(5.0d);
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(
-                new MediaTypeWithQualityHeaderValue("application/json")
-            );
-        }
-
-        private HttpRequestMessage CreateRequest(string urlQuery)
-        {
-            var request = new HttpRequestMessage()
+            if (responseBody.Contains("token"))
             {
-                Method = HttpMethod.Post,
-                Content = new StringContent(urlQuery, Encoding.UTF8, "application/json")
-            };
+                var json = JObject.Parse(responseBody);
+                token = (string)json["token"];
+            }
 
-            return request;
+            return token;
+        }
+
+        public async Task PostData(string token, string json)
+        {
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token); 
+            await _client.PostAsync($"{_baseUrl}/sensors/specified", new StringContent(json, Encoding.UTF8, "application/json"));
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace RpiAsSensor
 {
-    class MessageBuilder
+    public class MessageBuilder
     {
         public string Identifier { get; set; }
 

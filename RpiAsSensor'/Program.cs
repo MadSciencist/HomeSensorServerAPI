@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace RpiAsSensor
 {
@@ -6,13 +7,17 @@ namespace RpiAsSensor
     {
         static void Main(string[] args)
         {
-            new Program().RunAsync(args);
+            Console.WriteLine("Starting program...");
+            new Program().UpdateTemperatureAsync().Wait();
+            Console.WriteLine("End of the program");
         }
 
-        private async void RunAsync(string[] args)
+        public async Task UpdateTemperatureAsync()
         {
-            Console.WriteLine("Starting program...");
+            const string baseUrl = @"http://localhost:5000/api";
             const string identifier = "rpi";
+            const string username = "homeAutomationSensor";
+            const string password = "homeAutomationSensorPassword";
 
             Console.WriteLine("Reading temperature...");
             var reader = new TemperatureReader();
@@ -25,10 +30,14 @@ namespace RpiAsSensor
             Console.WriteLine("The JSON is: ");
             Console.WriteLine(json);
 
-            Console.WriteLine("Posting data do API");
-            var client = new RpiHttpClient();
-            await client.PostData(json);
-            Console.WriteLine("End of the program");
+
+            var client = new RpiHttpClient(baseUrl);
+            Console.WriteLine("Getting JWT...");
+            string token = await client.GetToken(username, password);
+            Console.WriteLine("Got token:");
+            Console.WriteLine(token);
+            Console.WriteLine("Posting data do API...");
+            await client.PostData(token, json);
         }
     }
 }
