@@ -115,7 +115,7 @@ namespace LocalSensorServer.Controllers
             user.Password = cryptoService.CreateHashString(user.Password);
 
             await _userRepository.CreateAsync(user);
-            return CreatedAtAction("RegisterUser", new { id = user.Id }, user);
+            return CreatedAtAction("RegisterUser", new { id = user.ID }, user);
         }
 
         //api/users/delete/id

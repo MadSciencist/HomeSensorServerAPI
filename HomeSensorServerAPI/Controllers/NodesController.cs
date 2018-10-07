@@ -70,7 +70,7 @@ namespace HomeSensorServerAPI.Controllers
         [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> PutNode([FromRoute] int id, [FromBody] Node node)
         {
-            if (id != node.Id)
+            if (id != node.ID)
             {
                 return BadRequest();
             }
@@ -79,10 +79,10 @@ namespace HomeSensorServerAPI.Controllers
             var userRole = ClaimsPrincipalHelper.GetClaimedUserRole(this.User);
             var userId = ClaimsPrincipalHelper.GetClaimedUserIdentifierInt(this.User);
 
-            if (!(userRole == EUserRole.Admin || userId == existingNode.Owner.Id))
-            {
-                return Forbid();
-            }
+            //if (!(userRole == EUserRole.Admin || userId == existingNode.Owner.Id))
+            //{
+            //    return Forbid();
+            //}
 
             Node updatedNode = null;
 
@@ -119,7 +119,7 @@ namespace HomeSensorServerAPI.Controllers
             var userId = int.Parse(ClaimsPrincipalHelper.GetClaimedUserIdentifier(this.User));
             var user = await _userRepository.GetByIdAsync(userId);
 
-            node.Owner = user;
+            //node.Owner = user;
 
             try
             {
@@ -160,10 +160,10 @@ namespace HomeSensorServerAPI.Controllers
             var userRole = ClaimsPrincipalHelper.GetClaimedUserRole(this.User);
             var userId = ClaimsPrincipalHelper.GetClaimedUserIdentifierInt(this.User);
 
-            if (!(userRole == EUserRole.Admin || userId == node.Owner.Id))
-            {
-                return Forbid();
-            }
+            //if (!(userRole == EUserRole.Admin || userId == node.Owner.Id))
+            //{
+            //    return Forbid();
+            //}
 
             await _nodeRepository.DeleteAsync(node);
 

@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HomeSensorServerAPI.Models
 {
     public class Entity
     {
-        public virtual int Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int ID { get; set; }
     }
 }

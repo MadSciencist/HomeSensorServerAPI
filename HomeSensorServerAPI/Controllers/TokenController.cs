@@ -54,19 +54,19 @@ namespace HomeSensorServerAPI.Controllers
             return response;
         }
 
-        private IActionResult CreateResponseToken(IUser user, string tokenString)
+        private IActionResult CreateResponseToken(User user, string tokenString)
         {
             return Ok(JsonConvert.SerializeObject(new
             {
                 token = tokenString,
-                userId = user.Id,
+                userId = user.ID,
                 userRole = user.Role.ToString(),
                 tokenIssueTime = DateTime.Now.ToString(),
                 tokenValidTo = DateTime.Now.AddMinutes(double.Parse(_config["AuthenticationJwt:ValidTime"])).ToString(),
             }));
         }
 
-        private async Task UpdateLastLoginInfo(IUser user)
+        private async Task UpdateLastLoginInfo(User user)
         {
             if (user != null)
                 await _userRepository.UpdateAsync(user as User);

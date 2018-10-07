@@ -6,16 +6,18 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace HomeSensorServerAPI.Models
 {
     [Table("streaming_devices")]
-    public class StreamingDevice : Entity
+    public class StreamingDevice
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int ID { get; set; }
         [Required]
-        public string  Name { get; set; }
+        public string Name { get; set; }
 
         [Required]
         public string ConnectionString { get; set; }
 
         [BindNever]
-        public User Owner { get; set; }
+        public User Creator { get; set; }
 
         public string Description { get; set; }
         public string Login { get; set; }

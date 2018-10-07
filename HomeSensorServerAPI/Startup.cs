@@ -37,9 +37,15 @@ namespace HomeSensorServerAPI
 
             services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseMySql(dbConnectionString, mysqlOptions => mysqlOptions.ServerVersion(new Version(10, 1, 29), ServerType.MariaDb))
-                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+                options.UseMySql(dbConnectionString, mysqlOptions => mysqlOptions.ServerVersion(new Version(10, 1, 29), ServerType.MariaDb));
+               // .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
+
+            //    services.AddDbContext<AppDbContext>(options =>
+            //{
+            //    options.UseSqlServer(Configuration["ConnectionStrings:MsSqlConnection"]);
+            //    //.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            //});
 
             services.AddTransient<INodeRepository, NodeRepository>();
             services.AddTransient<ISensorRepository, SensorRepository>();
@@ -50,7 +56,6 @@ namespace HomeSensorServerAPI
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddJsonOptions(json => json.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-     
 
             services.AddSwaggerGen(swagger =>
             {

@@ -31,7 +31,7 @@ namespace HomeSensorServerAPI.Repository
 
                     if (actualCount >= 1000) //keep only last 1000 samples
                     {
-                        var toRemove = _context.Sensors.Where(s => s.Identifier == sensor.Identifier).OrderBy(s => s.Id).Take(1);
+                        var toRemove = _context.Sensors.Where(s => s.Identifier == sensor.Identifier).OrderBy(s => s.ID).Take(1);
                         _context.Sensors.RemoveRange(toRemove);
                     }
                     _context.Sensors.Add(sensor);

@@ -25,13 +25,12 @@ namespace HomeSensorServerAPI.Repository
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<User>()
-                .HasMany(n => n.NodesOwner)
-                .WithOne(u => u.Owner as User);
+            builder.Entity<StreamingDevice>()
+                .HasOne(p => p.Creator)
+                .WithMany(u => u.CreatedStreamingDevices);
 
-            builder.Entity<User>()
-                .HasMany(s => s.StreamingDevicesOwner)
-                .WithOne(u => u.Owner as User);
+            base.OnModelCreating(builder);
+
         }
     }
 }

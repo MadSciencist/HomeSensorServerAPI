@@ -12,77 +12,99 @@ namespace HomeSensorServerAPI.Migrations
                 name: "dictionary_actuator_types",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    ID = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Key = table.Column<int>(nullable: false),
                     Value = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dictionary_actuator_types", x => x.Id);
+                    table.PrimaryKey("PK_dictionary_actuator_types", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
                 name: "dictionary_genders",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    ID = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Key = table.Column<int>(nullable: false),
                     Value = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dictionary_genders", x => x.Id);
+                    table.PrimaryKey("PK_dictionary_genders", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
                 name: "dictionary_node_types",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    ID = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Key = table.Column<int>(nullable: false),
                     Value = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dictionary_node_types", x => x.Id);
+                    table.PrimaryKey("PK_dictionary_node_types", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
                 name: "dictionary_roles",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    ID = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Key = table.Column<int>(nullable: false),
                     Value = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dictionary_roles", x => x.Id);
+                    table.PrimaryKey("PK_dictionary_roles", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
                 name: "dictionary_sensor_types",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    ID = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Key = table.Column<int>(nullable: false),
                     Value = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dictionary_sensor_types", x => x.Id);
+                    table.PrimaryKey("PK_dictionary_sensor_types", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "nodes",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    Identifier = table.Column<string>(nullable: true),
+                    LoginName = table.Column<string>(nullable: true),
+                    LoginPassword = table.Column<string>(nullable: true),
+                    NodeType = table.Column<int>(nullable: true),
+                    RegistredProperties = table.Column<string>(nullable: true),
+                    IpAddress = table.Column<string>(nullable: true),
+                    GatewayAddress = table.Column<string>(nullable: true),
+                    IsOn = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_nodes", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
                 name: "sensors",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    ID = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     TimeStamp = table.Column<DateTime>(nullable: false),
                     Identifier = table.Column<string>(nullable: true),
@@ -90,14 +112,14 @@ namespace HomeSensorServerAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_sensors", x => x.Id);
+                    table.PrimaryKey("PK_sensors", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
                 name: "system_data",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    ID = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     RpiUrl = table.Column<string>(nullable: true),
                     RpiLogin = table.Column<string>(nullable: true),
@@ -106,14 +128,14 @@ namespace HomeSensorServerAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_system_data", x => x.Id);
+                    table.PrimaryKey("PK_system_data", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
                 name: "users",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    ID = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true),
                     Lastname = table.Column<string>(nullable: true),
@@ -130,73 +152,37 @@ namespace HomeSensorServerAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_users", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "nodes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
-                    Identifier = table.Column<string>(nullable: true),
-                    OwnerId = table.Column<int>(nullable: true),
-                    LoginName = table.Column<string>(nullable: true),
-                    LoginPassword = table.Column<string>(nullable: true),
-                    NodeType = table.Column<int>(nullable: true),
-                    RegistredProperties = table.Column<string>(nullable: true),
-                    SensorType = table.Column<int>(nullable: true),
-                    ActuatorType = table.Column<int>(nullable: true),
-                    IpAddress = table.Column<string>(nullable: true),
-                    GatewayAddress = table.Column<string>(nullable: true),
-                    IsOn = table.Column<bool>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_nodes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_nodes_users_OwnerId",
-                        column: x => x.OwnerId,
-                        principalTable: "users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                    table.PrimaryKey("PK_users", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
                 name: "streaming_devices",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    ID = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: false),
                     ConnectionString = table.Column<string>(nullable: false),
-                    OwnerId = table.Column<int>(nullable: true),
+                    CreatorID = table.Column<int>(nullable: true),
                     Description = table.Column<string>(nullable: true),
                     Login = table.Column<string>(nullable: true),
                     Password = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_streaming_devices", x => x.Id);
+                    table.PrimaryKey("PK_streaming_devices", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_streaming_devices_users_OwnerId",
-                        column: x => x.OwnerId,
+                        name: "FK_streaming_devices_users_CreatorID",
+                        column: x => x.CreatorID,
                         principalTable: "users",
-                        principalColumn: "Id",
+                        principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_nodes_OwnerId",
-                table: "nodes",
-                column: "OwnerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_streaming_devices_OwnerId",
+                name: "IX_streaming_devices_CreatorID",
                 table: "streaming_devices",
-                column: "OwnerId");
+                column: "CreatorID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

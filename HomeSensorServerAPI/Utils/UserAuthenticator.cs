@@ -8,7 +8,7 @@ namespace HomeSensorServerAPI.Utils
 {
     public class UserAuthenticator
     {
-        public IUser Authenticate(IEnumerable<User> users, LoginCredentials login)
+        public User Authenticate(IEnumerable<User> users, LoginCredentials login)
         {
             User user = null;
 

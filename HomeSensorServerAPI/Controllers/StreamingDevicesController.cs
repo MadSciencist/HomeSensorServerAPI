@@ -4,7 +4,10 @@ using HomeSensorServerAPI.Repository;
 using HomeSensorServerAPI.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace HomeSensorServerAPI.Controllers
@@ -16,11 +19,13 @@ namespace HomeSensorServerAPI.Controllers
     {
         private readonly IStreamingDeviceRepository _streamingDeviceRepository;
         private readonly IUserRepository _userRepository;
+        private readonly AppDbContext _context;
 
-        public StreamingDevicesController(IStreamingDeviceRepository streamingDeviceRepository, IUserRepository userRepository)
+        public StreamingDevicesController(IStreamingDeviceRepository streamingDeviceRepository, IUserRepository userRepository, AppDbContext context)
         {
             _streamingDeviceRepository = streamingDeviceRepository;
             _userRepository = userRepository;
+            _context = context;
         }
 
         // GET: api/StreamingDevices
@@ -49,16 +54,16 @@ namespace HomeSensorServerAPI.Controllers
         [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> PutStreamingDevice([FromRoute] int id, [FromBody] StreamingDevice streamingDevice)
         {
-            if (id != streamingDevice.Id)
+            if (id != streamingDevice.ID)
             {
                 return BadRequest();
             }
 
-            var existingStreamingDevice = await _streamingDeviceRepository.GetByIdAsync(id);
+            var existingStreamingDevice = _context.StreamingDevices.Include(x => x.Creator).Single(x => x.ID == id);
             var userRole = ClaimsPrincipalHelper.GetClaimedUserRole(this.User);
             var userId = ClaimsPrincipalHelper.GetClaimedUserIdentifierInt(this.User);
 
-            if (!(userRole == EUserRole.Admin || userId == existingStreamingDevice.Owner.Id))
+            if (!(userRole == EUserRole.Admin || userId == existingStreamingDevice.Creator.ID))
             {
                 return Forbid();
             }
@@ -73,14 +78,22 @@ namespace HomeSensorServerAPI.Controllers
         [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> PostStreamingDevice([FromBody] StreamingDevice streamingDevice)
         {
+            StreamingDevice createdDevice = null;
             var userId = int.Parse(ClaimsPrincipalHelper.GetClaimedUserIdentifier(this.User));
-            var user = await _userRepository.GetByIdAsync(userId);
+            var creator = _context.Users.Single(u => u.ID == userId);
 
-            streamingDevice.Owner = user;
+            streamingDevice.Creator = creator;
 
-            var createdDevice = await _streamingDeviceRepository.CreateAsync(streamingDevice);
+            try
+            {
+                createdDevice = await _streamingDeviceRepository.CreateAsync(streamingDevice);
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
 
-            return CreatedAtAction("PostStreamingDevice", new { id = streamingDevice.Id }, createdDevice);
+            return CreatedAtAction("PostStreamingDevice", new { id = streamingDevice.ID }, createdDevice);
         }
 
         // DELETE: api/StreamingDevices/5
@@ -88,7 +101,8 @@ namespace HomeSensorServerAPI.Controllers
         [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> DeleteStreamingDevice([FromRoute] int id)
         {
-            var streamingDevice = await _streamingDeviceRepository.GetByIdAsync(id);
+            //  var streamingDevice = await _streamingDeviceRepository.GetByIdAsync(id);
+            var streamingDevice = _context.StreamingDevices.Include(x => x.Creator).Single(x => x.ID == id);
 
             if (streamingDevice == null)
             {
@@ -98,7 +112,7 @@ namespace HomeSensorServerAPI.Controllers
             var userRole = ClaimsPrincipalHelper.GetClaimedUserRole(this.User);
             var userId = ClaimsPrincipalHelper.GetClaimedUserIdentifierInt(this.User);
 
-            if (!(userRole == EUserRole.Admin || userId == streamingDevice.Owner.Id))
+            if (!(userRole == EUserRole.Admin || userId == streamingDevice.Creator.ID))
             {
                 return Forbid();
             }

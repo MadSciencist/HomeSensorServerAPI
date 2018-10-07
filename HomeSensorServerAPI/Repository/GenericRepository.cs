@@ -29,10 +29,12 @@ namespace HomeSensorServerAPI.Repository
             catch (DbUpdateConcurrencyException e)
             {
                 _logger.LogError(e, "Error while updading entity - concurrency");
+                throw;
             }
             catch (DbUpdateException e)
             {
                 _logger.LogError(e, "Error while updading entity");
+                throw;
             }
 
             return entity;

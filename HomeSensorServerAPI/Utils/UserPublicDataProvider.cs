@@ -6,7 +6,7 @@ namespace HomeSensorServerAPI.Utils
 {
     public class UserPublicDataProvider
     {
-        public IEnumerable<PublicUser> ConvertFullUsersDataToPublicData(IEnumerable<IUser> users)
+        public IEnumerable<PublicUser> ConvertFullUsersDataToPublicData(IEnumerable<User> users)
         {
             var result = from u in users
                          select new PublicUser()
@@ -21,14 +21,14 @@ namespace HomeSensorServerAPI.Utils
                              LastInvalidLogin = u.LastInvalidLogin,
                              LastValidLogin = u.LastValidLogin,
                              JoinDate = u.JoinDate,
-                             Id = u.Id,
+                             ID = u.ID,
                              Login = u.Login
                          };
 
             return result;
         }
 
-        public PublicUser ConvertFullUserDataToPublicData(IUser user)
+        public PublicUser ConvertFullUserDataToPublicData(User user)
         {
             var publicUser = new PublicUser()
             {
@@ -43,7 +43,7 @@ namespace HomeSensorServerAPI.Utils
                 LastInvalidLogin = user.LastInvalidLogin,
                 LastValidLogin = user.LastValidLogin,
                 JoinDate = user.JoinDate,
-                Id = user.Id
+                ID = user.ID
             };
             return publicUser;
         }

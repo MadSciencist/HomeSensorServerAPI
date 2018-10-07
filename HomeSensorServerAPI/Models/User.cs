@@ -9,10 +9,11 @@ namespace HomeSensorServerAPI.Models
 {
     //TODO: more validation
     [Table("users")]
-    public class User : Entity, IUser
+    public class User
     {
-        [BindNever]
-        public override int Id { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int ID { get; set; }
         public string Name { get; set; }
         public string Lastname { get; set; }
         public string Email { get; set; }
@@ -25,8 +26,8 @@ namespace HomeSensorServerAPI.Models
         public EUserRole? Role { get; set; }
         public string PhotoUrl { get; set; }
 
-        public ICollection<Node> NodesOwner { get; set; }
-        public ICollection<StreamingDevice> StreamingDevicesOwner { get; set; }
+        //public ICollection<Node> NodesOwner { get; set; }
+        public ICollection<StreamingDevice> CreatedStreamingDevices { get; set; }
 
         [BindNever]
         public DateTime? LastValidLogin { get; set; }
