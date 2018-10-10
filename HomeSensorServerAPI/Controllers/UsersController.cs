@@ -6,8 +6,6 @@ using HomeSensorServerAPI.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace LocalSensorServer.Controllers
@@ -115,7 +113,7 @@ namespace LocalSensorServer.Controllers
             user.Password = cryptoService.CreateHashString(user.Password);
 
             await _userRepository.CreateAsync(user);
-            return CreatedAtAction("RegisterUser", new { id = user.ID }, user);
+            return CreatedAtAction("RegisterUser", new { id = user.Id }, user);
         }
 
         //api/users/delete/id
@@ -152,8 +150,10 @@ namespace LocalSensorServer.Controllers
             {
                 string adminIdString = ClaimsPrincipalHelper.GetClaimedUserIdentifier(this.User);
 
-                if (Int32.TryParse(adminIdString, out int adminId))
+                if (int.TryParse(adminIdString, out int adminId))
+                {
                     return removedUserId == adminId;
+                }
             }
 
             return false;
@@ -163,10 +163,14 @@ namespace LocalSensorServer.Controllers
         {
             var claimedUserIdentifier = ClaimsPrincipalHelper.GetClaimedUserIdentifier(this.User);
 
-            if (Int32.TryParse(claimedUserIdentifier, out int claimedUserId))
+            if (int.TryParse(claimedUserIdentifier, out int claimedUserId))
+            {
                 return claimedUserId == requestedId;
+            }
             else
+            {
                 return false;
+            }
         }
     }
 }

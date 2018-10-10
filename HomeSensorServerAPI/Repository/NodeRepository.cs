@@ -23,10 +23,6 @@ namespace HomeSensorServerAPI.Repository
         {
             return _context.Nodes.Where(n => n.NodeType == type);
         }
-        //public override async Task<Node> GetByIdAsync(int id)
-        //{
-        //    return await _context.Nodes.Include(x => x.Owner).FirstOrDefaultAsync(x => x.Id == id);
-        //}
 
         public async Task<Node> GetWithIdentifierAsync(string identifier)
         {
@@ -78,7 +74,7 @@ namespace HomeSensorServerAPI.Repository
 
         public override async Task<Node> UpdateAsync(Node node)
         {
-            var existingNode = await _context.Nodes.AsNoTracking().SingleOrDefaultAsync(n => n.ID == node.ID);
+            var existingNode = await _context.Nodes.AsNoTracking().SingleOrDefaultAsync(n => n.Id == node.Id);
             IPAddress sensorIP = null, sensorGatewayIP = null;
 
             //check if there already exissts node with that identifier, if yes, then if it's identifier is other than new one 
@@ -113,11 +109,12 @@ namespace HomeSensorServerAPI.Repository
             }
             else if (node.NodeType == ENodeType.Sensor)
             {
-                node.IpAddress = String.Empty;
-                node.GatewayAddress = String.Empty;
+                node.IpAddress = string.Empty;
+                node.GatewayAddress = string.Empty;
             }
 
-            _context.Entry(node).State = EntityState.Modified;
+            //_context.Entry(node).State = EntityState.Modified;
+            _context.Nodes.Update(node);
 
             try
             {

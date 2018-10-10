@@ -21,7 +21,7 @@ namespace HomeSensorServerAPI.Utils
                              LastInvalidLogin = u.LastInvalidLogin,
                              LastValidLogin = u.LastValidLogin,
                              JoinDate = u.JoinDate,
-                             ID = u.ID,
+                             Id = u.Id,
                              Login = u.Login
                          };
 
@@ -43,7 +43,7 @@ namespace HomeSensorServerAPI.Utils
                 LastInvalidLogin = user.LastInvalidLogin,
                 LastValidLogin = user.LastValidLogin,
                 JoinDate = user.JoinDate,
-                ID = user.ID
+                Id = user.Id
             };
             return publicUser;
         }

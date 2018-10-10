@@ -12,8 +12,8 @@ namespace HomeSensorServerAPI.Models
 
         public string Identifier { get; set; }
 
-        //[BindNever]
-        //public User Owner { get; set; }
+        [BindNever]
+        public User Creator { get; set; }
 
         public string LoginName { get; set; }
         public string LoginPassword { get; set; }

@@ -70,19 +70,25 @@ namespace HomeSensorServerAPI.Controllers
         [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> PutNode([FromRoute] int id, [FromBody] Node node)
         {
-            if (id != node.ID)
+            if (id != node.Id)
             {
                 return BadRequest();
             }
 
-            var existingNode = await _nodeRepository.GetByIdAsync(id);
+            var existingNode = _nodeRepository.AsQueryableNoTrack().Include(x => x.Creator).SingleOrDefault(n => n.Id == id);
+
+            if(existingNode == null)
+            {
+                return NotFound();
+            }
+
             var userRole = ClaimsPrincipalHelper.GetClaimedUserRole(this.User);
             var userId = ClaimsPrincipalHelper.GetClaimedUserIdentifierInt(this.User);
 
-            //if (!(userRole == EUserRole.Admin || userId == existingNode.Owner.Id))
-            //{
-            //    return Forbid();
-            //}
+            if (!(userRole == EUserRole.Admin || userId == existingNode.Creator.Id))
+            {
+                return Forbid();
+            }
 
             Node updatedNode = null;
 
@@ -119,7 +125,7 @@ namespace HomeSensorServerAPI.Controllers
             var userId = int.Parse(ClaimsPrincipalHelper.GetClaimedUserIdentifier(this.User));
             var user = await _userRepository.GetByIdAsync(userId);
 
-            //node.Owner = user;
+            node.Creator = user;
 
             try
             {
@@ -160,10 +166,10 @@ namespace HomeSensorServerAPI.Controllers
             var userRole = ClaimsPrincipalHelper.GetClaimedUserRole(this.User);
             var userId = ClaimsPrincipalHelper.GetClaimedUserIdentifierInt(this.User);
 
-            //if (!(userRole == EUserRole.Admin || userId == node.Owner.Id))
-            //{
-            //    return Forbid();
-            //}
+            if (!(userRole == EUserRole.Admin || userId == node.Creator.Id))
+            {
+                return Forbid();
+            }
 
             await _nodeRepository.DeleteAsync(node);
 

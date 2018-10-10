@@ -6,10 +6,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace HomeSensorServerAPI.Models
 {
     [Table("streaming_devices")]
-    public class StreamingDevice
+    public class StreamingDevice : Entity
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ID { get; set; }
+        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        //public int Id { get; set; }
         [Required]
         public string Name { get; set; }
 

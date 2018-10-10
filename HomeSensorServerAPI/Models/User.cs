@@ -9,11 +9,11 @@ namespace HomeSensorServerAPI.Models
 {
     //TODO: more validation
     [Table("users")]
-    public class User
+    public class User : Entity
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ID { get; set; }
+        //[Key]
+        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        //public int Id { get; set; }
         public string Name { get; set; }
         public string Lastname { get; set; }
         public string Email { get; set; }
@@ -26,7 +26,9 @@ namespace HomeSensorServerAPI.Models
         public EUserRole? Role { get; set; }
         public string PhotoUrl { get; set; }
 
-        //public ICollection<Node> NodesOwner { get; set; }
+        [BindNever]
+        public ICollection<Node> CreatedNodes { get; set; }
+        [BindNever]
         public ICollection<StreamingDevice> CreatedStreamingDevices { get; set; }
 
         [BindNever]

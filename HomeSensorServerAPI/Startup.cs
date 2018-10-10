@@ -41,12 +41,6 @@ namespace HomeSensorServerAPI
                // .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
 
-            //    services.AddDbContext<AppDbContext>(options =>
-            //{
-            //    options.UseSqlServer(Configuration["ConnectionStrings:MsSqlConnection"]);
-            //    //.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-            //});
-
             services.AddTransient<INodeRepository, NodeRepository>();
             services.AddTransient<ISensorRepository, SensorRepository>();
             services.AddTransient<IStreamingDeviceRepository, StreamingDeviceRepository>();

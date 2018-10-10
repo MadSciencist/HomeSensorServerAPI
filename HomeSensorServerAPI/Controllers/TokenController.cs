@@ -59,7 +59,7 @@ namespace HomeSensorServerAPI.Controllers
             return Ok(JsonConvert.SerializeObject(new
             {
                 token = tokenString,
-                userId = user.ID,
+                userId = user.Id,
                 userRole = user.Role.ToString(),
                 tokenIssueTime = DateTime.Now.ToString(),
                 tokenValidTo = DateTime.Now.AddMinutes(double.Parse(_config["AuthenticationJwt:ValidTime"])).ToString(),

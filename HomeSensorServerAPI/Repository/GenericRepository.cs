@@ -68,6 +68,16 @@ namespace HomeSensorServerAPI.Repository
             return _context.Set<T>();
         }
 
+        public IQueryable<T> AsQueryable()
+        {
+            return _context.Set<T>().AsQueryable();
+        }
+
+        public IQueryable<T> AsQueryableNoTrack()
+        {
+            return _context.Set<T>().AsNoTracking().AsQueryable();
+        }
+
         public virtual async Task<T> GetByIdAsync(int id)
         {
             return await _context.Set<T>().FindAsync(id);
@@ -75,7 +85,7 @@ namespace HomeSensorServerAPI.Repository
 
         public virtual async Task<T> UpdateAsync(T entity)
         {
-            _context.Entry(entity).State = EntityState.Modified;
+            _context.Set<T>().Update(entity);
 
             try
             {

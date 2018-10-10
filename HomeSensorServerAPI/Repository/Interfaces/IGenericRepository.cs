@@ -8,6 +8,8 @@ namespace HomeSensorServerAPI.Repository
     public interface IGenericRepository<T> where T : class
     {
         IEnumerable<T> GetAll();
+        IQueryable<T> AsQueryable();
+        IQueryable<T> AsQueryableNoTrack();
         IEnumerable<T> Find(Func<T, bool> predicate);
         Task<T> GetByIdAsync(int id);
         Task<T> CreateAsync(T entity);
