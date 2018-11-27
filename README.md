@@ -10,6 +10,15 @@ This application is meant to be deployed on Raspberry PI 3B+ using Kestrel + NGI
  * handle user accounts
  * grant and revoke permissions (view, control, admin, add-data {sensors}) to users
  
+
+###### Main features:
+Example usage (with AngularJS SPA):
+![HTTPs connection](https://github.com/MadSciencist/HomeSensorServerAPI/tree/master/GithubAssets/cert.PNG)
+![Credentials prompt](https://github.com/MadSciencist/HomeSensorServerAPI/tree/master/GithubAssets/login.PNG)
+![Charts panel overview - presents data from all registered sensors](https://github.com/MadSciencist/HomeSensorServerAPI/tree/master/GithubAssets/charts.PNG)
+![Devices panel overview - here it is possible to control registered actuators (like on-off switches)](https://github.com/MadSciencist/HomeSensorServerAPI/tree/master/GithubAssets/devices.PNG)
+![Devices control panel overview - user can manage it's devices and sensors](https://github.com/MadSciencist/HomeSensorServerAPI/tree/master/GithubAssets/devices_manage.PNG)
+
  Publishing to Raspberry PI (Only RPi 2+ versions work):
  1. On develompent machine:
 	* dotnet clean
