@@ -49,34 +49,21 @@ I'm using nginx as a reverse proxy for kestrel. Also nginx is hangling the HTTPs
 config: (you need SSL certificate from next steps, if you want to use only HTTP, comment out the second server definition)
 
 ```bash
+
 server {
     listen 80;
-    include /etc/nginx/proxy_params;
-
-    proxy_http_version 1.1;
-    proxy_cache_bypass $http_upgrade;
-    proxy_set_header Connection $http_connection;
-    proxy_set_header Upgrade $http_upgrade;
-
-    location / {
-        proxy_pass http://localhost:5000;
-    }
-}
-
-server {
-    listen 443;
+    listen 443 ssl;
+    server_name kryszczak.ddns.net www.kryszczak.ddns.net;
 
     ssl_certificate           /etc/letsencrypt/live/kryszczak.ddns.net/fullchain.pem;
     ssl_certificate_key       /etc/letsencrypt/live/kryszczak.ddns.net/privkey.pem;
 
-    ssl on;
     ssl_session_cache  builtin:1000  shared:SSL:10m;
     ssl_protocols  TLSv1 TLSv1.1 TLSv1.2;
     ssl_ciphers HIGH:!aNULL:!eNULL:!EXPORT:!CAMELLIA:!DES:!MD5:!PSK:!RC4;
     ssl_prefer_server_ciphers on;
 
     location / {
-
       proxy_set_header        Host $host;
       proxy_set_header        X-Real-IP $remote_addr;
       proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -87,6 +74,7 @@ server {
       proxy_read_timeout  90;
     }
 }
+
 ```
 ---
 
